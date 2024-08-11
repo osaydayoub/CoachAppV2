@@ -6,16 +6,17 @@ import AdminPage from "./pages/AdminPage/AdminPage";
 import TimetablePage from "./pages/TimetablePage/TimetablePage";
 import TrackingPage from "./pages/TrackingPage/TrackingPage";
 import MealsPage from "./pages/MealsPage/MealsPage";
-import Navbar from "./components/Navbar/Navbar";
+
 import { useAuth } from "./context/AuthContext";
 import Footer from "./components/Footer/Footer";
 import MealOptionsPage from "./pages/MealOptionsPage/MealOptionsPage";
+import ResponsiveAppBar from "./components/AppBar/AppBar";
 
 function App() {
   const { currentUser, isLoggedIn } = useAuth();
   return (
     <>
-      {isLoggedIn && <Navbar />}
+      {isLoggedIn && <ResponsiveAppBar />}
 
       <Routes>
         <Route

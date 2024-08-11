@@ -1,4 +1,4 @@
-#CoachApp
+# CoachApp
 - Welcome to CoachApp – Your Ultimate Sports Training Companion!
 - This new version of CoachApp incorporates Material UI for an enhanced user interface and experience.
 
