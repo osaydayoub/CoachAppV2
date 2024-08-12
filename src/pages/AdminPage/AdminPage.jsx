@@ -20,6 +20,7 @@ function AdminPage() {
   useEffect(() => {
     if (clientsData != null) {
       setClientsToDisply(clientsData);
+      console.log(clientsData);
     }
   }, [clientsData]);
   const handelSearchChange = (e) => {

@@ -45,6 +45,30 @@ const MyClientTable = ({data}) => {
             header: 'Email',
             size: 300,
           },
+
+          {
+            accessorKey: 'age',
+            // filterVariant: 'range', //if not using filter modes feature, use this instead of filterFn
+            filterFn: 'between',
+            header: 'Age',
+            size: 300,
+          },
+          {
+            accessorFn: (row) => new Date(row.startDate), //convert to Date for sorting and filtering
+            id: 'startDate',
+            header: 'Start Date',
+            filterVariant: 'date',
+            filterFn: 'lessThan',
+            sortingFn: 'datetime',
+            Cell: ({ cell }) => cell.getValue()?.toLocaleDateString(), //render Date as a string
+            Header: ({ column }) => <em>{column.columnDef.header}</em>, //custom header markup
+            muiFilterTextFieldProps: {
+              sx: {
+                minWidth: '250px',
+              },
+            },
+          },
+          
         ],
       },
     ],
@@ -93,20 +117,16 @@ const MyClientTable = ({data}) => {
           width: '100%',
         }}
       >
+        <Box sx={{ textAlign: 'center' }}>
+        {`(Workouts Number: ${row.original.numberOfWorkouts} , Total Cost: ${row.original.totalCost} , Paid Amount: ${row.original.paidAmount})`}
+        </Box>
+        <Box sx={{ textAlign: 'center' }}>
+        {`Caloric Intake: ${row.original.caloricIntake}`}
+        </Box>
         
-        <Box sx={{ textAlign: 'center' }}>
-          <Typography variant="h6">
-          One
-          </Typography>
-        </Box>
-        <Box sx={{ textAlign: 'center' }}>
-          <Typography variant="h6">
-          Tow
-          </Typography>
-        </Box>
       </Box>
     ),
-    renderRowActionMenuItems: ({ closeMenu }) => [
+    renderRowActionMenuItems: ({ row, closeMenu  }) => [
       <MenuItem
         key={0}
         onClick={() => {
@@ -122,8 +142,8 @@ const MyClientTable = ({data}) => {
       </MenuItem>,
       <MenuItem
         key={1}
-        onClick={() => {
-          // Send email logic...
+        onClick={( ) => {
+          console.log(row.original);
           closeMenu();
         }}
         sx={{ m: 0 }}
