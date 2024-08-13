@@ -6,7 +6,9 @@
     justify-content: center;
     align-items:center;    
     font-size: large;
-    background-color: var(--color3);
+    background-color:#1976d2;
+    color:white;
+    /* background-color: var(--color3); */
 
 }
 .icon-list{

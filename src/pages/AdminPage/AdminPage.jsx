@@ -32,21 +32,21 @@ function AdminPage() {
   return (
     <div className="AdminPage page">
       {/* <div className="search-box"> */}
-      <input
+      {/* <input
         className="search-box"
         type="text"
         placeholder="Search by Client Name ..."
         onChange={handelSearchChange}
-      />
+      /> */}
        {/* <FaSearch /> </div> */}
-      {clientsToDisply && (
+      {/* {clientsToDisply && (
         <div className="clients-list">
           {clientsToDisply.map((client, index) => {
             // return <Client key={index} client={client} index={index} />;
             return <Client key={client.email} client={client} index={index} />;
           })}
         </div>
-      )}
+      )} */}
 
      {clientsToDisply&&( <MyClientTableWithLocalizationProvider data={clientsToDisply}/>)}
     </div>
