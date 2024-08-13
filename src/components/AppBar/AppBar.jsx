@@ -50,18 +50,23 @@ function ResponsiveAppBar() {
     setAnchorElNav(null);
   };
   const handleHomeClick =()=>{
+    handleCloseNavMenu();
     navigate("/");
   }
   const handleAdminClick =()=>{
+    handleCloseNavMenu();
     navigate("/admin");
   }
   const handleTrainingClick =()=>{
+    handleCloseNavMenu();
     navigate("/timetable");
   }
   const handleMealsClick =()=>{
+    handleCloseNavMenu();
     navigate("/meals");
   }
   const handleTrackingClick =()=>{
+    handleCloseNavMenu();
     navigate("/tracking");
   }
  
