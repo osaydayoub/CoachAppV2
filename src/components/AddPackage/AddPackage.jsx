@@ -27,7 +27,7 @@ function AddPackage({ client ,packageDisplay}) {
 
   return (
     <div className="addPackage-container">
-      <button onClick={()=>packageDisplay(false)}>X</button>
+      <button onClick={()=>packageDisplay()}>X</button>
       <h3>Add a Package</h3>
       <form onSubmit={(e) => handleAddPackage(e)}>
         <div>

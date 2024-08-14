@@ -20,7 +20,6 @@ function AddWorkout({ client,workoutDisplay }) {
 
   const handleCreateWorkout = async (e) => {
     e.preventDefault();
-    console.log("handleCreateWorkout");
     try {
       setAdding(true);
       await createWorkout({
@@ -33,7 +32,7 @@ function AddWorkout({ client,workoutDisplay }) {
   };
   return (
     <div className="addWorkout-container">
-      <button onClick={()=>workoutDisplay(false)}>X</button>
+      <button onClick={()=>workoutDisplay()}>X</button>
       <h3>Add a Workout</h3>
       <form onSubmit={(e) => handleCreateWorkout(e)}>
         <div>
@@ -86,6 +85,4 @@ function AddWorkout({ client,workoutDisplay }) {
 
 export default AddWorkout;
 
-// "exercise": "WORK222",
-// "date": "2024-02-22T20:30:00",
-// "clientID": "65ac1202d31a8b43448efcfe"
+

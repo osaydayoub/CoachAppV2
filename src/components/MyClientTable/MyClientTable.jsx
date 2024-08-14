@@ -12,16 +12,9 @@ import {
 import {
   Box,
   Button,
-  ListItemIcon,
   MenuItem,
-  Typography,
   lighten,
 } from '@mui/material';
-
-//Icons Imports
-import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-import  FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
-
 
 
 const MyClientTable = ({data}) => {
@@ -127,31 +120,12 @@ const MyClientTable = ({data}) => {
       </Box>
     ),
     renderRowActionMenuItems: ({ row, closeMenu  }) => [
-      <MenuItem
-        key={0}
-        onClick={() => {
-          // View profile logic...
-          closeMenu();
-        }}
-        sx={{ m: 0 }}
-      >
-        <ListItemIcon>
-          <AddShoppingCartIcon />
-        </ListItemIcon>
-        Add a Package
+      <MenuItem key={0}>
+         <AddWorkoutDialog client={row.original}/>
       </MenuItem>,
-      <MenuItem
-        key={1}
-        onClick={( ) => {
-          console.log(row.original);
-          closeMenu();
-        }}
-        sx={{ m: 0 }}
-      >
-        <ListItemIcon>
-          <FitnessCenterIcon />
-        </ListItemIcon>
-        Add a Workout
+
+      <MenuItem key={1}>
+       <AddPackageDialog client={row.original}/>
       </MenuItem>,
     ],
     renderTopToolbar: ({ table }) => {
@@ -220,6 +194,8 @@ const MyClientTable = ({data}) => {
 //Date Picker Imports - these should just be in your Context Provider
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import AddWorkoutDialog from '../Dialog/Dialog';
+import AddPackageDialog from '../PackageDialog/PackageDialog';
 
 const MyClientTableWithLocalizationProvider = ({ data }) => (
   //App.tsx or AppProviders file
