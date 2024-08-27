@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import "../../pages/LoginPage/LoginPage.css";
+import "./Login.css";
 import { useAuth } from "../../context/AuthContext";
 import { useData } from "../../context/DataContext";
 import axios from "axios";
-import loginImg from "../../assets/msaCoach.jpeg";
+// import loginImg from "../../assets/msaCoach.jpeg";
+import loginImg from "../../assets/images/logo2.png";
 //TODO handel is afunc for moving to signup page oe login... so do it
 function Login({ handle }) {
   const [email, setEmail] = useState("");
@@ -43,7 +44,7 @@ function Login({ handle }) {
 
   return (
     <div className="login-container">
-      <img className="img-login" src={loginImg} alt="logo-img" />
+      {/* <img className="img-login" src={loginImg} alt="logo-img" /> */}
       <h2>Welcome</h2>
       {/* <h3>M.S.A</h3> */}
       {error && <div className="error-container">{error}</div>}

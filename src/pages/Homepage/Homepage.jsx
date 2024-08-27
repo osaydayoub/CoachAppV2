@@ -5,6 +5,8 @@ import "react-circular-progressbar/dist/styles.css";
 import "./Homepage.css";
 import { useData } from "../../context/DataContext.jsx";
 import { isSameDay } from "../../utils/helpers.js";
+import EventAvailableIcon from '@mui/icons-material/EventAvailable';
+import { Box, Stack, Typography } from "@mui/material";
 function Homepage() {
   const { currentUser, isLoggedIn } = useAuth();
   const { currentClient } = useData();
@@ -58,8 +60,17 @@ function Homepage() {
               </div>
             </div>
           )}
+  
         </div>
       )}
+      <Box sx={{ mb: 2 }}>
+    <Stack direction="row" alignItems="center" spacing={1}>
+      <EventAvailableIcon sx={{ color: 'primary.main', fontSize: 28 }} />
+      <Typography variant="h5" color="textPrimary">
+        Your upcoming workout is
+      </Typography>
+    </Stack>
+  </Box>
     </div>
   );
 }

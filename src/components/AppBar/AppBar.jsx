@@ -1,43 +1,55 @@
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Button from '@mui/material/Button';
-import MenuItem from '@mui/material/MenuItem';
-import LogoutIcon from '@mui/icons-material/Logout';
+import * as React from "react";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import Menu from "@mui/material/Menu";
+import MenuIcon from "@mui/icons-material/Menu";
+import Container from "@mui/material/Container";
+import Button from "@mui/material/Button";
+import MenuItem from "@mui/material/MenuItem";
+import LogoutIcon from "@mui/icons-material/Logout";
 import { useAuth } from "../../context/AuthContext.jsx";
 import { useData } from "../../context/DataContext.jsx";
 import logo from "../../assets/images/logo.jpeg";
 import "./AppBar.css";
-import { useNavigate } from 'react-router-dom';
-
+import { useNavigate } from "react-router-dom";
 
 function ResponsiveAppBar() {
-    const { currentUser, setCurrentUser, setIsLoggedIn } = useAuth();
-    const {
-      setClientsData,
-      setWorkoutsData,
-      setCurrentClient,
-      setIsLoggedIn: setIsLoggedInData,
-    } = useData();
+  const { currentUser, setCurrentUser, isLoggedIn, setIsLoggedIn } = useAuth();
+  const {
+    setClientsData,
+    setWorkoutsData,
+    setCurrentClient,
+    setIsLoggedIn: setIsLoggedInData,
+  } = useData();
 
-    const [pages, setPages] = React.useState([]);
-    const [handleFunctions, setHandleFunctions]=React.useState([]);
+  const [pages, setPages] = React.useState([]);
+  const [handleFunctions, setHandleFunctions] = React.useState([]);
 
-    React.useEffect(() => {
-    if(currentUser.isAdmin){
-        setPages(['Home','Admin', 'Training Timetable', 'Meals']);
-        setHandleFunctions([handleHomeClick,handleAdminClick,handleTrainingClick,handleMealsClick]);
-    }else{
-        setPages(['Home','Training Timetable', 'Meals','Tracking']);
-     setHandleFunctions([handleHomeClick,handleTrainingClick,handleMealsClick,handleTrackingClick]);
+  React.useEffect(() => {
+    if(isLoggedIn){
+      if (currentUser.isAdmin) {
+        setPages(["Home", "Admin", "Training Timetable", "Meals"]);
+        setHandleFunctions([
+          handleHomeClick,
+          handleAdminClick,
+          handleTrainingClick,
+          handleMealsClick,
+        ]);
+      } else {
+        setPages(["Home", "Training Timetable", "Meals", "Tracking"]);
+        setHandleFunctions([
+          handleHomeClick,
+          handleTrainingClick,
+          handleMealsClick,
+          handleTrackingClick,
+        ]);
+      }
+
     }
-    }, []);
+  }, [isLoggedIn]);
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const navigate = useNavigate();
@@ -49,27 +61,27 @@ function ResponsiveAppBar() {
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
-  const handleHomeClick =()=>{
+  const handleHomeClick = () => {
     handleCloseNavMenu();
     navigate("/");
-  }
-  const handleAdminClick =()=>{
+  };
+  const handleAdminClick = () => {
     handleCloseNavMenu();
     navigate("/admin");
-  }
-  const handleTrainingClick =()=>{
+  };
+  const handleTrainingClick = () => {
     handleCloseNavMenu();
     navigate("/timetable");
-  }
-  const handleMealsClick =()=>{
+  };
+  const handleMealsClick = () => {
     handleCloseNavMenu();
     navigate("/meals");
-  }
-  const handleTrackingClick =()=>{
+  };
+  const handleTrackingClick = () => {
     handleCloseNavMenu();
     navigate("/tracking");
-  }
- 
+  };
+
   async function handleLogout() {
     try {
       setCurrentUser(null);
@@ -85,34 +97,37 @@ function ResponsiveAppBar() {
     }
   }
 
-  const handleLogoClick =()=>{
+  const handleLogoClick = () => {
     navigate("/");
-  }
+  };
 
   return (
-    <AppBar position="static">
+    <AppBar position="static"  sx={{ height: '90px'}}>
       <Container maxWidth="xl">
-        <Toolbar disableGutters>
+        <Toolbar disableGutters  sx={{ height: '90px'}}>
           <Typography
             variant="h6"
             noWrap
             component="a"
             sx={{
               mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
+              display: { xs: "none", md: "flex" },
+              fontFamily: "monospace",
               fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
+              letterSpacing: ".3rem",
+              color: "inherit",
+              textDecoration: "none",
             }}
           >
-   
-        <img className="logo-img" src={logo} alt="img" onClick={handleLogoClick}/>
-   
+            <img
+              className="logo-img"
+              src={logo}
+              alt="img"
+              onClick={handleLogoClick}
+            />
           </Typography>
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+         {isLoggedIn && <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -127,68 +142,67 @@ function ResponsiveAppBar() {
               id="menu-appbar"
               anchorEl={anchorElNav}
               anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
+                vertical: "bottom",
+                horizontal: "left",
               }}
               keepMounted
               transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
+                vertical: "top",
+                horizontal: "left",
               }}
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
               sx={{
-                display: { xs: 'block', md: 'none' },
+                display: { xs: "block", md: "none" },
               }}
             >
-              {pages.map((page ,index) => (
+              {pages.map((page, index) => (
                 <MenuItem key={page} onClick={handleFunctions[index]}>
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
               ))}
             </Menu>
-          </Box>
-          
+          </Box>}
+
           <Typography
             variant="h5"
             noWrap
             component="a"
             sx={{
               mr: 2,
-              display: { xs: 'flex', md: 'none' },
+              display: { xs: "flex", md: "none" },
               flexGrow: 1,
-              fontFamily: 'monospace',
+              fontFamily: "monospace",
               fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
+              letterSpacing: ".3rem",
+              color: "inherit",
+              textDecoration: "none",
             }}
           >
-     
-        <img className="logo-img" src={logo} alt="img" onClick={handleLogoClick}/>
-     
+            <img
+              className="logo-img"
+              src={logo}
+              alt="img"
+              onClick={handleLogoClick}
+            />
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page,index) => (
+          {isLoggedIn && <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+            {pages.map((page, index) => (
               <Button
                 key={page}
                 onClick={handleFunctions[index]}
-                sx={{ my: 2, color: 'white', display: 'block' }}
+                sx={{ my: 2, color: "white", display: "block" }}
               >
                 {page}
               </Button>
             ))}
-          </Box>
+          </Box>}
 
-          <Box sx={{ flexGrow: 0 }}>
-          <IconButton
-              size="large"
-              onClick={handleLogout}
-              color="inherit"
-            >
-              <LogoutIcon/>
+          {isLoggedIn && <Box sx={{ flexGrow: 0 }}>
+            <IconButton size="large" onClick={handleLogout} color="inherit">
+              <LogoutIcon />
             </IconButton>
-          </Box>
+          </Box>}
         </Toolbar>
       </Container>
     </AppBar>

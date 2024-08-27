@@ -16,7 +16,7 @@ function App() {
   const { currentUser, isLoggedIn } = useAuth();
   return (
     <>
-      {isLoggedIn && <ResponsiveAppBar />}
+      <ResponsiveAppBar />
 
       <Routes>
         <Route

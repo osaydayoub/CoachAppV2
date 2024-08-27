@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import "../Login/Login.css";
 import axios from "axios";
 
 function SignUp({ handle }) {
