@@ -14,7 +14,7 @@ function Login({ handle }) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const { currentUser, setCurrentUser, isLoggedIn, setIsLoggedIn } = useAuth();
-  const { setCurrentClient, setIsLoggedIn: setIsLoggedInData } = useData();
+  const { setCurrentClient} = useData();
   const navigate = useNavigate();
   async function handleSubmit(e) {
     e.preventDefault();
@@ -30,10 +30,10 @@ function Login({ handle }) {
       );
 
       localStorage.setItem("token", res.data.token);
+      axios.defaults.headers.common["Authorization"] = `Bearer ${res.data.token}`;
       setCurrentUser(res.data);
       setCurrentClient(res.data.client);
       setIsLoggedIn(true);
-      setIsLoggedInData(true);
       navigate("/");
     } catch (error) {
       console.log(error);

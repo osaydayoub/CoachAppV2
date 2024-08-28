@@ -11,17 +11,17 @@ export function DataProvider({ children }) {
   const [clientsData, setClientsData] = useState(null);
   const [workoutsData, setWorkoutsData] = useState(null);
   const [currentClient, setCurrentClient] = useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  useEffect(() => {
-    if (isLoggedIn) {
-      console.log("token Changed!!!");
-      const token = localStorage.getItem("token");
-      if (token) {
-        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-      }
-    }
-  }, [isLoggedIn]);
+
+  // useEffect(() => {
+  //   if (isLoggedIn) {
+  //     console.log("token Changed!!!");
+  //     const token = localStorage.getItem("token");
+  //     if (token) {
+  //       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+  //     }
+  //   }
+  // }, [isLoggedIn]);
 
   const getWorkouts = async () => {
     try {
@@ -166,7 +166,6 @@ export function DataProvider({ children }) {
     createWorkout,
     deleteWorkout,
     addDailyTracking,
-    setIsLoggedIn,
     getAllMealsByType,
     addNewMeal,
   };

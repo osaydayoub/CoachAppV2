@@ -1,34 +1,69 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext.jsx";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import "./Homepage.css";
 import { useData } from "../../context/DataContext.jsx";
 import { isSameDay } from "../../utils/helpers.js";
-import EventAvailableIcon from '@mui/icons-material/EventAvailable';
+import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import { Box, Stack, Typography } from "@mui/material";
+import WorkoutsCarousel from "../../components/WorkoutsCarousel/WorkoutsCarousel.jsx";
 function Homepage() {
   const { currentUser, isLoggedIn } = useAuth();
   const { currentClient } = useData();
   const [dailyTracking, setDailyTracking] = useState(null);
-  useState(() => {
-    if (currentClient != null) {
-      let track = currentClient.dailyTracking.find((track) => {
-        return isSameDay(new Date(track.date), new Date());
-      });
-      if (track === undefined) {
-        console.log("stil no data");
-        const t = {
-          date: new Date(),
-          calories: 0,
-          waterAmount: 0,
-          sleepHours: 0,
-        };
-        track = t;
+  const { workoutsData, getWorkouts } = useData();
+  const [workoutsToDisply, setWorkoutsToDisply] = useState(null);
+  
+  // useEffect(() => {
+  //     if (currentUser.isAdmin){
+  //         if (workoutsData === null) {
+  //             getWorkouts();
+  //           }
+  //     }
+  //   }, []);
+
+  useEffect(() => {
+    if(isLoggedIn&&currentUser.isAdmin){
+      if (workoutsData == null) {
+            getWorkouts();
       }
-      setDailyTracking(track);
     }
-  }, []);
+
+  }, [currentUser.isAdmin]);
+  
+    useEffect(() => {
+      if (workoutsData != null) {
+        const workoutsForToday = workoutsData?.filter((workout) => {
+          return isSameDay(new Date(workout.date), new Date());
+        });
+        setWorkoutsToDisply(workoutsForToday);
+        // console.log(workoutsForToday);
+      }
+    }, [workoutsData]);
+
+    useEffect(() => {
+      if (currentClient != null) {
+        let track = currentClient.dailyTracking.find((track) => {
+          return isSameDay(new Date(track.date), new Date());
+        });
+        if (track === undefined) {
+          console.log("stil no data");
+          const t = {
+            date: new Date(),
+            calories: 0,
+            waterAmount: 0,
+            sleepHours: 0,
+          };
+          track = t;
+        }
+        setDailyTracking(track);
+      }
+    }, []);
+
+
+
+
 
   return (
     <div className="Homepage page">
@@ -50,27 +85,33 @@ function Homepage() {
             <div className="progress-container">
               <div className="progress">
                 <CircularProgressbar
-                  value={
-                    Math.floor((dailyTracking.calories / currentClient.caloricIntake)* 100)
-                  }
-                  text={`${
-                    Math.floor((dailyTracking.calories / currentClient.caloricIntake)* 100)
-                  }%`}
+                  value={Math.floor(
+                    (dailyTracking.calories / currentClient.caloricIntake) * 100
+                  )}
+                  text={`${Math.floor(
+                    (dailyTracking.calories / currentClient.caloricIntake) * 100
+                  )}%`}
                 />
               </div>
             </div>
           )}
-  
         </div>
       )}
-      <Box sx={{ mb: 2 }}>
-    <Stack direction="row" alignItems="center" spacing={1}>
-      <EventAvailableIcon sx={{ color: 'primary.main', fontSize: 28 }} />
-      <Typography variant="h5" color="textPrimary">
-        Your upcoming workout is
-      </Typography>
-    </Stack>
-  </Box>
+      {currentUser.isAdmin && (
+        <div>
+          <Box sx={{ mb: 2 }}>
+            <Stack direction="row" alignItems="center" spacing={1}>
+              <EventAvailableIcon
+                sx={{ color: "primary.main", fontSize: 28 }}
+              />
+              <Typography variant="h5" color="textPrimary">
+                Your upcoming workouts
+              </Typography>
+            </Stack>
+          </Box>
+          <WorkoutsCarousel workoutsToDisply={workoutsToDisply}></WorkoutsCarousel>
+        </div>
+      )}
     </div>
   );
 }

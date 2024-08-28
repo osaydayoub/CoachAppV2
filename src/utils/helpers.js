@@ -10,7 +10,10 @@ export const getFullDate = (date) => {
 export const getTime = (date) => {
   let hour = date.getHours();
   let minutes = date.getMinutes();
+  if(minutes>9)
   return `${hour}:${minutes}`;
+  else
+  return `${hour}:0${minutes}`;
 };
 
 export const isSameDay = (date1, date2) =>

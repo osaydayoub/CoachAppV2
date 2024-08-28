@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useData } from "../../context/DataContext.jsx";
 import Meal from "../../components/Meal/Meal.jsx";
 import AddMeal from "../../components/AddMeal/AddMeal.jsx";
+import { useAuth } from "../../context/AuthContext.jsx";
 
 function MealOptionsPage() {
   const { type } = useParams();
@@ -12,6 +13,7 @@ function MealOptionsPage() {
   const [addMealDisplay, setAddMealDisplay] = useState(false);
   const [mealsChanged, setMealsChanged] = useState(false);
   const { getAllMealsByType } = useData();
+  const { currentUser } = useAuth();
 
   useEffect(() => {
     const getMeals = async () => {
@@ -36,7 +38,7 @@ function MealOptionsPage() {
       <h1>{type}</h1>
       <p>{`You can choose from a variety of options for your ${type}, ensuring your meal fits your preferences and nutritional needs.`}</p>
       <div>
-        <div>
+      {currentUser.isAdmin && (<div>
           <button
             className="add-meal-btn"
             onClick={() => {
@@ -52,7 +54,8 @@ function MealOptionsPage() {
               handleMealsChanged={setMealsChanged}
             />
           )}
-        </div>
+        </div>)
+        }
         {mealOptions && (
           <div className="meals-container">
             {mealOptions.map((mealOption) => {
