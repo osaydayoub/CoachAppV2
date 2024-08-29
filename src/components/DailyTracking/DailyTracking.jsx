@@ -3,6 +3,8 @@ import { isSameDay } from "../../utils/helpers.js";
 import "./DailyTracking.css";
 import { useData } from "../../context/DataContext.jsx";
 import SingleTracking from "../SingleTracking/SingleTracking.jsx";
+import Button from "@mui/material/Button";
+import UpdateIcon from "@mui/icons-material/Update";
 
 function DailyTracking() {
   const [adding, setAdding] = useState(false);
@@ -85,13 +87,21 @@ function DailyTracking() {
             trackingState={sleepHours}
             trackingStateHandler={setSleepHours}
           />
-          <button
+          {/* <button
             className="update-btn"
             onClick={handleUpdateDailyTracking}
             disabled={adding}
           >
             Update
-          </button>
+          </button> */}
+          <Button
+            variant="contained"
+            endIcon={<UpdateIcon />}
+            onClick={handleUpdateDailyTracking}
+            disabled={adding}
+          >
+            Update
+          </Button>
         </div>
       )}
     </div>

@@ -10,6 +10,7 @@ import {
   isSameDay,
 } from "../../utils/helpers.js";
 import Workout from "../../components/Workout/Workout.jsx";
+import WorkoutsCarousel from "../../components/WorkoutsCarousel/WorkoutsCarousel.jsx";
 function TimetablePage() {
   const [value, onchange] = useState(new Date());
   const { currentUser } = useAuth();
@@ -77,6 +78,7 @@ function TimetablePage() {
                 workout={getWorkout(new Date(value))}
                 isAdmin={currentUser.isAdmin}
                 index={1}
+                isViewOnly={true}
               />
             )}
           </div>
@@ -93,20 +95,12 @@ function TimetablePage() {
           </h3>
         )}
         {workoutsToDisply && (
-          <>
-            {workoutsToDisply.map((workout, index) => {
-              console.log(workout);
-              return (
-                <Workout
-                  key={index}
-                  workout={workout}
-                  isAdmin={currentUser.isAdmin}
-                  index={index}
-                  id={workout._id}
-                />
-              );
-            })}
-          </>
+          <WorkoutsCarousel
+            autoPlay={false}
+            workoutsToDisply={workoutsToDisply}
+            isViewOnly={false}
+            isAdmin={currentUser.isAdmin}
+          ></WorkoutsCarousel>
         )}
       </div>
     </div>

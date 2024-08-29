@@ -2,7 +2,9 @@ import React from "react";
 import "./Workout.css";
 import { getFullDate, getTime } from "../../utils/helpers.js";
 import { useData } from "../../context/DataContext.jsx";
-function Workout({ workout, isAdmin, index, id }) {
+import EventBusyIcon from '@mui/icons-material/EventBusy';
+import { Button } from "@mui/material";
+function Workout({ workout, isAdmin, index, id, isViewOnly }) {
   const { deleteWorkout } = useData();
 
   const handleCancle = async () => {
@@ -24,13 +26,18 @@ function Workout({ workout, isAdmin, index, id }) {
       {isAdmin && <div>{`Client Name: ${workout.clientName}`} </div>}
       <div>{`Exercise: ${workout.exercise}`}</div>
       {/* <div>{`Date: ${getFullDate(new Date(workout.date))}`}</div> */}
-      {!isAdmin && <div>{`Date: ${getFullDate(new Date(workout.date))}`}</div>}
+      {(!isAdmin || isViewOnly) && (
+        <div>{`Date: ${getFullDate(new Date(workout.date))}`}</div>
+      )}
       <div>{`Time: ${getTime(new Date(workout.date))}`}</div>
-      {isAdmin && (
+      {isAdmin && !isViewOnly && (
         <div>
-          <button className="workout-btn" onClick={handleCancle}>
+          {/* <button className="workout-btn" onClick={handleCancle}>
             Cancle
-          </button>
+          </button> */}
+          <Button variant="contained" endIcon={<EventBusyIcon />}onClick={handleCancle}>
+          Cancle
+          </Button>
         </div>
       )}
     </div>

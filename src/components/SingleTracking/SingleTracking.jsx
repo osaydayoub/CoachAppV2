@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./SingleTracking.css";
+import Button from "@mui/material/Button";
+import AddIcon from "@mui/icons-material/Add";
 function SingleTracking({
   trackingType,
   dailyTracking,
@@ -16,7 +18,14 @@ function SingleTracking({
   return (
     <div className="tracking-box">
       <p>{`${trackingType}: ${dailyTracking}`}</p>
-      <button onClick={() => setAdding(true)}>+</button>
+      {/* <button onClick={() => setAdding(true)}>+</button> */}
+      <Button
+        variant="contained"
+        onClick={() => setAdding(true)}
+        style={{ minWidth: 0, padding: "8px" }} // Adjust padding if needed
+      >
+        <AddIcon />
+      </Button>
       {adding && (
         <input
           ref={inputRef}

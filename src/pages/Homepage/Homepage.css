@@ -4,6 +4,9 @@
     justify-content:start; 
     align-items: start;
 }
+.client-homepage{
+flex-direction: row;
+}
 .Homepage .progress-container{
 display: flex;
 gap: 30px;

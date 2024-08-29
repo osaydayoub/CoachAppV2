@@ -30,8 +30,24 @@
     background-position: center;
 
 }
-/* For screens smaller than 600px */
-@media (max-width: 600px) {
+
+@media (max-width: 1000px) {
+    .LoginPage {
+        min-height: calc(100vh );
+        justify-content: center;
+    }
+}
+
+@media (max-width: 1000px) {
+    .login-signup-container{
+        margin-right: 0;
+        margin-top: 0;    
+    }
+}
+
+
+/* For screens smaller than 1000px */
+@media (max-width: 1000px) {
     .login-img {
       /* Set a different image for small devices */
       width: 100%;
@@ -41,4 +57,5 @@
       background-position: center;
     }
 }
+
 
