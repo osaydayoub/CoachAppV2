@@ -1,6 +1,6 @@
 .LoginPage {
     width: 100%;
-    min-height: calc(100vh + 140px);
+    min-height: calc(100vh + 250px);
     display: flex;
     flex-direction: row;
     justify-content: right;

@@ -8,6 +8,7 @@ import axios from "axios";
 function SignUp({ handle }) {
   const [userName, setUserName] = useState("");
   const [age, setAge] = useState(0);
+  const [weight, setWeight] = useState(0);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
@@ -31,6 +32,7 @@ function SignUp({ handle }) {
       const res = await axios.post(`${import.meta.env.VITE_API_LINK}/users`, {
         name: userName,
         age,
+        weight,
         email,
         password,
       });
@@ -74,6 +76,16 @@ function SignUp({ handle }) {
             type="number"
             id="age"
             onChange={(e) => setAge(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label htmlFor="weight">Weight</label>
+          <br />
+          <input
+            type="number"
+            id="weight"
+            onChange={(e) => setWeight(e.target.value)}
             required
           />
         </div>
