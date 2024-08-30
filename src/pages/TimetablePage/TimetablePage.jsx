@@ -22,6 +22,7 @@ function TimetablePage() {
   useEffect(() => {
     if (!currentUser.isAdmin) {
       const currentUserWorkouts = currentUser.client.workouts;
+      currentUserWorkouts.sort((a,b)=>new Date(a.date) - new Date(b.date));
       const highlightArray = [];
       currentUserWorkouts.forEach((element) => {
         highlightArray.push(new Date(element.date));

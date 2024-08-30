@@ -28,7 +28,10 @@ export function DataProvider({ children }) {
       const response = await axios.get(
         `${import.meta.env.VITE_API_LINK}/coach/workouts`
       );
-      setWorkoutsData(response.data);
+      const data=response.data;
+      data.sort((a,b)=>new Date(a.date) - new Date(b.date))
+
+      setWorkoutsData(data);
     } catch (error) {
       console.log("error in get workouts");
     }

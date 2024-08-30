@@ -27,7 +27,7 @@ function Homepage() {
   useEffect(() => {
     if (workoutsData != null) {
       const workoutsForToday = workoutsData?.filter((workout) => {
-        return isSameDay(new Date(workout.date), new Date());
+        return isSameDay(new Date(workout.date), new Date())&&(new Date(workout.date)>= new Date());
       });
       setWorkoutsToDisply(workoutsForToday);
     }
@@ -60,7 +60,7 @@ function Homepage() {
           <Stack direction="row" alignItems="center" spacing={1}>
             <EventAvailableIcon sx={{ color: "primary.main", fontSize: 28 }} />
             <Typography variant="h5" color="textPrimary">
-              Your upcoming workouts
+            Upcoming Workouts for Today
             </Typography>
           </Stack>
         </Box>
