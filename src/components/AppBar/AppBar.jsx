@@ -12,7 +12,7 @@ import MenuItem from "@mui/material/MenuItem";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useAuth } from "../../context/AuthContext.jsx";
 import { useData } from "../../context/DataContext.jsx";
-import logo from "../../assets/images/logo.jpeg";
+import logo from "../../assets/images/logo.png";
 import "./AppBar.css";
 import { useNavigate } from "react-router-dom";
 
@@ -22,7 +22,6 @@ function ResponsiveAppBar() {
     setClientsData,
     setWorkoutsData,
     setCurrentClient,
-    setIsLoggedIn: setIsLoggedInData,
   } = useData();
 
   const [pages, setPages] = React.useState([]);
@@ -89,20 +88,22 @@ function ResponsiveAppBar() {
       setClientsData(null);
       setWorkoutsData(null);
       setCurrentClient(null);
-      setIsLoggedInData(false);
+      console.log("localStorage.removeItem");
       localStorage.removeItem("token");
+      localStorage.removeItem("currentUser");
       navigate("./login");
-    } catch {
-      console.log("failed to log out");
+    } catch (error){
+      console.error("Failed to log out:", error);
     }
   }
 
   const handleLogoClick = () => {
     navigate("/");
   };
-
+//To change the primary color of your Material-UI components,
+// such as the AppBar, you can customize the Material-UI theme. 
   return (
-    <AppBar position="static"  sx={{ height: '90px'}}>
+    <AppBar position="static"  sx={{ height: '90px', backgroundColor: '#21201c'}}>
       <Container maxWidth="xl">
         <Toolbar disableGutters  sx={{ height: '90px'}}>
           <Typography

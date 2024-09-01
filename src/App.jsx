@@ -6,14 +6,40 @@ import AdminPage from "./pages/AdminPage/AdminPage";
 import TimetablePage from "./pages/TimetablePage/TimetablePage";
 import TrackingPage from "./pages/TrackingPage/TrackingPage";
 import MealsPage from "./pages/MealsPage/MealsPage";
-
+import axios from "axios";
 import { useAuth } from "./context/AuthContext";
 import Footer from "./components/Footer/Footer";
 import MealOptionsPage from "./pages/MealOptionsPage/MealOptionsPage";
 import ResponsiveAppBar from "./components/AppBar/AppBar";
+import { useData } from "./context/DataContext";
+import { useEffect, useState } from "react";
 
 function App() {
-  const { currentUser, isLoggedIn } = useAuth();
+  const [loading, setLoading] = useState(true);
+  const {
+    setCurrentUser,
+    isLoggedIn,
+    setIsLoggedIn} = useAuth();
+    const { setCurrentClient} = useData();
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const userData = localStorage.getItem("currentUser");
+    console.log("useEffect Try to get login data from localStorage");
+    // console.log(JSON.parse(userData));
+    if (token) {
+      console.log("updating");
+      setIsLoggedIn(true);
+      setCurrentUser(JSON.parse(userData));
+      setCurrentClient(JSON.parse(userData).client);
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    } else {
+      setIsLoggedIn(false);
+    }
+    setLoading(false);
+  }, [isLoggedIn]);
+  if(loading){
+    return <h1>loading...</h1>;
+  }
   return (
     <>
       <ResponsiveAppBar />

@@ -3,10 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import "./Login.css";
 import { useAuth } from "../../context/AuthContext";
-import { useData } from "../../context/DataContext";
+
 import axios from "axios";
 // import loginImg from "../../assets/msaCoach.jpeg";
 import loginImg from "../../assets/images/logo2.png";
+import { useData } from "../../context/DataContext";
 //TODO handel is afunc for moving to signup page oe login... so do it
 function Login({ handle }) {
   const [email, setEmail] = useState("");
@@ -30,6 +31,7 @@ function Login({ handle }) {
       );
 
       localStorage.setItem("token", res.data.token);
+      localStorage.setItem("currentUser", JSON.stringify(res.data)); // Store the user data as a string
       axios.defaults.headers.common["Authorization"] = `Bearer ${res.data.token}`;
       setCurrentUser(res.data);
       setCurrentClient(res.data.client);
