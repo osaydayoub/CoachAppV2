@@ -26,7 +26,7 @@ function App() {
     const userData = localStorage.getItem("currentUser");
     console.log("useEffect Try to get login data from localStorage");
     // console.log(JSON.parse(userData));
-    if (token) {
+    if (token && userData) {
       console.log("updating");
       setIsLoggedIn(true);
       setCurrentUser(JSON.parse(userData));
