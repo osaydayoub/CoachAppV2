@@ -6,8 +6,8 @@ import { useAuth } from "../../context/AuthContext";
 
 function WorkoutsCarousel({autoPlay,workoutsToDisply,isViewOnly,isAdmin}) {
   return (
-    <div style={{ marginTop: "50px", color: "#200a8e" }}>
-      {workoutsToDisply && (
+    <div style={{ marginTop: "50px"}}>
+      {workoutsToDisply && (workoutsToDisply.length!=0)?(
         <Carousel
           autoPlay={autoPlay}
           interval={5000}
@@ -28,7 +28,8 @@ function WorkoutsCarousel({autoPlay,workoutsToDisply,isViewOnly,isAdmin}) {
             );
           })}
         </Carousel>
-      )}
+        //TODO update to a good component
+      ):<h4>No Workouts To Display Available!</h4>}
     </div>
   );
 }
