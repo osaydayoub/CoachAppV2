@@ -101,7 +101,7 @@ const BarcodeScanner = () => {
         audio={false}
         ref={webcamRef}
         screenshotFormat="image/png"
-        width={300}
+        width={200}
         videoConstraints={{
             facingMode: useMainCamera ? 'environment' : 'user', // Toggle between rear and front camera
           }}
