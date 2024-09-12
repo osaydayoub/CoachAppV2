@@ -6,6 +6,7 @@ const BarcodeScanner = () => {
   const [data, setData] = useState('No barcode detected');
   const [nutritionData, setNutritionData] = useState(null);
   const [isScanning, setIsScanning] = useState(false);
+  const [useMainCamera, setUseMainCamera] = useState(true);
   const webcamRef = useRef(null);
   const codeReader = useRef(new BrowserMultiFormatReader());
   const captureIntervalRef = useRef(null);
@@ -101,7 +102,13 @@ const BarcodeScanner = () => {
         ref={webcamRef}
         screenshotFormat="image/png"
         width={300}
+        videoConstraints={{
+            facingMode: useMainCamera ? 'environment' : 'user', // Toggle between rear and front camera
+          }}
       />}
+      <button onClick={() => setUseMainCamera(!useMainCamera)}>
+        Switch to {useMainCamera ? 'Selfie' : 'Main'} Camera
+      </button>
       <button onClick={startScanning} disabled={isScanning}>Start Scanning</button>
       <button onClick={stopScanning} disabled={!isScanning}>Stop Scanning</button>
       <p>Scanned Barcode: {data}</p>
