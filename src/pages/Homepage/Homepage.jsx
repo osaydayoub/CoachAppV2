@@ -9,6 +9,7 @@ import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import { Box, Stack, Typography } from "@mui/material";
 import WorkoutsCarousel from "../../components/WorkoutsCarousel/WorkoutsCarousel.jsx";
 import MealsAccordion from "../../components/MealsAccordion/MealsAccordion.jsx";
+import BarcodeScanner from "../../components/BarcodeScanner/BarcodeScanner.jsx";
 function Homepage() {
   const { currentUser, isLoggedIn } = useAuth();
   const { currentClient } = useData();
@@ -70,6 +71,7 @@ function Homepage() {
           isAdmin={currentUser.isAdmin}
         ></WorkoutsCarousel>
       </div>
+      <BarcodeScanner/>
     </div>
   ) : (
     <div className="client-homepage Homepage page">
