@@ -10,6 +10,7 @@ const BarcodeScanner = () => {
   const webcamRef = useRef(null);
   const codeReader = useRef(new BrowserMultiFormatReader());
   const captureIntervalRef = useRef(null);
+  const [counter, setCounter] = useState(0);
 
   // Cleanup function to stop scanning when the component unmounts
   useEffect(() => {
@@ -35,6 +36,7 @@ const BarcodeScanner = () => {
         } else {
           console.log('No image captured');
         }
+        setCounter((prevCounter) => prevCounter + 1);
       }
     }, 1600); // Scans every 1000ms (1 second)
   };
@@ -97,6 +99,7 @@ const BarcodeScanner = () => {
   return (
     <div>
       <h1>Barcode Scanner</h1>
+      <h2>{`counter=${counter}`}</h2>
       {isScanning&&<Webcam
         audio={false}
         ref={webcamRef}
