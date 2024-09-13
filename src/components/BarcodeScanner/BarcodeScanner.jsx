@@ -38,7 +38,7 @@ const BarcodeScanner = () => {
         }
         setCounter((prevCounter) => prevCounter + 1);
       }
-    }, 1600); // Scans every 1000ms (1 second)
+    }, 2000); // Scans every 1000ms (1 second)
   };
 
   const stopScanning = () => {
