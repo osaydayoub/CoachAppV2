@@ -36,7 +36,7 @@ const BarcodeScanner = () => {
           console.log('No image captured');
         }
       }
-    }, 1000); // Scans every 1000ms (1 second)
+    }, 1600); // Scans every 1000ms (1 second)
   };
 
   const stopScanning = () => {
@@ -101,7 +101,7 @@ const BarcodeScanner = () => {
         audio={false}
         ref={webcamRef}
         screenshotFormat="image/png"
-        width={200}
+        width={300}
         videoConstraints={{
             facingMode: useMainCamera ? 'environment' : 'user', // Toggle between rear and front camera
           }}
