@@ -3,69 +3,46 @@ import { BrowserMultiFormatReader, BarcodeFormat } from "@zxing/library";
 import "./BarcodeScanner.css";
 import Webcam from "react-webcam";
 import axios from "axios";
-import Controls from "../Controls/Controls";
-import { styled } from "@mui/material/styles";
-import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Switch from "@mui/material/Switch";
 import NutritionCard from "../NutritionCard/NutritionCard";
+import { Button } from "@mui/material";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import StopIcon from "@mui/icons-material/Stop";
+// Define the limit as a constant outside the component
+const MAX_SCAN_ATTEMPTS = 10;
 
-const Android12Switch = styled(Switch)(({ theme }) => ({
-  padding: 8,
-  "& .MuiSwitch-track": {
-    borderRadius: 22 / 2,
-    "&::before, &::after": {
-      content: '""',
-      position: "absolute",
-      top: "50%",
-      transform: "translateY(-50%)",
-      width: 16,
-      height: 16,
-    },
-    "&::before": {
-      backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24"><path fill="${encodeURIComponent(
-        theme.palette.getContrastText(theme.palette.primary.main)
-      )}" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"/></svg>')`,
-      left: 12,
-    },
-    "&::after": {
-      backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24"><path fill="${encodeURIComponent(
-        theme.palette.getContrastText(theme.palette.primary.main)
-      )}" d="M19,13H5V11H19V13Z" /></svg>')`,
-      right: 12,
-    },
-  },
-  "& .MuiSwitch-thumb": {
-    boxShadow: "none",
-    width: 16,
-    height: 16,
-    margin: 2,
-  },
-}));
 
 const BarcodeScanner = () => {
-  const [data, setData] = useState("No barcode detected");
+  const [data, setData] = useState(null);
   const [nutritionData, setNutritionData] = useState(null);
+  //"idle", "loading", "success","no_data", or "error"
+  const [nutritionDataFetchStatus, setNutritionDataFetchStatus] = useState("idle");
   const [isScanning, setIsScanning] = useState(false);
   const [useMainCamera, setUseMainCamera] = useState(true);
   const webcamRef = useRef(null);
   const codeReader = useRef(new BrowserMultiFormatReader());
   const captureIntervalRef = useRef(null);
   const [counter, setCounter] = useState(0);
-  const [isChecked, setIsChecked] = useState(false);
+  const [tryScanAgain, setTryScanAgain] = useState(false);
 
-  // Handler for Android12Switch
-  const handleAndroidSwitchChange = (event) => {
-    const checked = event.target.checked;
+  const handleScanning = () => {
+    setCounter(0);
+    setTryScanAgain(false);
+    setData(null);
+    setNutritionData(null);
+    setNutritionDataFetchStatus("idle");
 
-    if (checked) {
-      startScanning(); // Start scanning when switched on
+    if (!isScanning) {
+      startScanning();
     } else {
-      stopScanning(); // Stop scanning when switched off
+      stopScanning();
     }
+    setIsScanning(!isScanning);
+  };
 
-    setIsChecked(checked); // Update the state based on the switch position
-    console.log("Android 12 Switch is " + (checked ? "On" : "Off"));
+  const handleManualInput = (barcode) => {
+    setData(barcode);
+    fetchNutritionData(barcode);
+    setTryScanAgain(false); // Reset the try again state
   };
 
   // Cleanup function to stop scanning when the component unmounts
@@ -95,16 +72,23 @@ const BarcodeScanner = () => {
         setCounter((prevCounter) => {
           const newCounter = prevCounter + 1;
           console.log(`counter=${newCounter}`);
+          
+          if (newCounter >= MAX_SCAN_ATTEMPTS) {
+            // Check if the counter reaches 30
+            console.log("Reached maximum scanning attempts");
+            setTryScanAgain(true);
+            stopScanning(); // Stop scanning when counter hits 30
+          }
           return newCounter;
         });
       }
-    }, 400); // Scans every 500ms (0.5 second)
+    }, 500); // Scans every 500ms (0.5 second)
   };
 
   const stopScanning = () => {
     console.log("Stopping scan");
     setIsScanning(false);
-    setIsChecked(false);
+    // setCounter(0);
     if (captureIntervalRef.current) {
       clearInterval(captureIntervalRef.current);
     }
@@ -146,19 +130,26 @@ const BarcodeScanner = () => {
       const response = await axios.get(
         `https://world.openfoodfacts.org/api/v0/product/${barcode}.json`
       );
-      const newNutritionData =
+      if(response.data.status===1){
+        const newNutritionData =
         response.data.product.nutriments["energy-kcal_100g"];
       console.log(newNutritionData);
       setNutritionData(newNutritionData);
-      // return response.data;
+      setNutritionDataFetchStatus("success");
+      }else{
+        if(response.data.status===0)
+        setNutritionDataFetchStatus("no_data");
+      }
+
     } catch (error) {
       console.log(error);
+      setNutritionDataFetchStatus("error");
       // throw new Error(error.)
     }
   };
 
   return (
-    <div>
+    <div className="container">
       <h1>Barcode Scanner</h1>
       <div className="scanner-container">
         {isScanning && (
@@ -173,32 +164,23 @@ const BarcodeScanner = () => {
           />
         )}
       </div>
-
-      <FormGroup>
-        <FormControlLabel
-          control={<Android12Switch checked={isChecked} />}
-          label={isScanning ? "Stop Scanning" : "Start Scanning"}
-          onChange={handleAndroidSwitchChange}
+      <Button
+        sx={{ mt: 2 }}
+        variant="contained"
+        endIcon={isScanning ? <StopIcon /> : <PlayArrowIcon />}
+        onClick={handleScanning}
+      >
+        {isScanning ? "Stop Scanning" : "Start Scanning"}
+      </Button>
+      {(nutritionData || tryScanAgain) && (
+        <NutritionCard
+          status={tryScanAgain ? "failed" : "success"} 
+          scannedBarcode={data}
+          nutritionData={nutritionData}
+          nutritionDataFetchStatus={nutritionDataFetchStatus}
+          handleManualInput={handleManualInput}
         />
-        {/* <button onClick={() => setUseMainCamera(!useMainCamera)}>
-          Switch to {useMainCamera ? "Selfie" : "Main"} Camera
-        </button> */}
-      </FormGroup>
-
-      {/* <p>Scanned Barcode: {data}</p> */}
-      {nutritionData && <NutritionCard scannedBarcode={data} nutritionData={nutritionData}/>
-      // &&(
-      //   <div>
-      //     <h2>Nutrition Information:</h2>
-      //     {/* <p><strong>Product Name:</strong> {nutritionData.food_name}</p> */}
-      //     <p>
-      //       <strong>Calories in 100 gr:</strong> {nutritionData}
-      //     </p>
-      //     {/* <p><strong>Serving Size:</strong> {nutritionData.serving_qty} {nutritionData.serving_unit}</p> */}
-      //     {/* Add more nutritional details as needed */}
-      //   </div>
-      // )
-      }
+      )}
     </div>
   );
 };

@@ -15,32 +15,32 @@ import { useData } from "./context/DataContext";
 import { useEffect, useState } from "react";
 
 function App() {
-  //const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const {
-   // setCurrentUser,
+    setCurrentUser,
     isLoggedIn,
-   // setIsLoggedIn
+    setIsLoggedIn
   } = useAuth();
-   // const { setCurrentClient} = useData();
-  // useEffect(() => {
-  //   const token = localStorage.getItem("token");
-  //   const userData = localStorage.getItem("currentUser");
-  //   console.log("useEffect Try to get login data from localStorage");
+   const { setCurrentClient} = useData();
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const userData = localStorage.getItem("currentUser");
+    console.log("useEffect Try to get login data from localStorage");
     
-  //   if (token && userData) {
-  //     console.log("updating");
-  //     setIsLoggedIn(true);
-  //     setCurrentUser(JSON.parse(userData));
-  //     setCurrentClient(JSON.parse(userData).client);
-  //     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-  //   } else {
-  //     setIsLoggedIn(false);
-  //   }
-  //   setLoading(false);
-  // }, [isLoggedIn]);
-  // if(loading){
-  //   return <h1>loading...</h1>;
-  // }
+    if (token && userData) {
+      console.log("updating");
+      setIsLoggedIn(true);
+      setCurrentUser(JSON.parse(userData));
+      setCurrentClient(JSON.parse(userData).client);
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    } else {
+      setIsLoggedIn(false);
+    }
+    setLoading(false);
+  }, [isLoggedIn]);
+  if(loading){
+    return <h1>loading...</h1>;
+  }
   return (
     <>
       <ResponsiveAppBar />

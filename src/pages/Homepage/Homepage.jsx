@@ -105,6 +105,7 @@ function Homepage() {
       </div>
 </div>
       <MealsAccordion />
+      <BarcodeScanner/>
     </div>
   );
 }

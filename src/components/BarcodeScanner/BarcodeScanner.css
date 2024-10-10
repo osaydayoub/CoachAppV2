@@ -1,3 +1,13 @@
+.container{
+    border: solid 2px black;
+    border-radius: 10px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Horizontally centers the content */
+    align-items: center; 
+
+}
 .scanner-container{
     background-image: url('../../assets/images/barcode-scanner-2.png');
     background-size: cover;
