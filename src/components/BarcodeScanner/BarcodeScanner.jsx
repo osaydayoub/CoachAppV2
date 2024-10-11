@@ -139,6 +139,7 @@ const BarcodeScanner = () => {
       }else{
         if(response.data.status===0)
         setNutritionDataFetchStatus("no_data");
+        setNutritionData(null);
       }
 
     } catch (error) {
@@ -172,9 +173,9 @@ const BarcodeScanner = () => {
       >
         {isScanning ? "Stop Scanning" : "Start Scanning"}
       </Button>
-      {(nutritionData || tryScanAgain) && (
+      {(nutritionData || tryScanAgain||nutritionDataFetchStatus==="no_data") && (
         <NutritionCard
-          status={tryScanAgain ? "failed" : "success"} 
+          status={(tryScanAgain||nutritionDataFetchStatus==="no_data") ? "failed" : "success"} 
           scannedBarcode={data}
           nutritionData={nutritionData}
           nutritionDataFetchStatus={nutritionDataFetchStatus}

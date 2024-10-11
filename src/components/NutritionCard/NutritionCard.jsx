@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { Box, Card, CardActions, CardContent, Button, Typography, TextField } from "@mui/material";
+import {
+  Box,
+  Card,
+  CardActions,
+  CardContent,
+  Button,
+  Typography,
+  TextField,
+} from "@mui/material";
 import { useAuth } from "../../context/AuthContext.jsx";
 
 function NutritionCard({
@@ -22,7 +30,6 @@ function NutritionCard({
   const handleAddCalories = () => {
     console.log("handleAddCalories");
   };
-  
 
   const handleInputChange = (event) => {
     setInputValue(event.target.value);
@@ -45,26 +52,37 @@ function NutritionCard({
     >
       <CardContent>
         {status === "failed" ? (
-          <>
-            <Typography
-              gutterBottom
-              sx={{ color: "text.secondary", fontSize: 14 }}
-            >
-              Scanning failed. Please try again by clicking the Start Scanning
-              button, or enter the barcode number manually below.
+          nutritionDataFetchStatus === "no_data" ? (
+            <Typography gutterBottom sx={{ color: "error.main", fontSize: 14 }}>
+              No data available for this product!
             </Typography>
+            //TODO if currentUser.isAdmin so add option to add new data! 
+          ) : (
+            <>
+              <Typography
+                gutterBottom
+                sx={{ color: "text.secondary", fontSize: 14 }}
+              >
+                Scanning failed. Please try again by clicking the Start Scanning
+                button, or enter the barcode number manually below.
+              </Typography>
 
-            <TextField
-              label="Enter Barcode"
-              variant="outlined"
-              value={manualBarcode}
-              onChange={(e) => setManualBarcode(e.target.value)}
-              sx={{ mt: 1, mb: 2, width: "100%" }}
-            />
-            <Button variant="contained" color="primary" onClick={handleSubmit}>
-              Submit Barcode
-            </Button>
-          </>
+              <TextField
+                label="Enter Barcode"
+                variant="outlined"
+                value={manualBarcode}
+                onChange={(e) => setManualBarcode(e.target.value)}
+                sx={{ mt: 1, mb: 2, width: "100%" }}
+              />
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleSubmit}
+              >
+                Submit Barcode
+              </Button>
+            </>
+          )
         ) : (
           <>
             <Typography
@@ -82,8 +100,8 @@ function NutritionCard({
           </>
         )}
       </CardContent>
-      {status === "success" && (
-        currentUser.isAdmin&& <CardActions>
+      {status === "success" && currentUser.isAdmin && (
+        <CardActions>
           {/* Button to choose first option (Calories to Weight) */}
           <Button onClick={() => setSelectedOption("calories-to-weight")}>
             Input Calories to Continue Calculation for Weight
@@ -136,7 +154,7 @@ function NutritionCard({
           sx={{
             padding: 2,
             display: "flex",
-            flexDirection: 'column',
+            flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
           }}
@@ -147,9 +165,7 @@ function NutritionCard({
               : `Calories: ${result}`}
           </Typography>
 
-          <Button variant="contained"
-          onClick={handleAddCalories}
-          >
+          <Button variant="contained" onClick={handleAddCalories}>
             Add Calories to your daily tracking
             {/* Calories to your daily tracking */}
           </Button>
