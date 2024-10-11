@@ -18,6 +18,7 @@ function NutritionCard({
   handleManualInput,
 }) {
   const [manualBarcode, setManualBarcode] = useState("");
+  const [manualNutritionData, setManualNutritionData] = useState("");
   const [selectedOption, setSelectedOption] = useState(null);
   const [inputValue, setInputValue] = useState(""); // To store the user's input (either calories or weight)
   const [result, setResult] = useState(null); // To store the result of the calculation
@@ -27,6 +28,10 @@ function NutritionCard({
       handleManualInput(manualBarcode);
     }
   };
+
+  const handleAddProduct=()=>{
+    console.log("handleAddProduct");
+  }
   const handleAddCalories = () => {
     console.log("handleAddCalories");
   };
@@ -53,11 +58,49 @@ function NutritionCard({
       <CardContent>
         {status === "failed" ? (
           nutritionDataFetchStatus === "no_data" ? (
-            <Typography gutterBottom sx={{ color: "error.main", fontSize: 14 }}>
-              No data available for this product!
-            </Typography>
-            //TODO if currentUser.isAdmin so add option to add new data! 
+            <>
+              <Typography
+                gutterBottom
+                sx={{ color: "text.secondary", fontSize: 14 }}
+              >
+                {`Nutrition Information for scanned Barcode ${scannedBarcode} `}
+              </Typography>
+
+              <Typography
+                gutterBottom
+                sx={{ color: "error.main", fontSize: 14 }}
+              >
+                No data available for this product!
+              </Typography>
+              {currentUser.isAdmin && (
+                <>
+                  <Typography
+                    gutterBottom
+                    sx={{ color: "text.secondary", fontSize: 14 }}
+                  >
+                  You can add this product to your database
+                  </Typography>
+                  
+                  <TextField
+                    label="Calories in 100g"
+                    variant="outlined"
+                    value={manualNutritionData}
+                    type="number"
+                    onChange={(e) => setManualNutritionData(e.target.value)}
+                    sx={{ mt: 1, mb: 2, width: "100%" }}
+                  />
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleAddProduct}
+                  >
+                    Add product
+                  </Button>
+                </>
+              )}
+            </>
           ) : (
+            //TODO if currentUser.isAdmin so add option to add new data!
             <>
               <Typography
                 gutterBottom
