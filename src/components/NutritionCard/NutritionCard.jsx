@@ -9,7 +9,8 @@ import {
   TextField,
 } from "@mui/material";
 import { useAuth } from "../../context/AuthContext.jsx";
-
+import { useData } from "../../context/DataContext.jsx";
+import { isSameDay } from "../../utils/helpers.js";
 function NutritionCard({
   status,
   scannedBarcode,
@@ -22,18 +23,60 @@ function NutritionCard({
   const [selectedOption, setSelectedOption] = useState(null);
   const [inputValue, setInputValue] = useState(""); // To store the user's input (either calories or weight)
   const [result, setResult] = useState(null); // To store the result of the calculation
+  const [addingCalories, setAdding] = useState(false);
+  const [calories, setCalories] = useState(0);
+  // const [dailyTracking, setDailyTracking] = useState(null);
+
   const { currentUser } = useAuth();
+  const { currentClient, addDailyTracking, getCurrentClient } = useData();
   const handleSubmit = () => {
     if (manualBarcode.trim() !== "") {
       handleManualInput(manualBarcode);
     }
   };
 
-  const handleAddProduct=()=>{
+  const handleAddProduct = () => {
     console.log("handleAddProduct");
-  }
-  const handleAddCalories = () => {
+  };
+  const handleAddCalories = async () => {
     console.log("handleAddCalories");
+    console.log(currentClient);
+    let track = currentClient.dailyTracking.find((track) => {
+      return isSameDay(new Date(track.date), new Date());
+    });
+    if (track === undefined) {
+      console.log("stil no data");
+      const t = {
+        date: new Date(),
+        calories: 0,
+        waterAmount: 0,
+        sleepHours: 0,
+      };
+      track = t;
+    }
+
+    try {
+      setAdding(true);
+      console.log(track);
+      const updatednewTrack = {
+        date: track.date,
+        calories: Number(track.calories) + Number(calories),
+        waterAmount: Number(track.waterAmount),
+        sleepHours: Number(track.sleepHours),
+      };
+      await addDailyTracking(currentClient._id, updatednewTrack);
+      const resTrack = await getCurrentClient(currentClient._id);
+      const uptrack = resTrack.dailyTracking.find((track) => {
+        return isSameDay(new Date(track.date), new Date());
+      });
+    } catch (error) {
+      console.log(error);
+      console.log("error in handleDailyTracking");
+    }
+    setAdding(false);
+    setSelectedOption(null);
+    setResult(null);
+    setInputValue("");
   };
 
   const handleInputChange = (event) => {
@@ -42,14 +85,16 @@ function NutritionCard({
 
   const handleCalculateWeight = () => {
     // Logic to calculate weight from calories
-    const weight = (inputValue / nutritionData) * 100; // Example: Assuming calories per 100g, calculate weight
+    const weight = (inputValue / nutritionData) * 100;
     setResult(weight.toFixed(2) + " gr");
+    setCalories(inputValue);
   };
 
   const handleCalculateCalories = () => {
     // Logic to calculate calories from weight
-    const calories = (inputValue * nutritionData) / 100; // Example: calories per 100g, calculate total calories
-    setResult(calories.toFixed(2) + " cal");
+    const calculatedCalories = (inputValue * nutritionData) / 100;
+    setCalories(calculatedCalories);
+    setResult(calculatedCalories.toFixed(2) + " cal");
   };
   return (
     <Card
@@ -78,9 +123,9 @@ function NutritionCard({
                     gutterBottom
                     sx={{ color: "text.secondary", fontSize: 14 }}
                   >
-                  You can add this product to your database
+                    You can add this product to your database
                   </Typography>
-                  
+
                   <TextField
                     label="Calories in 100g"
                     variant="outlined"
@@ -143,14 +188,12 @@ function NutritionCard({
           </>
         )}
       </CardContent>
-      {status === "success" && currentUser.isAdmin && (
+      {status === "success" && !currentUser.isAdmin && (
         <CardActions>
-          {/* Button to choose first option (Calories to Weight) */}
           <Button onClick={() => setSelectedOption("calories-to-weight")}>
             Input Calories to Continue Calculation for Weight
           </Button>
 
-          {/* Button to choose second option (Weight to Calories) */}
           <Button onClick={() => setSelectedOption("weight-to-calories")}>
             Input Weight to Continue Calculation for Calories
           </Button>
@@ -208,7 +251,7 @@ function NutritionCard({
               : `Calories: ${result}`}
           </Typography>
 
-          <Button variant="contained" onClick={handleAddCalories}>
+          <Button variant="contained" onClick={handleAddCalories} disabled={addingCalories}>
             Add Calories to your daily tracking
             {/* Calories to your daily tracking */}
           </Button>

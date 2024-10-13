@@ -14,7 +14,7 @@ function DailyTracking() {
   const [dailyTracking, setDailyTracking] = useState(null);
   const { currentClient, addDailyTracking, getCurrentClient } = useData();
 
-  useState(() => {
+  useEffect(() => {
     let track = currentClient.dailyTracking.find((track) => {
       return isSameDay(new Date(track.date), new Date());
     });
@@ -31,17 +31,11 @@ function DailyTracking() {
     setDailyTracking(track);
   }, []);
 
-  const handleUpdateDailyTracking = async (e) => {
-    e.preventDefault();
+  const handleUpdateDailyTracking = async () => {
     console.log("handleUpdateDailyTracking");
     try {
       setAdding(true);
-      const newTrack = {
-        date: dailyTracking.date,
-        calories: dailyTracking.calories,
-        waterAmount: dailyTracking.waterAmount,
-        sleepHours: dailyTracking.sleepHours,
-      };
+
       const updatednewTrack = {
         date: dailyTracking.date,
         calories: Number(dailyTracking.calories) + Number(calories),
@@ -87,13 +81,7 @@ function DailyTracking() {
             trackingState={sleepHours}
             trackingStateHandler={setSleepHours}
           />
-          {/* <button
-            className="update-btn"
-            onClick={handleUpdateDailyTracking}
-            disabled={adding}
-          >
-            Update
-          </button> */}
+
           <Button
             variant="contained"
             endIcon={<UpdateIcon />}

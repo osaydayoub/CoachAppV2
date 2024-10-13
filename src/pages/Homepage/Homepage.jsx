@@ -51,7 +51,7 @@ function Homepage() {
       }
       setDailyTracking(track);
     }
-  }, []);
+  }, [currentClient]);
 
   return currentUser.isAdmin ? (
     <div className="Homepage page">
