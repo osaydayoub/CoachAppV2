@@ -24,19 +24,35 @@ function NutritionCard({
   const [inputValue, setInputValue] = useState(""); // To store the user's input (either calories or weight)
   const [result, setResult] = useState(null); // To store the result of the calculation
   const [addingCalories, setAdding] = useState(false);
+  const [addingProduct,setAddingProduct]=useState(false);
   const [calories, setCalories] = useState(0);
   // const [dailyTracking, setDailyTracking] = useState(null);
 
   const { currentUser } = useAuth();
-  const { currentClient, addDailyTracking, getCurrentClient } = useData();
+  const { currentClient, addDailyTracking, getCurrentClient,addProduct } = useData();
   const handleSubmit = () => {
     if (manualBarcode.trim() !== "") {
       handleManualInput(manualBarcode);
     }
   };
 
-  const handleAddProduct = () => {
+  const handleAddProduct = async () => {
     console.log("handleAddProduct");
+    try {
+      setAddingProduct(true);
+      const newProduct = {
+        
+          barcodeNumber: scannedBarcode,
+          caloriesIn100g: manualNutritionData,
+        
+      };
+      await addProduct(newProduct);
+    } catch (error) {
+      console.log("error in handleAddProduct");
+      console.log(error);
+    }
+
+    setAddingProduct(false);
   };
   const handleAddCalories = async () => {
     console.log("handleAddCalories");
@@ -138,6 +154,7 @@ function NutritionCard({
                     variant="contained"
                     color="primary"
                     onClick={handleAddProduct}
+                    disabled={addingProduct}
                   >
                     Add product
                   </Button>

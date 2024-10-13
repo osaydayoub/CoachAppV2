@@ -155,6 +155,36 @@ export function DataProvider({ children }) {
     }
   };
 
+
+  const addProduct = async (product) => {
+    console.log("addProduct");
+    try {
+      console.log(product);
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_LINK}/coach/products`,
+        {
+          barcodeNumber: product.barcodeNumber,
+          caloriesIn100g: product.caloriesIn100g,
+        }
+      );
+      // console.log(response.data);
+    } catch (error) {
+      console.log(error);
+      console.log("error in addProduct");
+    }
+  };
+
+  const getProductByBarcodeNumber = async (number) => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_LINK}/coach/products/${number}`
+      );
+      return response.data;
+    } catch (error) {
+      console.log("error in getProductByBarcodeNumber");
+    }
+  };
+
   const value = {
     currentClient,
     setCurrentClient,
@@ -171,6 +201,8 @@ export function DataProvider({ children }) {
     addDailyTracking,
     getAllMealsByType,
     addNewMeal,
+    addProduct,
+    getProductByBarcodeNumber,
   };
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
 }

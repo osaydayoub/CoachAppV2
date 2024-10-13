@@ -7,15 +7,17 @@ import NutritionCard from "../NutritionCard/NutritionCard";
 import { Button } from "@mui/material";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import StopIcon from "@mui/icons-material/Stop";
+import { useData } from "../../context/DataContext.jsx";
 // Define the limit as a constant outside the component
 const MAX_SCAN_ATTEMPTS = 10;
 
-
 const BarcodeScanner = () => {
+  const { getProductByBarcodeNumber } = useData();
   const [data, setData] = useState(null);
   const [nutritionData, setNutritionData] = useState(null);
   //"idle", "loading", "success","no_data", or "error"
-  const [nutritionDataFetchStatus, setNutritionDataFetchStatus] = useState("idle");
+  const [nutritionDataFetchStatus, setNutritionDataFetchStatus] =
+    useState("idle");
   const [isScanning, setIsScanning] = useState(false);
   const [useMainCamera, setUseMainCamera] = useState(true);
   const webcamRef = useRef(null);
@@ -72,7 +74,7 @@ const BarcodeScanner = () => {
         setCounter((prevCounter) => {
           const newCounter = prevCounter + 1;
           console.log(`counter=${newCounter}`);
-          
+
           if (newCounter >= MAX_SCAN_ATTEMPTS) {
             // Check if the counter reaches 30
             console.log("Reached maximum scanning attempts");
@@ -130,18 +132,30 @@ const BarcodeScanner = () => {
       const response = await axios.get(
         `https://world.openfoodfacts.org/api/v0/product/${barcode}.json`
       );
-      if(response.data.status===1){
+      if (response.data.status === 1) {
         const newNutritionData =
-        response.data.product.nutriments["energy-kcal_100g"];
-      console.log(newNutritionData);
-      setNutritionData(newNutritionData);
-      setNutritionDataFetchStatus("success");
-      }else{
-        if(response.data.status===0)
-        setNutritionDataFetchStatus("no_data");
-        setNutritionData(null);
+          response.data.product.nutriments["energy-kcal_100g"];
+        console.log(newNutritionData);
+        setNutritionData(newNutritionData);
+        setNutritionDataFetchStatus("success");
+      } else {
+        if (response.data.status === 0)
+          //TODO search in our app databace
+          try {
+            const productData = await getProductByBarcodeNumber(barcode);
+            if (!productData ) {
+              setNutritionDataFetchStatus("no_data");
+              setNutritionData(null);
+              return;
+            }
+            setNutritionData(productData.caloriesIn100g);
+            setNutritionDataFetchStatus("success");
+          } catch (error) {
+            //console.log(error);
+            setNutritionDataFetchStatus("no_data");
+            setNutritionData(null);
+          }
       }
-
     } catch (error) {
       console.log(error);
       setNutritionDataFetchStatus("error");
@@ -173,9 +187,15 @@ const BarcodeScanner = () => {
       >
         {isScanning ? "Stop Scanning" : "Start Scanning"}
       </Button>
-      {(nutritionData || tryScanAgain||nutritionDataFetchStatus==="no_data") && (
+      {(nutritionData ||
+        tryScanAgain ||
+        nutritionDataFetchStatus === "no_data") && (
         <NutritionCard
-          status={(tryScanAgain||nutritionDataFetchStatus==="no_data") ? "failed" : "success"} 
+          status={
+            tryScanAgain || nutritionDataFetchStatus === "no_data"
+              ? "failed"
+              : "success"
+          }
           scannedBarcode={data}
           nutritionData={nutritionData}
           nutritionDataFetchStatus={nutritionDataFetchStatus}
