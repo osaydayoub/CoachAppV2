@@ -3,6 +3,7 @@ import "./TrackingPage.css";
 import { useAuth } from "../../context/AuthContext.jsx";
 import { useData } from "../../context/DataContext.jsx";
 import DailyTracking from "../../components/DailyTracking/DailyTracking";
+import WeightTracking from "../../components/WeightTracking/WeightTracking.jsx";
 
 function TrackingPage() {
   const { currentUser } = useAuth();
@@ -20,6 +21,7 @@ function TrackingPage() {
             your daily activities and goals.
           </p>
           <DailyTracking />
+          <WeightTracking/>
         </div>
       )}
       {currentUser.isAdmin && <h2> Admin Daily Tracking</h2>}

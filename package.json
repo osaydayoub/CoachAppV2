@@ -10,14 +10,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@date-io/date-fns": "^3.0.0",
     "@emotion/react": "^11.13.0",
     "@emotion/styled": "^11.13.0",
     "@mui/icons-material": "^5.16.7",
     "@mui/material": "^5.16.7",
     "@mui/styles": "^6.0.0",
-    "@mui/x-date-pickers": "^7.12.1",
+    "@mui/x-date-pickers": "^7.20.0",
     "@zxing/library": "^0.21.3",
     "axios": "^1.6.5",
+    "date-fns": "^3.6.0",
     "dayjs": "^1.11.12",
     "material-react-table": "^2.13.1",
     "react": "^18.2.0",
@@ -27,7 +29,8 @@
     "react-icons": "^4.12.0",
     "react-material-ui-carousel": "^3.4.2",
     "react-router-dom": "^6.21.0",
-    "react-webcam": "^7.2.0"
+    "react-webcam": "^7.2.0",
+    "recharts": "^2.13.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.37",

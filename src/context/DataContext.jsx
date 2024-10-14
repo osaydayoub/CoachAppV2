@@ -185,6 +185,25 @@ export function DataProvider({ children }) {
     }
   };
 
+  const addWeightTracking = async (clientID,weightLog) => {
+    console.log("addWeightTracking");
+    try {
+      console.log(weightLog);
+      const response = await axios.put(
+        `${import.meta.env.VITE_API_LINK}/coach/clients/weightTracking/${clientID}`,
+        {
+          weight: weightLog.weight,
+          date: weightLog.date,
+        }
+      );
+      // console.log(response.data);
+       await getCurrentClient(clientID);
+    } catch (error) {
+      console.log(error);
+      console.log("error in addWeightTracking");
+    }
+  };
+
   const value = {
     currentClient,
     setCurrentClient,
@@ -203,6 +222,7 @@ export function DataProvider({ children }) {
     addNewMeal,
     addProduct,
     getProductByBarcodeNumber,
+    addWeightTracking,
   };
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
 }
