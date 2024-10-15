@@ -8,9 +8,15 @@ function WeightTracking() {
   const [date, setDate] = useState("");
   const [newWeight, setNewWeight] = useState("");
   const [loggingWeight, setLoggingWeight] = useState(false);
-  const { currentClient, addWeightTracking } = useData();
   const [showLogs, setShowLogs] = useState(false);
+  const { currentClient, addWeightTracking } = useData();
 
+  const sortedWeightTracking = currentClient.weightTracking
+  ? [...currentClient.weightTracking].sort(
+      (log1, log2) => new Date(log1.date) - new Date(log2.date)
+    )
+  : [];
+ 
   const handleLogWeight = async (date, newWeight) => {
     console.log("handleLogWeight");
     console.log(date);
@@ -77,8 +83,8 @@ function WeightTracking() {
 
       {showLogs && currentClient.weightTracking && (
         <>
-          <WeightLogChart weightTracking={currentClient.weightTracking} />
-          <WeightLogList weightTracking={currentClient.weightTracking} />
+          <WeightLogChart weightTracking={sortedWeightTracking} />
+          <WeightLogList weightTracking={sortedWeightTracking} />
         </>
       )}
     </div>

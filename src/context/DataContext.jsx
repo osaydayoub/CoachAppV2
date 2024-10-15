@@ -204,6 +204,26 @@ export function DataProvider({ children }) {
     }
   };
 
+
+  const addMealRating = async (mealId,clientID,rating) => {
+    console.log("addMealRating");
+    try {
+      console.log(clientID);
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_LINK}/coach/meals/mealsRating/${mealId}`,
+        {
+          clientId: clientID,
+          rating: rating,
+        }
+      );
+      // console.log(response.data);
+      // await getCurrentClient(clientID);
+    } catch (error) {
+      console.log(error);
+      console.log("error in addMealRating");
+    }
+  };
+
   const value = {
     currentClient,
     setCurrentClient,
@@ -223,6 +243,7 @@ export function DataProvider({ children }) {
     addProduct,
     getProductByBarcodeNumber,
     addWeightTracking,
+    addMealRating, 
   };
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
 }

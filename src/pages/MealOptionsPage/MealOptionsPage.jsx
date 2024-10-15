@@ -59,7 +59,7 @@ function MealOptionsPage() {
         {mealOptions && (
           <div className="meals-container">
             {mealOptions.map((mealOption) => {
-              return <Meal mealOption={mealOption} key={mealOption._id} />;
+              return <Meal mealOption={mealOption} setMealsChanged={setMealsChanged} key={mealOption._id} />;
             })}
           </div>
         )}
