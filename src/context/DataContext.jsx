@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
+import { isSameDay } from "../utils/helpers";
 
 export const DataContext = createContext();
 
@@ -224,6 +225,54 @@ export function DataProvider({ children }) {
     }
   };
 
+  const addDailyMeal = async (clientID,mealId,type) => {
+    console.log("addDailyMeal");
+    try {
+      console.log(clientID);
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_LINK}/coach/clients/dailyMeals/${clientID}`,
+        {
+          mealId: mealId,
+          mealType: (type==="snack")?"snack-1":type,
+        }
+      );
+    } catch (error) {
+      console.log(error);
+      console.log("error in addDailyMeal");
+    }
+  };
+
+  const AddCaloriesToDailyTracking = async (calories) => {
+    let track = currentClient.dailyTracking.find((track) => {
+      return isSameDay(new Date(track.date), new Date());
+    });
+    if (track === undefined) {
+      console.log("stil no data");
+      const t = {
+        date: new Date(),
+        calories: 0,
+        waterAmount: 0,
+        sleepHours: 0,
+      };
+      track = t;
+    }
+    try {
+      const updatednewTrack = {
+        date: track.date,
+        calories: Number(track.calories) + Number(calories),
+        waterAmount: Number(track.waterAmount),
+        sleepHours: Number(track.sleepHours),
+      };
+    await addDailyTracking(currentClient._id, updatednewTrack);
+      await getCurrentClient(currentClient._id);
+    } catch (error) {
+      console.log(error);
+      console.log("AddCaloriesToDailyTracking");
+    }
+  }
+
+
+
   const value = {
     currentClient,
     setCurrentClient,
@@ -243,7 +292,9 @@ export function DataProvider({ children }) {
     addProduct,
     getProductByBarcodeNumber,
     addWeightTracking,
-    addMealRating, 
+    addMealRating,
+    addDailyMeal,
+    AddCaloriesToDailyTracking,
   };
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
 }

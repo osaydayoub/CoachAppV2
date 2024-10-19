@@ -30,12 +30,13 @@ function ResponsiveAppBar() {
   React.useEffect(() => {
     if(isLoggedIn){
       if (currentUser.isAdmin) {
-        setPages(["Home", "Admin", "Training Timetable", "Meals"]);
+        setPages(["Home", "Admin", "Training Timetable", "Meals", "Tracking"]);
         setHandleFunctions([
           handleHomeClick,
           handleAdminClick,
           handleTrainingClick,
           handleMealsClick,
+          handleTrackingClick,
         ]);
       } else {
         setPages(["Home", "Training Timetable", "Meals", "Tracking"]);

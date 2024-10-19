@@ -29,8 +29,9 @@ function NutritionCard({
   // const [dailyTracking, setDailyTracking] = useState(null);
 
   const { currentUser } = useAuth();
-  const { currentClient, addDailyTracking, getCurrentClient,addProduct } = useData();
+  const { currentClient, addDailyTracking, getCurrentClient,addProduct ,AddCaloriesToDailyTracking} = useData();
   const handleSubmit = () => {
+    console.log("handleSubmit")
     if (manualBarcode.trim() !== "") {
       handleManualInput(manualBarcode);
     }
@@ -54,39 +55,14 @@ function NutritionCard({
 
     setAddingProduct(false);
   };
+  
   const handleAddCalories = async () => {
     console.log("handleAddCalories");
     console.log(currentClient);
-    let track = currentClient.dailyTracking.find((track) => {
-      return isSameDay(new Date(track.date), new Date());
-    });
-    if (track === undefined) {
-      console.log("stil no data");
-      const t = {
-        date: new Date(),
-        calories: 0,
-        waterAmount: 0,
-        sleepHours: 0,
-      };
-      track = t;
-    }
-
     try {
       setAdding(true);
-      console.log(track);
-      const updatednewTrack = {
-        date: track.date,
-        calories: Number(track.calories) + Number(calories),
-        waterAmount: Number(track.waterAmount),
-        sleepHours: Number(track.sleepHours),
-      };
-      await addDailyTracking(currentClient._id, updatednewTrack);
-      const resTrack = await getCurrentClient(currentClient._id);
-      const uptrack = resTrack.dailyTracking.find((track) => {
-        return isSameDay(new Date(track.date), new Date());
-      });
+      await AddCaloriesToDailyTracking(calories);
     } catch (error) {
-      console.log(error);
       console.log("error in handleDailyTracking");
     }
     setAdding(false);
@@ -94,6 +70,46 @@ function NutritionCard({
     setResult(null);
     setInputValue("");
   };
+  // const handleAddCalories = async () => {
+  //   console.log("handleAddCalories");
+  //   console.log(currentClient);
+  //   let track = currentClient.dailyTracking.find((track) => {
+  //     return isSameDay(new Date(track.date), new Date());
+  //   });
+  //   if (track === undefined) {
+  //     console.log("stil no data");
+  //     const t = {
+  //       date: new Date(),
+  //       calories: 0,
+  //       waterAmount: 0,
+  //       sleepHours: 0,
+  //     };
+  //     track = t;
+  //   }
+
+  //   try {
+  //     setAdding(true);
+  //     console.log(track);
+  //     const updatednewTrack = {
+  //       date: track.date,
+  //       calories: Number(track.calories) + Number(calories),
+  //       waterAmount: Number(track.waterAmount),
+  //       sleepHours: Number(track.sleepHours),
+  //     };
+  //     await addDailyTracking(currentClient._id, updatednewTrack);
+  //     const resTrack = await getCurrentClient(currentClient._id);
+  //     const uptrack = resTrack.dailyTracking.find((track) => {
+  //       return isSameDay(new Date(track.date), new Date());
+  //     });
+  //   } catch (error) {
+  //     console.log(error);
+  //     console.log("error in handleDailyTracking");
+  //   }
+  //   setAdding(false);
+  //   setSelectedOption(null);
+  //   setResult(null);
+  //   setInputValue("");
+  // };
 
   const handleInputChange = (event) => {
     setInputValue(event.target.value);

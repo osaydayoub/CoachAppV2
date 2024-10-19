@@ -7,23 +7,26 @@ import {
   ListItem,
   Box,
   Rating,
+  Button,
+  Tooltip,
 } from "@mui/material";
 import CircleIcon from "@mui/icons-material/Circle"; // For dot icons
 import { useData } from "../../context/DataContext";
 import { useAuth } from "../../context/AuthContext";
+import LocalDining from "@mui/icons-material/LocalDining";
+import AddIcon from "@mui/icons-material/Add";
+import DoneIcon from '@mui/icons-material/Done';
 
-
-function Meal({ mealOption ,setMealsChanged}) {
+function Meal({ mealOption, setMealsChanged, display }) {
   const [rating, setRating] = useState(null);
-  const { currentClient,addMealRating} = useData();
+  const { currentClient, addMealRating, addDailyMeal,AddCaloriesToDailyTracking } = useData();
   const { currentUser } = useAuth();
 
   useEffect(() => {
     if (currentClient) {
-      const clientRating = mealOption?.ratings?.[currentClient._id]; 
-      setRating(clientRating ?? 0); 
+      const clientRating = mealOption?.ratings?.[currentClient._id];
+      setRating(clientRating ?? 0);
     }
-    
   }, [currentClient]);
 
   const handelNewRating = async (newValue) => {
@@ -32,15 +35,44 @@ function Meal({ mealOption ,setMealsChanged}) {
     console.log(newValue);
     try {
       // setLoggingWeight(true);
-      const updatedClient = await addMealRating(mealOption._id,currentClient._id, newValue);
-      setMealsChanged(true);
+      const updatedClient = await addMealRating(
+        mealOption._id,
+        currentClient._id,
+        newValue
+      );
+      // setMealsChanged(true);
     } catch (error) {
       console.log(error);
       console.log("error in handelNewRating");
     }
-  
-    setRating(newValue)
+
+    setRating(newValue);
   };
+
+  const handelAddDailyMeal = async () => {
+    console.log("handelAddDailyMeal");
+    try {
+      const dailyMeal = await addDailyMeal(
+        currentClient._id,
+        mealOption._id,
+        mealOption.type
+      );
+    } catch (error) {
+      console.log(error);
+      console.log("error in handelNewRating");
+    }
+  };
+
+  const handleConsumeMeal=async()=>{
+    console.log("handleConsumeMeal");
+    //TODO change flage to consumed =true!
+    try {
+      await AddCaloriesToDailyTracking(mealOption.totalCalories)
+    } catch (error) {
+      console.log("error in handleConsumeMeal")
+    }
+    
+  }
 
   return (
     <Card sx={{ maxWidth: 345, margin: 2 }}>
@@ -63,14 +95,52 @@ function Meal({ mealOption ,setMealsChanged}) {
         {/* Add the Rating component here */}
         {/* //TODO admin cant rate  */}
         {/* TODO Add rating average if  isAdmin */}
-       {!currentUser.isAdmin && <Box sx={{ marginTop: 2 }}>         
-          <Rating
-            name="half-rating"
-            value={rating} // Bind value to the rating state
-            precision={0.5}
-            onChange={(event, newValue) => handelNewRating(newValue)} // Update state on change
-          />
-        </Box>}
+        {!currentUser.isAdmin && (
+          <Box
+            sx={{
+              marginTop: 2,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center", // Optional: To center the contents horizontally
+              gap: 2,
+            }}
+          >
+            <Rating
+              name="half-rating"
+              value={rating} // Bind value to the rating state
+              precision={0.5}
+              onChange={(event, newValue) => handelNewRating(newValue)} // Update state on change
+            />
+            {/* <Button
+              variant="contained"
+              endIcon={<LocalDiningIcon />}
+              onClick={() => handelAddDailyMeal()}
+            >
+              Add to Today's Meals
+            </Button> */}
+
+            {!display && (
+              <Tooltip title="Add to Today's Meals">
+                <Button
+                  variant="contained"
+                  onClick={() => handelAddDailyMeal()}
+                  endIcon={<LocalDining />}
+                  startIcon={<AddIcon />}
+                />
+              </Tooltip>
+            )}
+{/* "You’ve already consumed a meal for this time. You can't select another." */}
+            {display && (
+              <Button
+                variant="contained"
+                onClick={() => handleConsumeMeal()}
+                endIcon={<DoneIcon />}
+              >
+                I Ate This
+              </Button>
+            )}
+          </Box>
+        )}
       </CardContent>
     </Card>
   );

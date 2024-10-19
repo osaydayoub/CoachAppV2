@@ -29,7 +29,7 @@ function DailyTracking() {
       track = t;
     }
     setDailyTracking(track);
-  }, []);
+  }, [currentClient]);
 
   const handleUpdateDailyTracking = async () => {
     console.log("handleUpdateDailyTracking");
