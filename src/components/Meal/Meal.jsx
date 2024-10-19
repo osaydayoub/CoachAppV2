@@ -9,17 +9,33 @@ import {
   Rating,
   Button,
   Tooltip,
+  MenuItem,
+  Select,
+  InputLabel,
+  FormControl,
 } from "@mui/material";
 import CircleIcon from "@mui/icons-material/Circle"; // For dot icons
 import { useData } from "../../context/DataContext";
 import { useAuth } from "../../context/AuthContext";
 import LocalDining from "@mui/icons-material/LocalDining";
 import AddIcon from "@mui/icons-material/Add";
-import DoneIcon from '@mui/icons-material/Done';
+import DoneIcon from "@mui/icons-material/Done";
 
-function Meal({ mealOption, setMealsChanged, display }) {
+function Meal({ mealOption, mealType, setMealsChanged, display, consumed }) {
   const [rating, setRating] = useState(null);
-  const { currentClient, addMealRating, addDailyMeal,AddCaloriesToDailyTracking } = useData();
+  const [selectedSnack, setSelectedSnack] = useState(""); // State to store selected snack
+
+  // Handle snack selection
+  const handleSnackChange = (event) => {
+    setSelectedSnack(event.target.value);
+  };
+  const {
+    currentClient,
+    addMealRating,
+    addDailyMeal,
+    AddCaloriesToDailyTracking,
+    consumeDailyMeal,
+  } = useData();
   const { currentUser } = useAuth();
 
   useEffect(() => {
@@ -55,7 +71,7 @@ function Meal({ mealOption, setMealsChanged, display }) {
       const dailyMeal = await addDailyMeal(
         currentClient._id,
         mealOption._id,
-        mealOption.type
+        mealOption.type === "snack" ? selectedSnack : mealOption.type
       );
     } catch (error) {
       console.log(error);
@@ -63,16 +79,19 @@ function Meal({ mealOption, setMealsChanged, display }) {
     }
   };
 
-  const handleConsumeMeal=async()=>{
+  const handleConsumeMeal = async () => {
     console.log("handleConsumeMeal");
     //TODO change flage to consumed =true!
     try {
-      await AddCaloriesToDailyTracking(mealOption.totalCalories)
+      await AddCaloriesToDailyTracking(mealOption.totalCalories);
+      await consumeDailyMeal(
+        currentClient._id,
+        mealOption.type === "snack" ? mealType : mealOption.type
+      );
     } catch (error) {
-      console.log("error in handleConsumeMeal")
+      console.log("error in handleConsumeMeal");
     }
-    
-  }
+  };
 
   return (
     <Card sx={{ maxWidth: 345, margin: 2 }}>
@@ -120,21 +139,52 @@ function Meal({ mealOption, setMealsChanged, display }) {
             </Button> */}
 
             {!display && (
-              <Tooltip title="Add to Today's Meals">
-                <Button
-                  variant="contained"
-                  onClick={() => handelAddDailyMeal()}
-                  endIcon={<LocalDining />}
-                  startIcon={<AddIcon />}
-                />
-              </Tooltip>
+              <>
+                {mealOption.type === "snack" && (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 2,
+                      marginTop: 2,
+                    }}
+                  >
+                    <FormControl sx={{ minWidth: 110 }}>
+                      <InputLabel id="snack-select-label">Select as</InputLabel>
+                      <Select
+                        labelId="snack-select-label"
+                        value={selectedSnack}
+                        label="Select Snack"
+                        onChange={handleSnackChange}
+                      >
+                        <MenuItem value="snack-1">Snack 1</MenuItem>
+                        <MenuItem value="snack-2">Snack 2</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Box>
+                )}
+                <Tooltip title="Add to Today's Meals">
+                  <span>
+                    <Button
+                      variant="contained"
+                      onClick={() => handelAddDailyMeal()}
+                      endIcon={<LocalDining />}
+                      startIcon={<AddIcon />}
+                      disabled={
+                        mealOption.type === "snack" && selectedSnack === ""
+                      }
+                    />
+                  </span>
+                </Tooltip>
+              </>
             )}
-{/* "You’ve already consumed a meal for this time. You can't select another." */}
+            {/* "You’ve already consumed a meal for this time. You can't select another." */}
             {display && (
               <Button
                 variant="contained"
                 onClick={() => handleConsumeMeal()}
                 endIcon={<DoneIcon />}
+                disabled={consumed}
               >
                 I Ate This
               </Button>

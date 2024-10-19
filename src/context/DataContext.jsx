@@ -233,11 +233,11 @@ export function DataProvider({ children }) {
         `${import.meta.env.VITE_API_LINK}/coach/clients/dailyMeals/${clientID}`,
         {
           mealId: mealId,
-          mealType: (type==="snack")?"snack-1":type,
+          mealType: type,
         }
       );
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       console.log("error in addDailyMeal");
     }
   };
@@ -272,6 +272,23 @@ export function DataProvider({ children }) {
   }
 
 
+  const consumeDailyMeal = async (clientID,type) => {
+    console.log("consumeDailyMeal");
+    try {
+      console.log(clientID);
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_LINK}/coach/clients/consumeDailyMeals/${clientID}`,
+        {
+          mealType: type,
+        }
+      );
+      await getCurrentClient(currentClient._id);
+    } catch (error) {
+      console.log(error);
+      console.log("error in consumeDailyMeal");
+    }
+  };
+
 
   const value = {
     currentClient,
@@ -295,6 +312,7 @@ export function DataProvider({ children }) {
     addMealRating,
     addDailyMeal,
     AddCaloriesToDailyTracking,
+    consumeDailyMeal,
   };
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
 }

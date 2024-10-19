@@ -43,7 +43,7 @@ export default function MealsAccordion() {
       console.log(dailyMeals);
       setdailyMeals(dailyMeals);
     }
-  }, [currentClientUpdated]);
+  }, [currentClientUpdated,currentClient]);
   return (
     <div style={{ width: "450px" }}>
       {/* TODO use map for creating diff Accordions */}
@@ -57,7 +57,7 @@ export default function MealsAccordion() {
         </AccordionSummary>
         <AccordionDetails>
           {dailyMeals && dailyMeals.breakfast ? (
-            <Meal mealOption={dailyMeals.breakfast} display={true} />
+            <Meal mealOption={dailyMeals.breakfast.meal} consumed={dailyMeals.breakfast.consumed} display={true} />
           ) : (
             "Breakfast Meal for Today Not Chosen!"
           )}
@@ -73,7 +73,7 @@ export default function MealsAccordion() {
         </AccordionSummary>
 
         {dailyMeals && dailyMeals.snacks[0] ? (
-          <Meal mealOption={dailyMeals.snacks[0]} display={true} />
+          <Meal mealOption={dailyMeals.snacks[0].meal} mealType={"snack-1"}consumed={dailyMeals.snacks[0].consumed} display={true} />
         ) : (
           <AccordionDetails>No First Snack picked for Today</AccordionDetails>
         )}
@@ -88,7 +88,7 @@ export default function MealsAccordion() {
         </AccordionSummary>
         <AccordionDetails>
           {dailyMeals && dailyMeals.lunch ? (
-            <Meal mealOption={dailyMeals.lunch} display={true} />
+            <Meal mealOption={dailyMeals.lunch.meal} consumed={dailyMeals.lunch.consumed} display={true} />
           ) : (
             "Lunch Meal for Today Not Chosen!"
           )}
@@ -105,7 +105,7 @@ export default function MealsAccordion() {
         </AccordionSummary>
         <AccordionDetails>
           {dailyMeals && dailyMeals.snacks[1] ? (
-            <Meal mealOption={dailyMeals.snacks[1]} display={true} />
+            <Meal mealOption={dailyMeals.snacks[1].meal} mealType={"snack-2"} consumed={dailyMeals.snacks[1].consumed} display={true} />
           ) : (
             "Second Snack for Today Not Chosen!"
           )}
@@ -121,7 +121,7 @@ export default function MealsAccordion() {
         </AccordionSummary>
         <AccordionDetails>
           {dailyMeals && dailyMeals.dinner ? (
-            <Meal mealOption={dailyMeals.dinner} display={true} />
+            <Meal mealOption={dailyMeals.dinner.meal} consumed={dailyMeals.dinner.consumed}display={true} />
           ) : (
             "Dinner Meal for Today Not Chosen!"
           )}
