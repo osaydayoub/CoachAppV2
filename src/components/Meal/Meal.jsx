@@ -14,7 +14,7 @@ import {
   InputLabel,
   FormControl,
 } from "@mui/material";
-import CircleIcon from "@mui/icons-material/Circle"; // For dot icons
+import CircleIcon from "@mui/icons-material/Circle"; 
 import { useData } from "../../context/DataContext";
 import { useAuth } from "../../context/AuthContext";
 import LocalDining from "@mui/icons-material/LocalDining";
@@ -178,7 +178,7 @@ function Meal({ mealOption, mealType, setMealsChanged, display, consumed }) {
                 </Tooltip>
               </>
             )}
-            {/* "You’ve already consumed a meal for this time. You can't select another." */}
+            {/*TODO "You’ve already consumed a meal for this time. You can't select another." */}
             {display && (
               <Button
                 variant="contained"
