@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import "./WeightTracking.css";
-import { Button, TextField } from "@mui/material";
+import { Button, TextField, Box } from "@mui/material";
 import { useData } from "../../context/DataContext";
 import WeightLogList from "../WeightLogList/WeightLogList";
 import WeightLogChart from "../WeightLogChart/WeightLogChart";
+
 function WeightTracking() {
   const [date, setDate] = useState("");
   const [newWeight, setNewWeight] = useState("");
@@ -12,25 +12,20 @@ function WeightTracking() {
   const { currentClient, addWeightTracking } = useData();
 
   const sortedWeightTracking = currentClient.weightTracking
-  ? [...currentClient.weightTracking].sort(
-      (log1, log2) => new Date(log1.date) - new Date(log2.date)
-    )
-  : [];
- 
+    ? [...currentClient.weightTracking].sort(
+        (log1, log2) => new Date(log1.date) - new Date(log2.date)
+      )
+    : [];
+
   const handleLogWeight = async (date, newWeight) => {
-    console.log("handleLogWeight");
-    console.log(date);
-    console.log(newWeight);
     const newLog = { weight: newWeight, date: new Date(date) };
     try {
       setLoggingWeight(true);
-      const updatedClient = await addWeightTracking(currentClient._id, newLog);
+      await addWeightTracking(currentClient._id, newLog);
     } catch (error) {
-      console.log(error);
-      console.log("error in handleLogWeight");
+      console.log("Error in handleLogWeight:", error);
     }
     setLoggingWeight(false);
-    //setDate("");
     setNewWeight("");
   };
 
@@ -39,43 +34,52 @@ function WeightTracking() {
   };
 
   return (
-    <div className="weight-tracking-container">
-      <h3>WeightTracking</h3>
-      <div style={{ paddingTop: "20px" }}>
-        <label htmlFor="date">{`Date: `}</label>
-        <input
-          type="date"
-          id="date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-          required
-        />
-      </div>
+    <Box sx={{
+      maxWidth:400,
+      border: '2px solid #1976d2', // Change the color and width as needed
+      borderRadius: '8px',         // Optional, for rounded corners
+      padding: '16px',             // Padding inside the box
+      boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.4)' // Optional, for a shadow effect
+    }} p={2}>
+      <h3>Weight Tracking</h3>
+      
+      <TextField
+        type="date"
+        label="Date"
+        value={date}
+        onChange={(e) => setDate(e.target.value)}
+        fullWidth
+        required
+        sx={{ mt: 2 }}
+        InputLabelProps={{ shrink: true }} // Keeps the label inside the border
+      />
 
-      <>
-        <TextField
-          label="Weight in kg"
-          variant="outlined"
-          value={newWeight}
-          type="number"
-          onChange={(e) => setNewWeight(e.target.value)}
-          sx={{ mt: 2, mb: 2, width: "100%" }}
-        />
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => handleLogWeight(date, newWeight)}
-          sx={{ mt: 2 }}
-          disabled={!date || newWeight === "" || loggingWeight}
-        >
-          {loggingWeight ? "Logging..." : "Log Weight"}
-        </Button>
-      </>
-      {/* Button to toggle weight log visibility */}
+      <TextField
+        label="Weight in kg"
+        variant="outlined"
+        value={newWeight}
+        type="number"
+        onChange={(e) => setNewWeight(e.target.value)}
+        fullWidth
+        sx={{ mt: 2, mb: 2 }}
+      />
+
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => handleLogWeight(date, newWeight)}
+        fullWidth
+        sx={{ mt: 2 }}
+        disabled={!date || newWeight === "" || loggingWeight}
+      >
+        {loggingWeight ? "Logging..." : "Log Weight"}
+      </Button>
+
       <Button
         variant="outlined"
         color="secondary"
         onClick={toggleLogs}
+        fullWidth
         sx={{ mt: 2 }}
       >
         {showLogs ? "Hide Logs" : "Show Logs"}
@@ -87,7 +91,7 @@ function WeightTracking() {
           <WeightLogList weightTracking={sortedWeightTracking} />
         </>
       )}
-    </div>
+    </Box>
   );
 }
 
