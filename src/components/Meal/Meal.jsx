@@ -24,7 +24,7 @@ import DoneIcon from "@mui/icons-material/Done";
 function Meal({ mealOption, mealType, setMealsChanged, display, consumed }) {
   const [rating, setRating] = useState(null);
   const [selectedSnack, setSelectedSnack] = useState(""); // State to store selected snack
-
+  const [addingMeal,setAddingMeal]=useState(false);
   // Handle snack selection
   const handleSnackChange = (event) => {
     setSelectedSnack(event.target.value);
@@ -68,6 +68,7 @@ function Meal({ mealOption, mealType, setMealsChanged, display, consumed }) {
   const handelAddDailyMeal = async () => {
     console.log("handelAddDailyMeal");
     try {
+      setAddingMeal(true);
       const dailyMeal = await addDailyMeal(
         currentClient._id,
         mealOption._id,
@@ -76,6 +77,8 @@ function Meal({ mealOption, mealType, setMealsChanged, display, consumed }) {
     } catch (error) {
       console.log(error);
       console.log("error in handelNewRating");
+    }finally{
+      setAddingMeal(false);
     }
   };
 
@@ -171,7 +174,7 @@ function Meal({ mealOption, mealType, setMealsChanged, display, consumed }) {
                       endIcon={<LocalDining />}
                       startIcon={<AddIcon />}
                       disabled={
-                        mealOption.type === "snack" && selectedSnack === ""
+                        mealOption.type === "snack" && selectedSnack === ""||addingMeal
                       }
                     />
                   </span>

@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { useData } from "../../context/DataContext.jsx";
-import "./AddPackage.css";
-function AddPackage({ client ,packageDisplay}) {
+import { TextField, Button, Typography, IconButton, Box } from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close'; 
+
+function AddPackage({ client, packageDisplay }) {
   const [workoutsNumber, setWorkoutsNumber] = useState(0);
   const [totalCost, setTotalCost] = useState(0);
   const [paidAmount, setPaidAmount] = useState(0);
   const [caloricIntake, setCaloricIntake] = useState(0);
-  //TODO done
   const [adding, setAdding] = useState(false);
   const { addPackage } = useData();
 
@@ -20,67 +21,72 @@ function AddPackage({ client ,packageDisplay}) {
         paidAmount: paidAmount,
         caloricIntake: caloricIntake,
       });
-    } catch (error) {}
-    console.log("handleAddPackage");
+    } catch (error) {
+      console.error("Error adding package:", error);
+    }
     setAdding(false);
   };
 
   return (
-    <div className="addPackage-container">
-      <button onClick={()=>packageDisplay()}>X</button>
-      <h3>Add a Package</h3>
-      <form onSubmit={(e) => handleAddPackage(e)}>
-        <div>
-          <label htmlFor="workouts-number">Workouts Number</label>
-          <br />
-          <input
-            type="number"
-            id="workouts-number"
-            onChange={(e) => setWorkoutsNumber(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="total-cost">Total Cost</label>
-          <br />
-          <input
-            type="number"
-            id="total-cost"
-            onChange={(e) => setTotalCost(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="paid-amount">Paid Amount</label>
-          <br />
-          <input
-            type="number"
-            id="paid-amount"
-            onChange={(e) => setPaidAmount(e.target.value)}
-            required
-          />
-        </div>
-
-        <div>
-          <label htmlFor="caloric-intake">Caloric Intake</label>
-          <br />
-          <input
-            type="number"
-            id="caloric-intake"
-            onChange={(e) => setCaloricIntake(e.target.value)}
-            required
-          />
-        </div>
-
-        <div>
-          {/* disabled={adding} TODO implement the change*/}
-          <button type="submit" disabled={adding}>
-            Add
-          </button>
-        </div>
+    <Box  sx={{ padding: 2,  maxWidth:300}}>
+      <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+        <IconButton onClick={packageDisplay}>
+          <CloseIcon />
+        </IconButton>
+      </Box>
+      <Typography sx={{paddingBottom:2}} variant="h6" gutterBottom>
+        Add a Package
+      </Typography>
+      <form onSubmit={handleAddPackage}>
+        <TextField
+          label="Workouts Number"
+          type="number"
+          value={workoutsNumber}
+          onChange={(e) => setWorkoutsNumber(e.target.value)}
+          required
+          fullWidth
+          sx={{ marginBottom: 2 }}
+        />
+        <TextField
+          label="Total Cost"
+          type="number"
+          value={totalCost}
+          onChange={(e) => setTotalCost(e.target.value)}
+          required
+          fullWidth
+          sx={{ marginBottom: 2 }}
+        />
+        <TextField
+          label="Paid Amount"
+          type="number"
+          value={paidAmount}
+          onChange={(e) => setPaidAmount(e.target.value)}
+          required
+          fullWidth
+          sx={{ marginBottom: 2 }}
+        />
+        <TextField
+          label="Caloric Intake"
+          type="number"
+          value={caloricIntake}
+          onChange={(e) => setCaloricIntake(e.target.value)}
+          required
+          fullWidth
+          sx={{ marginBottom: 2 }}
+        />
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          disabled={adding}
+          fullWidth
+        >
+          Add
+        </Button>
       </form>
-    </div>
+    </Box>
   );
 }
 
 export default AddPackage;
+

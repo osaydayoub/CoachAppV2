@@ -24,7 +24,7 @@ function AddMeal({ handeleAddMealDisplay, type, handleMealsChanged }) {
   const [ingredientsArray, setIngredientsArray] = useState([]);
   const [ingredientName, setIngredientName] = useState("");
   const [amount, setAmount] = useState(0);
-  const [totalCalories, setTotalCalories] = useState(null);
+  const [totalCalories, setTotalCalories] = useState(0);
   const [displayNewMeal, setDisplayNewMeal] = useState(false);
 
   const unitOptions = [
