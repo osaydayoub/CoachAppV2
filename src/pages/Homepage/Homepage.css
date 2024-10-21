@@ -31,4 +31,7 @@ gap: 30px;
     .homepage-message-container{
         width: 100%;
     }
+    .client-homepage{
+        flex-direction: column;
+        }
 }

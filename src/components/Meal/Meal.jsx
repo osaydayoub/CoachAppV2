@@ -97,7 +97,7 @@ function Meal({ mealOption, mealType, setMealsChanged, display, consumed }) {
   };
 
   return (
-    <Card sx={{ maxWidth: 345, margin: 2 }}>
+    <Card sx={{ width: 230}}>
       <CardContent>
         <List>
           {mealOption.ingredients.map((ingredient) => (
@@ -114,7 +114,6 @@ function Meal({ mealOption, mealType, setMealsChanged, display, consumed }) {
         <Typography variant="h6" sx={{ marginTop: 2 }}>
           Total Calories: {mealOption.totalCalories}
         </Typography>
-        {/* Add the Rating component here */}
         {/* //TODO admin cant rate  */}
         {/* TODO Add rating average if  isAdmin */}
         {!currentUser.isAdmin && (
@@ -133,13 +132,6 @@ function Meal({ mealOption, mealType, setMealsChanged, display, consumed }) {
               precision={0.5}
               onChange={(event, newValue) => handelNewRating(newValue)} // Update state on change
             />
-            {/* <Button
-              variant="contained"
-              endIcon={<LocalDiningIcon />}
-              onClick={() => handelAddDailyMeal()}
-            >
-              Add to Today's Meals
-            </Button> */}
 
             {!display && (
               <>

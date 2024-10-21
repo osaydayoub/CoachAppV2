@@ -4,10 +4,10 @@ import AccordionActions from "@mui/material/AccordionActions";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import Button from "@mui/material/Button";
 import { useData } from "../../context/DataContext";
 import Meal from "../Meal/Meal";
 import { isSameDay } from "../../utils/helpers";
+import { Box } from "@mui/material";
 
 export default function MealsAccordion() {
   const [dailyMeals, setdailyMeals] = useState(null);
@@ -43,90 +43,51 @@ export default function MealsAccordion() {
       console.log(dailyMeals);
       setdailyMeals(dailyMeals);
     }
-  }, [currentClientUpdated,currentClient]);
+  }, [currentClientUpdated, currentClient]);
+  const mealTypes = [
+    { title: "Breakfast", key: "breakfast", path: "breakfast" },
+    { title: "First Snack", key: "snack-1", path: ["snacks", 0] },
+    { title: "Lunch", key: "lunch", path: "lunch" },
+    { title: "Second Snack", key: "snack-2", path: ["snacks", 1] },
+    { title: "Dinner", key: "dinner", path: "dinner" },
+  ];
   return (
-    <div style={{ width: "450px" }}>
-      {/* TODO use map for creating diff Accordions */}
-      <Accordion>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1-content"
-          id="panel1-header"
-        >
-          Breakfast
-        </AccordionSummary>
-        <AccordionDetails>
-          {dailyMeals && dailyMeals.breakfast ? (
-            <Meal mealOption={dailyMeals.breakfast.meal} consumed={dailyMeals.breakfast.consumed} display={true} />
-          ) : (
-            "Breakfast Meal for Today Not Chosen!"
-          )}
-        </AccordionDetails>
-      </Accordion>
-      <Accordion>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel2-content"
-          id="panel2-header"
-        >
-          First Snack
-        </AccordionSummary>
+    <Box sx={{ width: 300 }}>
+      {mealTypes.map((meal) => {
+        const mealData = Array.isArray(meal.path)
+          ? dailyMeals?.[meal.path[0]]?.[meal.path[1]]
+          : dailyMeals?.[meal.path];
 
-        {dailyMeals && dailyMeals.snacks[0] ? (
-          <Meal mealOption={dailyMeals.snacks[0].meal} mealType={"snack-1"}consumed={dailyMeals.snacks[0].consumed} display={true} />
-        ) : (
-          <AccordionDetails>No First Snack picked for Today</AccordionDetails>
-        )}
-      </Accordion>
-      <Accordion>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel2-content"
-          id="panel2-header"
-        >
-          Lunch
-        </AccordionSummary>
-        <AccordionDetails>
-          {dailyMeals && dailyMeals.lunch ? (
-            <Meal mealOption={dailyMeals.lunch.meal} consumed={dailyMeals.lunch.consumed} display={true} />
-          ) : (
-            "Lunch Meal for Today Not Chosen!"
-          )}
-        </AccordionDetails>
-      </Accordion>
-
-      <Accordion>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel2-content"
-          id="panel2-header"
-        >
-          Second Snack
-        </AccordionSummary>
-        <AccordionDetails>
-          {dailyMeals && dailyMeals.snacks[1] ? (
-            <Meal mealOption={dailyMeals.snacks[1].meal} mealType={"snack-2"} consumed={dailyMeals.snacks[1].consumed} display={true} />
-          ) : (
-            "Second Snack for Today Not Chosen!"
-          )}
-        </AccordionDetails>
-      </Accordion>
-      <Accordion>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel2-content"
-          id="panel2-header"
-        >
-          Dinner
-        </AccordionSummary>
-        <AccordionDetails>
-          {dailyMeals && dailyMeals.dinner ? (
-            <Meal mealOption={dailyMeals.dinner.meal} consumed={dailyMeals.dinner.consumed}display={true} />
-          ) : (
-            "Dinner Meal for Today Not Chosen!"
-          )}
-        </AccordionDetails>
-      </Accordion>
-    </div>
+        return (
+          <Accordion key={meal.key} sx={{ width: "300px" }}>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls={`${meal.key}-content`}
+              id={`${meal.key}-header`}
+            >
+              {meal.title}
+            </AccordionSummary>
+            <AccordionDetails
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              {mealData ? (
+                <Meal
+                  mealOption={mealData.meal}
+                  mealType={meal.key}
+                  consumed={mealData.consumed}
+                  display={true}
+                />
+              ) : (
+                `${meal.title} Meal for Today Not Chosen!`
+              )}
+            </AccordionDetails>
+          </Accordion>
+        );
+      })}
+    </Box>
   );
 }
