@@ -1,9 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { isSameDay } from "../../utils/helpers.js";
-import "./DailyTracking.css";
 import { useData } from "../../context/DataContext.jsx";
 import SingleTracking from "../SingleTracking/SingleTracking.jsx";
-import Button from "@mui/material/Button";
+import { Box, Button } from "@mui/material";
 import UpdateIcon from "@mui/icons-material/Update";
 
 function DailyTracking() {
@@ -19,7 +18,7 @@ function DailyTracking() {
       return isSameDay(new Date(track.date), new Date());
     });
     if (track === undefined) {
-      console.log("stil no data");
+      console.log("still no data");
       const t = {
         date: new Date(),
         calories: 0,
@@ -59,22 +58,36 @@ function DailyTracking() {
   };
 
   return (
-    <div className="daily-tracking-container">
-      <h3>add here!</h3>
+    <Box
+      sx={{
+        p: 2,
+        maxWidth: 400,
+        border: "2px solid #1976d2", // Change the color and width as needed
+        borderRadius: "8px", // Optional, for rounded corners
+        padding: "16px", // Padding inside the box
+        boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.4)", // Optional, for a shadow effect
+      }}
+    >
+       <h3>Add Tracking Data</h3>
       {dailyTracking && (
-        <div className="change-container">
+        <Box sx={{ mt: 2, mb: 3 }}>
+          {/* Calories Tracking */}
           <SingleTracking
             trackingType={"Calories"}
             dailyTracking={dailyTracking.calories}
             trackingState={calories}
             trackingStateHandler={setCalories}
           />
+
+          {/* Water Amount Tracking */}
           <SingleTracking
             trackingType={"Water Amount"}
             dailyTracking={dailyTracking.waterAmount}
             trackingState={waterAmount}
             trackingStateHandler={setWaterAmount}
           />
+
+          {/* Sleep Hours Tracking */}
           <SingleTracking
             trackingType={"Sleep Hours"}
             dailyTracking={dailyTracking.sleepHours}
@@ -82,17 +95,20 @@ function DailyTracking() {
             trackingStateHandler={setSleepHours}
           />
 
+          {/* Update Button */}
           <Button
             variant="contained"
             endIcon={<UpdateIcon />}
             onClick={handleUpdateDailyTracking}
             disabled={adding}
+            sx={{ mt: 2 }}
+            fullWidth
           >
-            Update
+            {adding ? "Updating..." : "Update"}
           </Button>
-        </div>
+        </Box>
       )}
-    </div>
+    </Box>
   );
 }
 
