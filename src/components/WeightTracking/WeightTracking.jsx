@@ -34,15 +34,17 @@ function WeightTracking() {
   };
 
   return (
-    <Box sx={{
-      maxWidth:400,
-      border: '2px solid #1976d2', // Change the color and width as needed
-      borderRadius: '8px',         // Optional, for rounded corners
-      padding: '16px',             // Padding inside the box
-      boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.4)' // Optional, for a shadow effect
-    }} p={2}>
+    <Box
+      sx={{
+        p: 2,
+        maxWidth: 400,
+        border: "2px solid #1976d2",
+        borderRadius: "8px",
+        boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.4)",
+      }}
+    >
       <h3>Weight Tracking</h3>
-      
+
       <TextField
         type="date"
         label="Date"

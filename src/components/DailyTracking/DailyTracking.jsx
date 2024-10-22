@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { isSameDay } from "../../utils/helpers.js";
 import { useData } from "../../context/DataContext.jsx";
 import SingleTracking from "../SingleTracking/SingleTracking.jsx";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Typography, Paper } from "@mui/material";
 import UpdateIcon from "@mui/icons-material/Update";
 
 function DailyTracking() {
@@ -62,52 +62,73 @@ function DailyTracking() {
       sx={{
         p: 2,
         maxWidth: 400,
-        border: "2px solid #1976d2", // Change the color and width as needed
-        borderRadius: "8px", // Optional, for rounded corners
-        padding: "16px", // Padding inside the box
-        boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.4)", // Optional, for a shadow effect
+        border: "2px solid #1976d2",
+        borderRadius: "8px",
+        boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.4)",
       }}
     >
-       <h3>Add Tracking Data</h3>
-      {dailyTracking && (
-        <Box sx={{ mt: 2, mb: 3 }}>
-          {/* Calories Tracking */}
-          <SingleTracking
-            trackingType={"Calories"}
-            dailyTracking={dailyTracking.calories}
-            trackingState={calories}
-            trackingStateHandler={setCalories}
-          />
+      {/* Title */}
+      <Typography variant="h5" component="h1" align="center" gutterBottom>
+        Daily Tracking
+      </Typography>
 
-          {/* Water Amount Tracking */}
-          <SingleTracking
-            trackingType={"Water Amount"}
-            dailyTracking={dailyTracking.waterAmount}
-            trackingState={waterAmount}
-            trackingStateHandler={setWaterAmount}
-          />
+      {/* Description */}
+      <Typography variant="body1" align="center" gutterBottom>
+        Please take a moment to add or update your Daily Tracking to keep a
+        record of your progress and maintain a comprehensive overview of your
+        daily activities and goals.
+      </Typography>
 
-          {/* Sleep Hours Tracking */}
-          <SingleTracking
-            trackingType={"Sleep Hours"}
-            dailyTracking={dailyTracking.sleepHours}
-            trackingState={sleepHours}
-            trackingStateHandler={setSleepHours}
-          />
+      {/* Tracking Data Box */}
+      <Paper
+        elevation={4}
+        sx={{
+          p: 1,
+          borderRadius: "10px",
+          boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+        }}
+      >
+        {dailyTracking && (
+          <Box sx={{ mt: 2 }}>
+            {/* Calories Tracking */}
+            <SingleTracking
+              trackingType={"Calories"}
+              dailyTracking={dailyTracking.calories}
+              trackingState={calories}
+              trackingStateHandler={setCalories}
+            />
 
-          {/* Update Button */}
-          <Button
-            variant="contained"
-            endIcon={<UpdateIcon />}
-            onClick={handleUpdateDailyTracking}
-            disabled={adding}
-            sx={{ mt: 2 }}
-            fullWidth
-          >
-            {adding ? "Updating..." : "Update"}
-          </Button>
-        </Box>
-      )}
+            {/* Water Amount Tracking */}
+            <SingleTracking
+              trackingType={"Water Amount"}
+              dailyTracking={dailyTracking.waterAmount}
+              trackingState={waterAmount}
+              trackingStateHandler={setWaterAmount}
+            />
+
+            {/* Sleep Hours Tracking */}
+            <SingleTracking
+              trackingType={"Sleep Hours"}
+              dailyTracking={dailyTracking.sleepHours}
+              trackingState={sleepHours}
+              trackingStateHandler={setSleepHours}
+            />
+
+            {/* Update Button */}
+            <Button
+              variant="contained"
+              color="primary"
+              endIcon={<UpdateIcon />}
+              onClick={handleUpdateDailyTracking}
+              disabled={adding}
+              fullWidth
+              sx={{ mt: 3 }}
+            >
+              {adding ? "Updating..." : "Update"}
+            </Button>
+          </Box>
+        )}
+      </Paper>
     </Box>
   );
 }
