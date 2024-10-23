@@ -21,6 +21,10 @@ export const isSameDay = (date1, date2) =>
   date1.getMonth() === date2.getMonth() &&
   date1.getFullYear() === date2.getFullYear();
 
+  export const isSameMonthAndYear = (date1, date2) =>
+    date1.getMonth() === date2.getMonth() &&
+  date1.getFullYear() === date2.getFullYear();
+
 // export const getDayAndMonth = (date) => {
 //     let year = date.getFullYear();
 //     // Months are zero-based, so add 1

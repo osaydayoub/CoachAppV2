@@ -15,6 +15,7 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+    border: solid black 1px;
   }
 
   .calendar-message-container{
@@ -37,3 +38,48 @@
 
     
 }
+
+/* .MuiDayCalendar-weekDayLabel {
+  visibility: hidden;
+  position: relative; 
+}
+
+.MuiDayCalendar-weekDayLabel::after {
+  visibility: visible; 
+  position: absolute;
+  top: 0; 
+  left: 0; 
+  border: saddlebrown 2px solid;
+  padding-right: 5px;
+ 
+}
+
+.MuiDayCalendar-weekDayLabel:nth-of-type(1)::after {
+  content: "Sun"; 
+}
+
+.MuiDayCalendar-weekDayLabel:nth-of-type(2)::after {
+  content: "Mon"; 
+}
+
+.MuiDayCalendar-weekDayLabel:nth-of-type(3)::after {
+  content: "Tue"; 
+}
+
+.MuiDayCalendar-weekDayLabel:nth-of-type(4)::after {
+  content: "Wed"; 
+}
+
+.MuiDayCalendar-weekDayLabel:nth-of-type(5)::after {
+  content: "Thu"; 
+}
+
+.MuiDayCalendar-weekDayLabel:nth-of-type(6)::after {
+  content: "Fri"; 
+  padding-left: 8px;
+}
+
+
+.MuiDayCalendar-weekDayLabel:nth-of-type(7)::after {
+  content: "Sat";
+} */

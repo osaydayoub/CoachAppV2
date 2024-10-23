@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext.jsx";
-import "react-circular-progressbar/dist/styles.css";
 import "./Homepage.css";
 import { useData } from "../../context/DataContext.jsx";
 import { isSameDay } from "../../utils/helpers.js";

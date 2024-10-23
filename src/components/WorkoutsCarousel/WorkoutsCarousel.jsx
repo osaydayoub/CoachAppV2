@@ -15,7 +15,7 @@ function WorkoutsCarousel({autoPlay,workoutsToDisply,isViewOnly,isAdmin}) {
           sx={{ paddingLeft: "50px", paddingRight:"50px", width: "320px" }}
         >
           {workoutsToDisply.map((workout, index) => {
-            if (index == 0) console.log(workoutsToDisply);
+            // if (index == 0) console.log(workoutsToDisply);
             return (
               <Workout
                 key={index}
