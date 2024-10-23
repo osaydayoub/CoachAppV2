@@ -19,7 +19,7 @@ import {
 import Workout from "../../components/Workout/Workout.jsx";
 import WorkoutsCarousel from "../../components/WorkoutsCarousel/WorkoutsCarousel.jsx";
 
-import { Box } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 
 const initialValue = dayjs(new Date());
 
@@ -48,7 +48,7 @@ function ServerDay(props) {
   );
 }
 function TimetablePage() {
-  const [value, onchange] = useState(new Date());
+  const [value, setValue] = useState(initialValue);
   const { currentUser } = useAuth();
   const { workoutsData, getWorkouts } = useData();
   //maybe no need for that
@@ -117,46 +117,14 @@ function TimetablePage() {
     });
     setHighlightedDays(days);
   };
+  const handleTodayClick = () => {
+    // onchange(new Date());
+    setValue(dayjs()); // Set the date to today using dayjs
+  };
 
   return (
     <div className="TimetablePage page">
       <div className="calendar-message-container">
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DateCalendar
-            sx={{
-              p: 1,
-              margin: 2,
-              maxWidth: 400,
-              border: "1px solid",
-              borderColor: "primary.main",
-              borderRadius: "8px",
-              boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.4)",
-              "& .MuiDayCalendar-weekDayLabel": {
-                marginLeft: "6px",
-              },
-            }}
-            defaultValue={initialValue}
-            // loading={isLoading}
-            onMonthChange={handleMonthChange}
-            onChange={(newDate) => {
-              onchange(new Date(newDate));
-              console.log(
-                "Selected day changed to:",
-                newDate.format("YYYY-MM-DD")
-              );
-              // Add any custom logic here when the day changes
-            }}
-            renderLoading={() => <DayCalendarSkeleton />}
-            slots={{
-              day: ServerDay,
-            }}
-            slotProps={{
-              day: {
-                highlightedDays,
-              },
-            }}
-          />
-        </LocalizationProvider>
         {!currentUser.isAdmin && workouts && (
           <div className="message-container">
             {/* <h3>{getFullDate(value)}</h3> */}
@@ -181,6 +149,79 @@ function TimetablePage() {
             </Box>
           </div>
         )}
+        <Box
+          sx={{
+            p: 1,
+            margin: 2,
+            maxWidth: 400,
+            border: "1px solid",
+            borderColor: "primary.main",
+            borderRadius: "8px",
+            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.4)",
+          }}
+        >
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DateCalendar
+              sx={{
+                // pt: 1,
+                // margin: 2,
+                // maxWidth: 400,
+                // border: "1px solid",
+                // borderColor: "primary.main",
+                // borderRadius: "8px",
+                // boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.4)",
+                "& .MuiDayCalendar-weekDayLabel": {
+                  marginLeft: "6px",
+                },
+              }}
+              value={value}
+              // loading={isLoading}
+              onMonthChange={handleMonthChange}
+              onChange={(newDate) => {
+                // setValue(new Date(newDate));
+                setValue(dayjs(newDate));
+                // Add any custom logic here when the day changes
+              }}
+              renderLoading={() => <DayCalendarSkeleton />}
+              slots={{
+                day: ServerDay,
+              }}
+              slotProps={{
+                day: {
+                  highlightedDays,
+                },
+              }}
+            />
+
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                // mt: 2,
+                borderTop: "solid 1px",
+                borderColor: "primary.main",
+              }}
+            >
+              <FitnessCenterIcon sx={{ mr: 1 }} />
+              <Typography fontSize="small" sx={{ color: '#9d9d9d' }}>
+                Days with the icon have workouts.
+              </Typography>
+            </Box>
+
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center", // Center horizontally
+                alignItems: "center", // Center vertically
+                mt: 1, // Margin-top for spacing
+              }}
+            >
+              <Button variant="contained" onClick={handleTodayClick}>
+                Today
+              </Button>
+            </Box>
+          </LocalizationProvider>
+        </Box>
       </div>
 
       <Box
