@@ -289,6 +289,21 @@ export function DataProvider({ children }) {
     }
   };
 
+  const updateUserActiveStatus = async (userId, newStatus) => {
+    try {
+      const response = await axios.put(
+        `${import.meta.env.VITE_API_LINK}/users/updateUserStatus`,
+        {
+          userId: userId,
+          status:  newStatus,
+        }
+      );
+      console.log(response.data);
+      // await getClients
+    } catch (error) {
+      console.log("error in updateUserActiveStatus");
+    }
+  };
 
   const value = {
     currentClient,
@@ -313,6 +328,7 @@ export function DataProvider({ children }) {
     addDailyMeal,
     AddCaloriesToDailyTracking,
     consumeDailyMeal,
+    updateUserActiveStatus,
   };
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
 }

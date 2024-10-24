@@ -9,13 +9,16 @@ import axios from "axios";
 import loginImg from "../../assets/images/logo2.png";
 import { useData } from "../../context/DataContext";
 //TODO handel is afunc for moving to signup page oe login... so do it
+const coachEmail="msa@CoachApp.com"
+const coachNumber="+972 54-996-1614"
+
 function Login({ handle }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const { currentUser, setCurrentUser, isLoggedIn, setIsLoggedIn } = useAuth();
-  const { setCurrentClient} = useData();
+  const { setCurrentClient } = useData();
   const navigate = useNavigate();
   async function handleSubmit(e) {
     e.preventDefault();
@@ -32,14 +35,24 @@ function Login({ handle }) {
 
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("currentUser", JSON.stringify(res.data)); // Store the user data as a string
-      axios.defaults.headers.common["Authorization"] = `Bearer ${res.data.token}`;
+      axios.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${res.data.token}`;
       setCurrentUser(res.data);
       setCurrentClient(res.data.client);
       setIsLoggedIn(true);
       navigate("/");
     } catch (error) {
-      console.log(error);
-      setError("Faild to login");
+      console.log("error.response:", error.response.status);
+      if (error.response.status === 403) {
+        console.log("Forbidden");
+        setError(
+          `Your account is not active. Please contact ${coachEmail} or reach out via WhatsApp at ${coachNumber} to activate your account.`
+        );
+      } else {
+        console.log(error);
+        setError("Faild to login");
+      }
     }
     setLoading(false);
   }
