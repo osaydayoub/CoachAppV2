@@ -244,7 +244,7 @@ function TimetablePage() {
           <h3>
             {isSameDay(new Date(value), new Date())
               ? `Today's Workouts`
-              : `Workouts For ${getFullDate(value)}`}
+              : `Workouts For ${getFullDate(value.toDate())}`}
           </h3>
         )}
         {workoutsToDisply && (
