@@ -18,6 +18,7 @@ function Workout({ workout, isAdmin, index, id, isViewOnly }) {
       setOpen(true);
       setSeverity("success")
     } catch (error) {
+      setMessage("error in deleteWorkout!")
       setOpen(true);
       setSeverity("error")
       console.log("error in deleteWorkout");

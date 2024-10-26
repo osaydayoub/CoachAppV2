@@ -299,7 +299,7 @@ export function DataProvider({ children }) {
         }
       );
       console.log(response.data);
-      // await getClients
+      await getClients();
     } catch (error) {
       console.log("error in updateUserActiveStatus");
     }

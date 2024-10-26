@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useData } from "../../context/DataContext";
 //MRT Imports
 import {
@@ -10,6 +10,7 @@ import {
 
 //Material UI Imports
 import { Box, Button, MenuItem, lighten } from "@mui/material";
+import Notification from "../Notification/Notification.jsx";
 // useEffect(()=>{
 //   if(data){
 //     console.log("data=>:",data);
@@ -19,6 +20,10 @@ import { Box, Button, MenuItem, lighten } from "@mui/material";
 
 const MyClientTable = ({ data }) => {
   const { updateUserActiveStatus } = useData();
+  const [updatingUserStatus, setUpdatingUserStatus] = useState(false); 
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState('');
+  const [severity, setSeverity] = useState('info'); // Can be 'success', 'error', 'warning', 'info'
   const columns = useMemo(
     () => [
       {
@@ -64,33 +69,32 @@ const MyClientTable = ({ data }) => {
           },
           {
             accessorKey: "isActive",
-            header: "Active Status",
+            accessorFn: (row) => (row.isActive ? 'true' : 'false'),
+            header: "Status",
             filterFn: "equals",
             Cell: ({ cell }) => {
               const isActive = cell.getValue();
-              console.log("isActive->", isActive);
               return (
                 <Box sx={{ display: "flex", gap: "0.5rem" }}>
                   <Box
                     variant="contained"
-                    color={isActive ? "success" : "error"}
                     sx={{
-                      backgroundColor: isActive ? "success.main" : "error.main",
+                      backgroundColor: isActive=='true' ? "success.main" : "error.main",
                       color: "white",
                       textTransform: "none",
                       padding: "4px 8px",
                       borderRadius: "8px",
                     }}
                   >
-                    {isActive ? "Active" : "Inactive"}
+                    {isActive==='true' ? "Active" : "Inactive"}
                   </Box>
                 </Box>
               );
             },
             filterSelectOptions: [
-              { label: "Active", value: true },
-              { label: "Inactive", value: false },
-              { label: "Other", value: "Other" },
+              { label: "Active", value: 'true' },
+              { label: "Inactive", value: 'false' },
+              // { label: "Other", value: "Other" },
             ],
             filterVariant: "select",
           },
@@ -160,38 +164,46 @@ const MyClientTable = ({ data }) => {
       </MenuItem>,
     ],
     renderTopToolbar: ({ table }) => {
-      // const handleDeactivate = () => {
-      //   table.getSelectedRowModel().flatRows.map((row) => {
-      //     alert("deactivating " + row.getValue("name"));
-      //   });
-      // };
 
-      const handleDeactivate = () => {
-        table.getSelectedRowModel().flatRows.map((row) => {
-          const userIds = table.getSelectedRowModel().flatRows.map((row) => {
-            callUpdateUser(row.original.user._id, false);
-            return row.original.user._id;
-          });
-          //TODO CHANGE TO NOTI...
-          alert("deactivating users with IDs: " + userIds.join(", "));
-        });
-      };
+
 
       const callUpdateUser = async (userId, status) => {
         try {
+          setUpdatingUserStatus(true);
           await updateUserActiveStatus(userId, status);
         } catch (error) {
           console.log("error in UpdateUser", error);
+          //TODO add Notification ?
         }
+        setUpdatingUserStatus(false);
+      };
+
+      const handleDeactivate = () => {
+        const userNames=[];
+        table.getSelectedRowModel().flatRows.map((row) => {
+          callUpdateUser(row.original.user._id, false);
+          userNames.push(row.original.name);
+          return row.original.user._id;
+        });
+
+        setMessage("deactivating users with Names: " + userNames.join(", "))
+        setOpen(true);
+        setSeverity("success");
+        // alert("deactivating users with Names: " + userNames.join(", "));
       };
 
       const handleActivate = () => {
+        const userNames=[];
         const userIds = table.getSelectedRowModel().flatRows.map((row) => {
           callUpdateUser(row.original.user._id, true);
+          userNames.push(row.original.name);
           return row.original.user._id;
         });
         //TODO CHANGE TO NOTI...
-        alert("Activating users with IDs: " + userIds.join(", "));
+        setMessage("Activating users with Names: " + userNames.join(", "))
+        setOpen(true);
+        setSeverity("success");
+        // alert("Activating users with IDs: " + userIds.join(", "));
       };
 
       return (
@@ -213,7 +225,7 @@ const MyClientTable = ({ data }) => {
             <Box sx={{ display: "flex", gap: "0.5rem" }}>
               <Button
                 color="error"
-                disabled={!table.getIsSomeRowsSelected()}
+                disabled={!table.getIsSomeRowsSelected()||updatingUserStatus}
                 onClick={handleDeactivate}
                 variant="contained"
               >
@@ -221,12 +233,13 @@ const MyClientTable = ({ data }) => {
               </Button>
               <Button
                 color="success"
-                disabled={!table.getIsSomeRowsSelected()}
+                disabled={!table.getIsSomeRowsSelected()||updatingUserStatus}
                 onClick={handleActivate}
                 variant="contained"
               >
                 Activate
               </Button>
+              <Notification open={open} setOpen={setOpen} message={message} severity={severity}></Notification>
             </Box>
           </Box>
         </Box>
