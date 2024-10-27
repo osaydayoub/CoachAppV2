@@ -7,7 +7,8 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useData } from "../../context/DataContext";
 import Meal from "../Meal/Meal";
 import { isSameDay } from "../../utils/helpers";
-import { Box } from "@mui/material";
+import { Box  ,Button} from "@mui/material";
+import { Link } from "react-router-dom";
 
 export default function MealsAccordion() {
   const [dailyMeals, setdailyMeals] = useState(null);
@@ -85,6 +86,15 @@ export default function MealsAccordion() {
                 `${meal.title} Meal for Today Not Chosen!`
               )}
             </AccordionDetails>
+          {(!mealData||!mealData?.consumed) && <AccordionActions>
+              <Button
+                component={Link}
+                to={`/meals/${meal.title.split(' ').pop().toLowerCase()}`}  
+                size="small"
+              >
+                Add/Choose
+              </Button>
+            </AccordionActions>}
           </Accordion>
         );
       })}
