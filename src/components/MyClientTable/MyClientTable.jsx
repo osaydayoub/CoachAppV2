@@ -10,20 +10,11 @@ import {
 
 //Material UI Imports
 import { Box, Button, MenuItem, lighten } from "@mui/material";
-import Notification from "../Notification/Notification.jsx";
-// useEffect(()=>{
-//   if(data){
-//     console.log("data=>:",data);
-
-//   }
-// },[])
-
+import { useNotification } from "../../context/NotificationContext.jsx";
 const MyClientTable = ({ data }) => {
   const { updateUserActiveStatus } = useData();
+  const showNotification = useNotification();
   const [updatingUserStatus, setUpdatingUserStatus] = useState(false); 
-  const [open, setOpen] = useState(false);
-  const [message, setMessage] = useState('');
-  const [severity, setSeverity] = useState('info'); // Can be 'success', 'error', 'warning', 'info'
   const columns = useMemo(
     () => [
       {
@@ -185,11 +176,10 @@ const MyClientTable = ({ data }) => {
           userNames.push(row.original.name);
           return row.original.user._id;
         });
-
-        setMessage("deactivating users with Names: " + userNames.join(", "))
-        setOpen(true);
-        setSeverity("success");
-        // alert("deactivating users with Names: " + userNames.join(", "));
+        showNotification(
+          "deactivating users with Names: " + userNames.join(", "),
+          "success"
+        );
       };
 
       const handleActivate = () => {
@@ -199,11 +189,11 @@ const MyClientTable = ({ data }) => {
           userNames.push(row.original.name);
           return row.original.user._id;
         });
-        //TODO CHANGE TO NOTI...
-        setMessage("Activating users with Names: " + userNames.join(", "))
-        setOpen(true);
-        setSeverity("success");
-        // alert("Activating users with IDs: " + userIds.join(", "));
+
+        showNotification(
+          "Activating users with Names: " + userNames.join(", "),
+          "success"
+        );
       };
 
       return (
@@ -239,7 +229,7 @@ const MyClientTable = ({ data }) => {
               >
                 Activate
               </Button>
-              <Notification open={open} setOpen={setOpen} message={message} severity={severity}></Notification>
+              {/* <Notification open={open} setOpen={setOpen} message={message} severity={severity}></Notification> */}
             </Box>
           </Box>
         </Box>
