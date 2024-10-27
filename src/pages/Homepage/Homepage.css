@@ -28,6 +28,9 @@ gap: 30px;
 }
 
 @media (max-width:750px) {
+    .Homepage{
+        padding: 10px;}
+
     .homepage-message-container{
         width: 100%;
     }
