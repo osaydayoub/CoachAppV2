@@ -49,6 +49,7 @@ function ServerDay(props) {
 }
 function TimetablePage() {
   const [value, setValue] = useState(initialValue);
+  const [month,setMonth]=useState(initialValue);
   const { currentUser } = useAuth();
   const { workoutsData, getWorkouts } = useData();
   //maybe no need for that
@@ -56,11 +57,11 @@ function TimetablePage() {
   const [allHighlightedDates, setAllHighlightedDates] = useState(null);
   const [workoutsToDisply, setWorkoutsToDisply] = useState(null);
   const [highlightedDays, setHighlightedDays] = useState(null);
+  const [workoutForDate, setWorkoutForDate] = useState(null);
   // const [isLoading,setIsLoading]=useState(false);
 
   useEffect(() => {
     if (!currentUser.isAdmin) {
-      //   console.log("hi 1");
       const currentUserWorkouts = currentUser.client.workouts;
       currentUserWorkouts.sort((a, b) => new Date(a.date) - new Date(b.date));
       const highlightArray = [];
@@ -101,12 +102,42 @@ function TimetablePage() {
     }
   }, [workoutsData, value]);
 
-  const getWorkout = (date) => {
-    const res = workouts?.find((workout) => {
-      return isSameDay(new Date(date), new Date(workout.date));
-    });
-    return res;
-  };
+  //set for admin
+  useEffect(() => {
+    if (workoutsData != null && currentUser.isAdmin) {
+      const highlightArray = [];
+      workoutsData.forEach((element) => {
+        highlightArray.push(new Date(element.date));
+      });
+
+      const filteredHighlightArray = highlightArray?.filter((day) => {
+        return isSameMonthAndYear(new Date(month), new Date(day));
+      });
+
+      const days = filteredHighlightArray?.map((date) => {
+        return date.getDate();
+      });
+
+      setAllHighlightedDates(highlightArray);
+      setHighlightedDays(days);
+    }
+  }, [workoutsData]);
+
+  useEffect(() => {
+    if (value != undefined) {
+      const res = workouts?.find((workout) => {
+        return isSameDay(new Date(value), new Date(workout.date));
+      });
+      setWorkoutForDate(res);
+    }
+  }, [value]);
+
+  // const getWorkout = (date) => {
+  //   const res = workouts?.find((workout) => {
+  //     return isSameDay(new Date(date), new Date(workout.date));
+  //   });
+  //   return res;
+  // };
 
   const handleMonthChange = (date) => {
     const res = allHighlightedDates?.filter((day) => {
@@ -115,6 +146,9 @@ function TimetablePage() {
     const days = res?.map((date) => {
       return date.getDate();
     });
+    console.log('new Date(date)=',new Date(date));
+    console.log('date=',date);
+    setMonth(new Date(date))
     setHighlightedDays(days);
   };
   const handleTodayClick = () => {
@@ -125,30 +159,6 @@ function TimetablePage() {
   return (
     <div className="TimetablePage page">
       <div className="calendar-message-container">
-        {!currentUser.isAdmin && workouts && (
-          <div className="message-container">
-            {/* <h3>{getFullDate(value)}</h3> */}
-            <Box
-              sx={{
-                width: 225,
-                height: 150,
-                border: "1px solid",
-                borderColor: "primary.main",
-                borderRadius: "8px",
-                boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.4)",
-              }}
-            >
-              {getWorkout(new Date(value)) && (
-                <Workout
-                  workout={getWorkout(new Date(value))}
-                  isAdmin={currentUser.isAdmin}
-                  index={1}
-                  isViewOnly={true}
-                />
-              )}
-            </Box>
-          </div>
-        )}
         <Box
           sx={{
             p: 1,
@@ -203,7 +213,7 @@ function TimetablePage() {
               }}
             >
               <FitnessCenterIcon sx={{ mr: 1 }} />
-              <Typography fontSize="small" sx={{ color: '#9d9d9d' }}>
+              <Typography fontSize="small" sx={{ color: "#9d9d9d" }}>
                 Days with the icon have workouts.
               </Typography>
             </Box>
@@ -222,6 +232,51 @@ function TimetablePage() {
             </Box>
           </LocalizationProvider>
         </Box>
+
+        {!currentUser.isAdmin && workouts && (
+          <div className="message-container">
+            {/* <h3>{getFullDate(value)}</h3> */}
+            <Box
+              sx={{
+                width: 225,
+                height: 150,
+                border: "1px solid",
+                borderColor: "primary.main",
+                borderRadius: "8px",
+                boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.4)",
+              }}
+            >
+              {workoutForDate ? (
+                <Workout
+                  workout={workoutForDate}
+                  isAdmin={currentUser.isAdmin}
+                  index={1}
+                  isViewOnly={true}
+                />
+              ) : (
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    height: "100%",
+                    width: "100%",
+                  }}
+                >
+                  <Typography>No workout on this date!</Typography>
+                </Box>
+              )}
+              {/* {getWorkout(new Date(value)) && (
+                <Workout
+                  workout={getWorkout(new Date(value))}
+                  isAdmin={currentUser.isAdmin}
+                  index={1}
+                  isViewOnly={true}
+                />
+              )} */}
+            </Box>
+          </div>
+        )}
       </div>
 
       <Box

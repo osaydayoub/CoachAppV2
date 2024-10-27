@@ -33,8 +33,10 @@ export function DataProvider({ children }) {
       data.sort((a,b)=>new Date(a.date) - new Date(b.date))
 
       setWorkoutsData(data);
+      return data;
     } catch (error) {
       console.log("error in get workouts");
+      return null;
     }
   };
   const getClients = async () => {

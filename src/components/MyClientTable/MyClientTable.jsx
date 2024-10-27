@@ -238,8 +238,6 @@ const MyClientTable = ({ data }) => {
 
   return (
     <Box sx={{ width: "80%" }}>
-      {" "}
-      {/* Parent container with full width */}
       <MaterialReactTable table={table} />
     </Box>
   );
