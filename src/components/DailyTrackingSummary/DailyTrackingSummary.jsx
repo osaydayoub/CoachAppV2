@@ -132,6 +132,7 @@ function DailyTrackingSummary({ currentUser, dailyTracking, currentClient }) {
                     top: 0,
                     left: 0,
                     borderRadius: 1, // Optional for rounded corners
+                    // maxWidth?
                   }}
                 />
                 {/* Percentage Text in the Center */}

@@ -49,7 +49,7 @@ function ServerDay(props) {
 }
 function TimetablePage() {
   const [value, setValue] = useState(initialValue);
-  const [month,setMonth]=useState(initialValue);
+  const [month, setMonth] = useState(initialValue);
   const { currentUser } = useAuth();
   const { workoutsData, getWorkouts } = useData();
   //maybe no need for that
@@ -124,13 +124,14 @@ function TimetablePage() {
   }, [workoutsData]);
 
   useEffect(() => {
-    if (value != undefined) {
+    if (value != undefined && !currentUser.isAdmin) {
       const res = workouts?.find((workout) => {
         return isSameDay(new Date(value), new Date(workout.date));
       });
+      console.log(res);
       setWorkoutForDate(res);
     }
-  }, [value]);
+  }, [value,workouts]);
 
   // const getWorkout = (date) => {
   //   const res = workouts?.find((workout) => {
@@ -146,9 +147,9 @@ function TimetablePage() {
     const days = res?.map((date) => {
       return date.getDate();
     });
-    console.log('new Date(date)=',new Date(date));
-    console.log('date=',date);
-    setMonth(new Date(date))
+    console.log("new Date(date)=", new Date(date));
+    console.log("date=", date);
+    setMonth(new Date(date));
     setHighlightedDays(days);
   };
   const handleTodayClick = () => {
