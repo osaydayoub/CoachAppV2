@@ -229,7 +229,6 @@ const MyClientTable = ({ data }) => {
               >
                 Activate
               </Button>
-              {/* <Notification open={open} setOpen={setOpen} message={message} severity={severity}></Notification> */}
             </Box>
           </Box>
         </Box>
