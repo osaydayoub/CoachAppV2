@@ -20,13 +20,28 @@ function TrackingPage() {
       {!currentUser.isAdmin && (
         <div className="add-track-container">
           <Box sx={{ width: "100%" }}>
-            <Tabs value={activeTab} onChange={handleTabChange} centered>
+            <Tabs
+              value={activeTab}
+              onChange={handleTabChange}
+              centered
+              variant="scrollable"
+              scrollButtons="auto"
+            >
               <Tab label="Daily Tracking" />
               <Tab label="Weight Tracking" />
               <Tab label="Barcode Scanner" />
             </Tabs>
 
-            <Box sx={{ padding: 2, width:400 }}>
+            <Box
+              sx={{
+                pt: 2,
+                width: "100%",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "flex-start",
+              }}
+            >
               {activeTab === 0 && <DailyTracking />}
               {activeTab === 1 && <WeightTracking />}
               {activeTab === 2 && <BarcodeScanner />}
