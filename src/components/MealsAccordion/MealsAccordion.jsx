@@ -6,7 +6,7 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useData } from "../../context/DataContext";
 import Meal from "../Meal/Meal";
-import { isSameDay } from "../../utils/helpers";
+import { isSameDay ,isToday } from "../../utils/helpers";
 import { Box  ,Button} from "@mui/material";
 import { Link } from "react-router-dom";
 
@@ -39,7 +39,8 @@ export default function MealsAccordion() {
   useEffect(() => {
     if (currentClientUpdated) {
       const dailyMeals = currentClient?.dailyMeals.find((daily) =>
-        isSameDay(new Date(daily.date), new Date())
+        // isSameDay(new Date(daily.date), new Date())
+      isToday(daily.date)
       );
       console.log(dailyMeals);
       setdailyMeals(dailyMeals);

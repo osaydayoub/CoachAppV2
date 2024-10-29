@@ -55,4 +55,12 @@ export function dateIsWithinSevenDays(date) {
   return (newDate >= currentDate) && (newDate <= sevenDaysLater);
 }
 
+export const isToday=(date)=>{
+  const inputDate = new Date(date);
+  inputDate.setHours(0, 0, 0, 0);
+  const Today= new Date();
+  Today.setHours(0, 0, 0, 0);
+  return Today.getTime() === inputDate.getTime()
+}
+
 

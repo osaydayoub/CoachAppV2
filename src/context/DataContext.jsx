@@ -13,7 +13,6 @@ export function DataProvider({ children }) {
   const [workoutsData, setWorkoutsData] = useState(null);
   const [currentClient, setCurrentClient] = useState(null);
 
-
   // useEffect(() => {
   //   if (isLoggedIn) {
   //     console.log("token Changed!!!");
@@ -29,8 +28,8 @@ export function DataProvider({ children }) {
       const response = await axios.get(
         `${import.meta.env.VITE_API_LINK}/coach/workouts`
       );
-      const data=response.data;
-      data.sort((a,b)=>new Date(a.date) - new Date(b.date))
+      const data = response.data;
+      data.sort((a, b) => new Date(a.date) - new Date(b.date));
 
       setWorkoutsData(data);
       return data;
@@ -69,10 +68,15 @@ export function DataProvider({ children }) {
   };
 
   const getCurrentClient = async (id) => {
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+    // console.log("getCurrentClient-currentDate:",currentDate);
+    // console.log("currentDate.toISOString():",currentDate.toISOString());
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_API_LINK}/coach/clients/${id}`
+        `${import.meta.env.VITE_API_LINK}/coach/clients/${id}?date=${currentDate.toISOString()}`
       );
+
       setCurrentClient(response.data);
       console.log(response.data);
       return response.data;
@@ -128,6 +132,7 @@ export function DataProvider({ children }) {
       console.log(response.data);
       // await getCurrentClient(id);
     } catch (error) {
+      console.log(error);
       console.log("error in addDailyTracking");
     }
   };
@@ -158,7 +163,6 @@ export function DataProvider({ children }) {
     }
   };
 
-
   const addProduct = async (product) => {
     console.log("addProduct");
     try {
@@ -188,27 +192,28 @@ export function DataProvider({ children }) {
     }
   };
 
-  const addWeightTracking = async (clientID,weightLog) => {
+  const addWeightTracking = async (clientID, weightLog) => {
     console.log("addWeightTracking");
     try {
       console.log(weightLog);
       const response = await axios.put(
-        `${import.meta.env.VITE_API_LINK}/coach/clients/weightTracking/${clientID}`,
+        `${
+          import.meta.env.VITE_API_LINK
+        }/coach/clients/weightTracking/${clientID}`,
         {
           weight: weightLog.weight,
           date: weightLog.date,
         }
       );
       // console.log(response.data);
-       await getCurrentClient(clientID);
+      await getCurrentClient(clientID);
     } catch (error) {
       console.log(error);
       console.log("error in addWeightTracking");
     }
   };
 
-
-  const addMealRating = async (mealId,clientID,rating) => {
+  const addMealRating = async (mealId, clientID, rating) => {
     console.log("addMealRating");
     try {
       console.log(clientID);
@@ -227,19 +232,27 @@ export function DataProvider({ children }) {
     }
   };
 
-  const addDailyMeal = async (clientID,mealId,type) => {
+  const normalizeDate = (date) => {
+    return new Date(
+      Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate())
+    );
+  };
+
+  const addDailyMeal = async (clientID, mealId, type) => {
     console.log("addDailyMeal");
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
     try {
-      console.log(clientID);
       const response = await axios.post(
         `${import.meta.env.VITE_API_LINK}/coach/clients/dailyMeals/${clientID}`,
         {
           mealId: mealId,
           mealType: type,
+          date: currentDate,
         }
       );
     } catch (error) {
-      // console.log(error);
+      console.log(error);
       console.log("error in addDailyMeal");
     }
   };
@@ -265,23 +278,27 @@ export function DataProvider({ children }) {
         waterAmount: Number(track.waterAmount),
         sleepHours: Number(track.sleepHours),
       };
-    await addDailyTracking(currentClient._id, updatednewTrack);
+      await addDailyTracking(currentClient._id, updatednewTrack);
       await getCurrentClient(currentClient._id);
     } catch (error) {
       console.log(error);
       console.log("AddCaloriesToDailyTracking");
     }
-  }
+  };
 
-
-  const consumeDailyMeal = async (clientID,type) => {
+  const consumeDailyMeal = async (clientID, type) => {
     console.log("consumeDailyMeal");
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
     try {
       console.log(clientID);
       const response = await axios.post(
-        `${import.meta.env.VITE_API_LINK}/coach/clients/consumeDailyMeals/${clientID}`,
+        `${
+          import.meta.env.VITE_API_LINK
+        }/coach/clients/consumeDailyMeals/${clientID}`,
         {
           mealType: type,
+          date:currentDate,
         }
       );
       await getCurrentClient(currentClient._id);
@@ -297,7 +314,7 @@ export function DataProvider({ children }) {
         `${import.meta.env.VITE_API_LINK}/users/updateUserStatus`,
         {
           userId: userId,
-          status:  newStatus,
+          status: newStatus,
         }
       );
       console.log(response.data);
