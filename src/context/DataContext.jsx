@@ -196,6 +196,32 @@ export function DataProvider({ children }) {
     console.log("addWeightTracking");
     try {
       console.log(weightLog);
+      const response = await axios.post(
+        `${
+          import.meta.env.VITE_API_LINK
+        }/coach/clients/weightTracking/${clientID}`,
+        {
+          weight: weightLog.weight,
+          date: weightLog.date,
+        }
+      );
+      // console.log(response.data);
+      await getCurrentClient(clientID);
+    } catch (error) {
+      console.log(error);
+      console.log("ststus:",error.response.status);
+      if(error.response.status==409){
+        throw(error);
+      }
+      console.log("error in addWeightTracking");
+    }
+  };
+ 
+
+  const updateWeightTracking = async (clientID, weightLog) => {
+    console.log("updateWeightTracking");
+    try {
+      console.log(weightLog);
       const response = await axios.put(
         `${
           import.meta.env.VITE_API_LINK
@@ -209,7 +235,11 @@ export function DataProvider({ children }) {
       await getCurrentClient(clientID);
     } catch (error) {
       console.log(error);
-      console.log("error in addWeightTracking");
+      console.log("ststus:",error.response.status);
+      if(error.response.status==409){
+        throw(error);
+      }
+      console.log("error in updateWeightTracking");
     }
   };
 
@@ -343,6 +373,7 @@ export function DataProvider({ children }) {
     addProduct,
     getProductByBarcodeNumber,
     addWeightTracking,
+    updateWeightTracking,
     addMealRating,
     addDailyMeal,
     AddCaloriesToDailyTracking,

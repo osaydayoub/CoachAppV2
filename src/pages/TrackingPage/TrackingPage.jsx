@@ -23,7 +23,7 @@ function TrackingPage() {
             <Tabs
               value={activeTab}
               onChange={handleTabChange}
-              centered
+              // centered
               variant="scrollable"
               scrollButtons="auto"
             >

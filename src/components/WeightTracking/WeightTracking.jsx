@@ -3,6 +3,7 @@ import { Button, TextField, Box } from "@mui/material";
 import { useData } from "../../context/DataContext";
 import WeightLogList from "../WeightLogList/WeightLogList";
 import WeightLogChart from "../WeightLogChart/WeightLogChart";
+import { useNotification } from "../../context/NotificationContext";
 
 function WeightTracking() {
   const [date, setDate] = useState("");
@@ -10,6 +11,7 @@ function WeightTracking() {
   const [loggingWeight, setLoggingWeight] = useState(false);
   const [showLogs, setShowLogs] = useState(false);
   const { currentClient, addWeightTracking } = useData();
+  const showNotification = useNotification();
 
   const sortedWeightTracking = currentClient.weightTracking
     ? [...currentClient.weightTracking].sort(
@@ -24,6 +26,13 @@ function WeightTracking() {
       await addWeightTracking(currentClient._id, newLog);
     } catch (error) {
       console.log("Error in handleLogWeight:", error);
+      if(error.response.status==409){
+        showNotification(
+          "Weight data for this date already exists. Would you like to update the existing entry?",
+          "error"
+        );
+        console.log("Error in handleLogWeight: status=>", error.response.status);
+      }
     }
     setLoggingWeight(false);
     setNewWeight("");
@@ -89,7 +98,7 @@ function WeightTracking() {
 
       {showLogs && currentClient.weightTracking && (
         <>
-          <WeightLogChart weightTracking={sortedWeightTracking} />
+      {false&&<WeightLogChart weightTracking={sortedWeightTracking} />}
           <WeightLogList weightTracking={sortedWeightTracking} />
         </>
       )}
