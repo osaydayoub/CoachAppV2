@@ -8,7 +8,7 @@ import { DataProvider } from "./context/DataContext.jsx";
 import { NotificationProvider } from "./context/NotificationContext.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <BrowserRouter>
       <AuthProvider>
         <DataProvider>
@@ -18,5 +18,5 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         </DataProvider>
       </AuthProvider>
     </BrowserRouter>
-  </React.StrictMode>
+  // </React.StrictMode>
 );

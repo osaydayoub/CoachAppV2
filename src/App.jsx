@@ -14,20 +14,15 @@ import ResponsiveAppBar from "./components/AppBar/AppBar";
 import { useData } from "./context/DataContext";
 import { useEffect, useState } from "react";
 
-
 function App() {
   const [loading, setLoading] = useState(true);
-  const {
-    setCurrentUser,
-    isLoggedIn,
-    setIsLoggedIn
-  } = useAuth();
-   const { setCurrentClient} = useData();
+  const { setCurrentUser, isLoggedIn, setIsLoggedIn } = useAuth();
+  const { setCurrentClient } = useData();
   useEffect(() => {
     const token = localStorage.getItem("token");
     const userData = localStorage.getItem("currentUser");
     console.log("useEffect Try to get login data from localStorage");
-    
+
     if (token && userData) {
       console.log("updating");
       setIsLoggedIn(true);
@@ -38,8 +33,8 @@ function App() {
       setIsLoggedIn(false);
     }
     setLoading(false);
-  }, [isLoggedIn]);
-  if(loading){
+  }, []);
+  if (loading) {
     return <h1>loading...</h1>;
   }
   return (
@@ -54,7 +49,6 @@ function App() {
             isLoggedIn ? <Homepage /> : <Navigate replace to={"/login"} />
           }
         />
-        {/* <Route path='/' exact element={<Homepage />} /> */}
         <Route path="/login" element={<LoginPage />} />
         <Route
           path="/admin"

@@ -4,12 +4,12 @@ import "./BarcodeScanner.css";
 import Webcam from "react-webcam";
 import axios from "axios";
 import NutritionCard from "../NutritionCard/NutritionCard";
-import { Button } from "@mui/material";
+import { Button ,Box } from "@mui/material";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import StopIcon from "@mui/icons-material/Stop";
 import { useData } from "../../context/DataContext.jsx";
 // Define the limit as a constant outside the component
-const MAX_SCAN_ATTEMPTS = 10;
+const MAX_SCAN_ATTEMPTS = 15;
 
 const BarcodeScanner = () => {
   const { getProductByBarcodeNumber } = useData();
@@ -164,7 +164,19 @@ const BarcodeScanner = () => {
   };
 
   return (
-    <div className="container">
+    <Box
+    sx={{
+      p: 2,
+      maxWidth: 400,
+      border: "2px solid #1976d2",
+      borderRadius: "8px",
+      boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.4)",
+      display: "flex",
+      flexDirection:"column",
+      justifyContent: "center", /* Horizontally centers the content */
+      alignItems: "center", 
+    }}
+  >
       <h1>Barcode Scanner</h1>
       <div className="scanner-container">
         {isScanning && (
@@ -202,7 +214,7 @@ const BarcodeScanner = () => {
           handleManualInput={handleManualInput}
         />
       )}
-    </div>
+    </Box>
   );
 };
 
