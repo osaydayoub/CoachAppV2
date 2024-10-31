@@ -1,5 +1,6 @@
 .MealOptionsPage{
     padding: 10px;
+    justify-content: flex-start;
 }
 .back-btn{
     border: solid var(--color1) 3px;

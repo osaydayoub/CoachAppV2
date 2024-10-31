@@ -3,15 +3,18 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import "./Login.css";
 import { useAuth } from "../../context/AuthContext";
+import { Alert, Typography } from "@mui/material";
 
 import axios from "axios";
 // import loginImg from "../../assets/msaCoach.jpeg";
 import loginImg from "../../assets/images/logo2.png";
 import { useData } from "../../context/DataContext";
 //TODO handel is afunc for moving to signup page oe login... so do it
-const coachEmail="msa@CoachApp.com"
-const coachNumber="+972 54-996-1614"
-
+const coachEmail = "ayoubm850@gmail.com";
+const coachNumber = "+972 54-996-1614";
+const loginErrorMessage = "Login failed. Please check your email and password.";
+const inactiveAccountMessage1 = `Account inactive.\nContact ${coachEmail} \nor WhatsApp ${coachNumber} \nto activate.`;
+const inactiveAccountMessage2 = `Your account is not active.Please contact\n ${coachEmail}\n or reach out via WhatsApp at\n ${coachNumber} \nto activate your account.`;
 function Login({ handle }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -46,12 +49,10 @@ function Login({ handle }) {
       console.log("error.response:", error.response.status);
       if (error.response.status === 403) {
         console.log("Forbidden");
-        setError(
-          `Your account is not active. Please contact ${coachEmail} or reach out via WhatsApp at ${coachNumber} to activate your account.`
-        );
+        setError(inactiveAccountMessage1);
       } else {
         console.log(error);
-        setError("Faild to login");
+        setError(loginErrorMessage);
       }
     }
     setLoading(false);
@@ -62,7 +63,27 @@ function Login({ handle }) {
       {/* <img className="img-login" src={loginImg} alt="logo-img" /> */}
       <h2>Welcome</h2>
       {/* <h3>M.S.A</h3> */}
-      {error && <div className="error-container">{error}</div>}
+      {error && false && <div className="error-container">{error}</div>}
+      {/* {error && (
+        <Alert
+          severity="error"
+          variant="filled"
+          style={{ marginBottom: "1rem" }}
+        >
+          {error}
+        </Alert>
+      )} */}
+      {error && (
+        <Alert
+          severity="error"
+          variant="filled"
+          // style={{ marginBottom: "1rem" }}
+        >
+          <Typography variant="body2" style={{ whiteSpace: "pre-line" }}>
+            {error}
+          </Typography>
+        </Alert>
+      )}
       <form onSubmit={(e) => handleSubmit(e)}>
         <div>
           <label htmlFor="email">Email</label>

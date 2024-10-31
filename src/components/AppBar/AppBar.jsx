@@ -15,6 +15,7 @@ import { useData } from "../../context/DataContext.jsx";
 import logo from "../../assets/images/logo.png";
 import "./AppBar.css";
 import { useNavigate } from "react-router-dom";
+import ScrollToTop from "../ScrollToTop/ScrollToTop.jsx";
 
 function ResponsiveAppBar() {
   const { currentUser, setCurrentUser, isLoggedIn, setIsLoggedIn } = useAuth();
@@ -23,6 +24,7 @@ function ResponsiveAppBar() {
     setWorkoutsData,
     setCurrentClient,
   } = useData();
+  const topScroller = React.useRef();
 
   const [pages, setPages] = React.useState([]);
   const [handleFunctions, setHandleFunctions] = React.useState([]);
@@ -104,7 +106,8 @@ function ResponsiveAppBar() {
 //To change the primary color of your Material-UI components,
 // such as the AppBar, you can customize the Material-UI theme. 
   return (
-    <AppBar position="static"  sx={{ height: '90px', backgroundColor: '#21201c'}}>
+    <AppBar position="static"  sx={{ height: '90px', backgroundColor: '#21201c'}}  ref={topScroller}>
+      <ScrollToTop refToScroller={topScroller} />
       <Container maxWidth="xl">
         <Toolbar disableGutters  sx={{ height: '90px'}}>
           <Typography
