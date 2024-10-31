@@ -26,6 +26,8 @@ function App() {
     if (token && userData) {
       console.log("updating");
       setIsLoggedIn(true);
+      console.log(JSON.parse(userData));
+      console.log(JSON.parse(userData).client);
       setCurrentUser(JSON.parse(userData));
       setCurrentClient(JSON.parse(userData).client);
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
