@@ -6,12 +6,19 @@ import Client from "../../components/Client/Client";
 import { FaSearch } from "react-icons/fa";
 
 import MyClientTableWithLocalizationProvider from "../../components/MyClientTable/MyClientTable.jsx";
+import { useNavigate } from "react-router-dom";
 // import { useNavigate } from "react-router-dom";
 
 function AdminPage() {
+  const { currentUser, isLoggedIn } = useAuth();
   const { clientsData, setClientsData, getClients } = useData();
   const [clientsToDisply, setClientsToDisply] = useState(null);
+  const navigate = useNavigate();
   useEffect(() => {
+    if (!currentUser.isAdmin) {
+      navigate("/404");
+      return;
+    }
     if (clientsData === null) {
       getClients();
     }
@@ -26,7 +33,9 @@ function AdminPage() {
 
   return (
     <div className="AdminPage page">
-     {clientsToDisply&&( <MyClientTableWithLocalizationProvider data={clientsToDisply}/>)}
+      {clientsToDisply && (
+        <MyClientTableWithLocalizationProvider data={clientsToDisply} />
+      )}
     </div>
   );
 }

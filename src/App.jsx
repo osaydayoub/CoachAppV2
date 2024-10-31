@@ -1,6 +1,6 @@
 import "./App.css";
 import LoginPage from "./pages/LoginPage/LoginPage";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, useParams } from "react-router-dom";
 import Homepage from "./pages/Homepage/Homepage";
 import AdminPage from "./pages/AdminPage/AdminPage";
 import TimetablePage from "./pages/TimetablePage/TimetablePage";
@@ -13,6 +13,18 @@ import MealOptionsPage from "./pages/MealOptionsPage/MealOptionsPage";
 import ResponsiveAppBar from "./components/AppBar/AppBar";
 import { useData } from "./context/DataContext";
 import { useEffect, useState } from "react";
+import NotFound from "./pages/NotFound/NotFound";
+
+function MealTypeCheck() {
+  const { type } = useParams();
+  const validMealTypes = ["breakfast", "lunch", "snack", "dinner"];
+
+  if (!validMealTypes.includes(type)) {
+    return <Navigate replace to="/404" />; // Redirect to NotFound page if type is invalid
+  }
+
+  return <MealOptionsPage/>;
+}
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -78,7 +90,7 @@ function App() {
             isLoggedIn ? <MealsPage /> : <Navigate replace to={"/login"} />
           }
         />
-        <Route
+        {/* <Route
           path="/meals/:type"
           element={
             isLoggedIn ? (
@@ -87,7 +99,16 @@ function App() {
               <Navigate replace to={"/login"} />
             )
           }
+        /> */}
+        <Route
+          path="/meals/:type"
+          element={
+            isLoggedIn ? <MealTypeCheck /> : <Navigate replace to="/login" />
+          }
         />
+        <Route path="/404" element={<NotFound />} />
+        <Route path="*" element={<NotFound />} />{" "}
+        {/* Catch all unmatched routes */}
       </Routes>
       <Footer />
     </>
