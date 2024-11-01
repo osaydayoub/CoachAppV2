@@ -14,6 +14,9 @@ import ResponsiveAppBar from "./components/AppBar/AppBar";
 import { useData } from "./context/DataContext";
 import { useEffect, useState } from "react";
 import NotFound from "./pages/NotFound/NotFound";
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
+import logo from '/src/assets/images/big-logo.png';
 
 function MealTypeCheck() {
   const { type } = useParams();
@@ -23,7 +26,7 @@ function MealTypeCheck() {
     return <Navigate replace to="/404" />; // Redirect to NotFound page if type is invalid
   }
 
-  return <MealOptionsPage/>;
+  return <MealOptionsPage />;
 }
 
 function App() {
@@ -50,8 +53,25 @@ function App() {
     }
     setLoading(false);
   }, []);
-  if (loading) {
-    return <h1>loading...</h1>;
+  if (loading|| true) {
+    return (
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+        height="100vh"
+      >
+        <img
+          src={logo}
+          alt="Loading logo"
+          width="200"
+          height="200"
+          style={{ marginBottom: "20px" }}
+        />
+        <CircularProgress sx={{ color: '#EB5406' }} />
+      </Box>
+    );
   }
   return (
     <>
