@@ -1,17 +1,26 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Carousel from "react-material-ui-carousel";
 import Workout from "../Workout/Workout";
-import { useData } from "../../context/DataContext";
-import { useAuth } from "../../context/AuthContext";
+
 
 function WorkoutsCarousel({autoPlay,workoutsToDisply,isViewOnly,isAdmin}) {
+  const [activeIndex, setActiveIndex] = useState(0); 
+
+  useEffect(() => {
+    if (workoutsToDisply && workoutsToDisply.length > 0) {
+      setActiveIndex(0); 
+    }
+  }, [workoutsToDisply]);
+
   return (
-    <div style={{ marginTop: "50px"}}>
+    <div>
       {workoutsToDisply && (workoutsToDisply.length!=0)?(
         <Carousel
           autoPlay={autoPlay}
           interval={5000}
           navButtonsAlwaysVisible={true}
+          index={activeIndex} 
+          onChange={(index) => setActiveIndex(index)} 
           sx={{ paddingLeft: "50px", paddingRight:"50px", width: "320px" }}
         >
           {workoutsToDisply.map((workout, index) => {
