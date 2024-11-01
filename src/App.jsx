@@ -53,7 +53,7 @@ function App() {
     }
     setLoading(false);
   }, []);
-  if (loading|| true) {
+  if (loading) {
     return (
       <Box
         display="flex"
