@@ -52,6 +52,7 @@ function MealOptionsPage() {
               handeleAddMealDisplay={setAddMealDisplay}
               type={type}
               handleMealsChanged={setMealsChanged}
+              open={addMealDisplay}
             />
           )}
         </div>)

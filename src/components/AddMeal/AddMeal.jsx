@@ -14,13 +14,14 @@ import {
   IconButton,
   CardContent,
   Card,
+  Dialog,
 } from "@mui/material";
 import { useData } from "../../context/DataContext.jsx";
 import CloseIcon from "@mui/icons-material/Close";
 import CircleIcon from "@mui/icons-material/Circle";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-function AddMeal({ handeleAddMealDisplay, type, handleMealsChanged }) {
+function AddMeal({ handeleAddMealDisplay, type, handleMealsChanged, open }) {
   const [ingredientsArray, setIngredientsArray] = useState([]);
   const [ingredientName, setIngredientName] = useState("");
   const [amount, setAmount] = useState(0);
@@ -79,115 +80,117 @@ function AddMeal({ handeleAddMealDisplay, type, handleMealsChanged }) {
   };
 
   return (
-    <Box
-      sx={{
-        padding: 3,
-        border: "1px solid #ccc",
-        borderRadius: 2,
-        maxWidth: 350,
-        margin: "auto",
-      }}
-    >
-      <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-        <IconButton onClick={() => handeleAddMealDisplay(false)}>
-          <CloseIcon />
-        </IconButton>
-      </Box>
-      <Typography variant="h5" gutterBottom>
-        Add a Meal
-      </Typography>
+    <Dialog onClose={() => handeleAddMealDisplay(false)} open={open} scroll='body' >
+      <Box
+        sx={{
+          padding: 2,
+          border: "1px solid #ccc",
+          borderRadius: 2,
+          maxWidth: 350,
+          margin: "auto",
+        }}
+      >
+        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+          <IconButton onClick={() => handeleAddMealDisplay(false)}>
+            <CloseIcon />
+          </IconButton>
+        </Box>
+        <Typography variant="h5" gutterBottom>
+          Add a Meal
+        </Typography>
 
-      {displayNewMeal && (
-        <Card sx={{ mb: 2 }}>
-          <CardContent>
-            <Typography variant="h6" component="div" gutterBottom>
-              Ingredients
-            </Typography>
-            <List>
-              {ingredientsArray.map((ingredient, index) => (
-                <ListItem
-                  key={index}
-                  secondaryAction={
-                    <IconButton
-                      edge="end"
-                      aria-label="delete"
-                      onClick={() => handleRemoveIngredient(index)}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  }
-                >
-                  <CircleIcon sx={{ fontSize: 10, mr: 1 }} />
-                  {`${ingredient.name} - ${ingredient.amount} ${ingredient.unit}`}
-                </ListItem>
+        {displayNewMeal && (
+          <Card sx={{ mb: 2 }}>
+            <CardContent>
+              <Typography variant="h6" component="div" gutterBottom>
+                Ingredients
+              </Typography>
+              <List>
+                {ingredientsArray.map((ingredient, index) => (
+                  <ListItem
+                    key={index}
+                    secondaryAction={
+                      <IconButton
+                        edge="end"
+                        aria-label="delete"
+                        onClick={() => handleRemoveIngredient(index)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    }
+                  >
+                    <CircleIcon sx={{ fontSize: 10, mr: 1 }} />
+                    {`${ingredient.name} - ${ingredient.amount} ${ingredient.unit}`}
+                  </ListItem>
+                ))}
+              </List>
+            </CardContent>
+          </Card>
+        )}
+
+        <form onSubmit={handleAddIngredient}>
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Ingredient Name"
+            value={ingredientName}
+            onChange={(e) => setIngredientName(e.target.value)}
+            required
+          />
+          <TextField
+            fullWidth
+            margin="normal"
+            type="number"
+            label="Amount"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+            required
+          />
+          <FormControl fullWidth margin="normal">
+            <InputLabel id="unit-label">Choose a Unit</InputLabel>
+            <Select
+              labelId="unit-label"
+              value={selectedUnit}
+              onChange={(e) => setSelectedUnit(e.target.value)}
+              label="Choose a Unit"
+            >
+              {unitOptions.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
               ))}
-            </List>
-          </CardContent>
-        </Card>
-      )}
+            </Select>
+          </FormControl>
+          <Button fullWidth variant="outlined" type="submit" sx={{ mt: 2 }}>
+            Add Ingredient
+          </Button>
+        </form>
 
-      <form onSubmit={handleAddIngredient}>
-        <TextField
-          fullWidth
-          margin="normal"
-          label="Ingredient Name"
-          value={ingredientName}
-          onChange={(e) => setIngredientName(e.target.value)}
-          required
-        />
-        <TextField
-          fullWidth
-          margin="normal"
-          type="number"
-          label="Amount"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-          required
-        />
-        <FormControl fullWidth margin="normal">
-          <InputLabel id="unit-label">Choose a Unit</InputLabel>
-          <Select
-            labelId="unit-label"
-            value={selectedUnit}
-            onChange={(e) => setSelectedUnit(e.target.value)}
-            label="Choose a Unit"
+        <form onSubmit={handleAddMeal}>
+          <TextField
+            fullWidth
+            margin="normal"
+            type="number"
+            label="Total Calories"
+            value={totalCalories}
+            onChange={(e) => setTotalCalories(e.target.value)}
+            required
+          />
+          <Button
+            fullWidth
+            variant="contained"
+            type="submit"
+            sx={{ mt: 2 }}
+            disabled={
+              adding || totalCalories <= 0 || ingredientsArray.length === 0
+            }
+            startIcon={adding ? <CircularProgress size={20} /> : null}
           >
-            {unitOptions.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <Button fullWidth variant="outlined" type="submit" sx={{ mt: 2 }}>
-          Add Ingredient
-        </Button>
-      </form>
-
-      <form onSubmit={handleAddMeal}>
-        <TextField
-          fullWidth
-          margin="normal"
-          type="number"
-          label="Total Calories"
-          value={totalCalories}
-          onChange={(e) => setTotalCalories(e.target.value)}
-          required
-        />
-        <Button
-          fullWidth
-          variant="contained"
-          type="submit"
-          sx={{ mt: 2 }}
-          disabled={
-            adding || totalCalories <= 0 || ingredientsArray.length === 0
-          }
-          startIcon={adding ? <CircularProgress size={20} /> : null}
-        >
-          {adding ? "Adding Meal..." : "Add Meal"}
-        </Button>
-      </form>
-    </Box>
+            {adding ? "Adding Meal..." : "Add Meal"}
+          </Button>
+        </form>
+      </Box>
+    </Dialog>
   );
 }
 

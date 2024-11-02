@@ -246,8 +246,8 @@ const MyClientTable = ({ data }) => {
 //Date Picker Imports - these should just be in your Context Provider
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import AddWorkoutDialog from "../Dialog/Dialog";
-import AddPackageDialog from "../PackageDialog/PackageDialog";
+import AddWorkoutDialog from "../AddWorkoutDialog/AddWorkoutDialog.jsx";
+import AddPackageDialog from "../PackageDialog/PackageDialog.jsx";
 
 const MyClientTableWithLocalizationProvider = ({ data }) => (
   //App.tsx or AppProviders file
