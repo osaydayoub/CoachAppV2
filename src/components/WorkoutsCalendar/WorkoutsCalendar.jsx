@@ -52,7 +52,7 @@ function WorkoutsCalendar() {
   const [value, setValue] = useState(initialValue);
   const [month, setMonth] = useState(initialValue);
   const { currentUser } = useAuth();
-  const { workoutsData, getWorkouts } = useData();
+  const { workoutsData, getWorkouts,currentClient } = useData();
   //maybe no need for that
   const [workouts, setWorkouts] = useState(null);
   const [allHighlightedDates, setAllHighlightedDates] = useState(null);
@@ -62,8 +62,8 @@ function WorkoutsCalendar() {
   // const [isLoading,setIsLoading]=useState(false);
 
   useEffect(() => {
-    if (!currentUser.isAdmin) {
-      const currentUserWorkouts = currentUser.client.workouts;
+    if (!currentUser.isAdmin&& currentClient?.workouts) {
+      const currentUserWorkouts = currentClient.workouts;
       currentUserWorkouts.sort((a, b) => new Date(a.date) - new Date(b.date));
       const highlightArray = [];
       currentUserWorkouts.forEach((element) => {
@@ -86,12 +86,10 @@ function WorkoutsCalendar() {
       setWorkoutsToDisply(filterdWorkouts);
       setAllHighlightedDates(highlightArray);
       setHighlightedDays(days);
-    } else {
-      if (workoutsData === null) {
-        getWorkouts();
-      }
+    } else if (currentUser.isAdmin && workoutsData === null) {
+      getWorkouts();
     }
-  }, []);
+  }, [currentClient]);
 
   useEffect(() => {
     if (workoutsData != null) {

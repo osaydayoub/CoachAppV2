@@ -14,9 +14,9 @@ import ResponsiveAppBar from "./components/AppBar/AppBar";
 import { useData } from "./context/DataContext";
 import { useEffect, useState } from "react";
 import NotFound from "./pages/NotFound/NotFound";
-import CircularProgress from '@mui/material/CircularProgress';
-import Box from '@mui/material/Box';
-import logo from '/src/assets/images/big-logo.png';
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
+import logo from "/src/assets/images/big-logo.png";
 
 function MealTypeCheck() {
   const { type } = useParams();
@@ -32,20 +32,30 @@ function MealTypeCheck() {
 function App() {
   const [loading, setLoading] = useState(true);
   const { setCurrentUser, isLoggedIn, setIsLoggedIn } = useAuth();
-  const { setCurrentClient } = useData();
+  const { setCurrentClient, getCurrentClient } = useData();
   useEffect(() => {
     const token = localStorage.getItem("token");
     const userData = localStorage.getItem("currentUser");
     console.log("useEffect Try to get login data from localStorage");
 
+    const updateClientData = async (clientID) => {
+      console.log("updateClientData:-=-=-");
+      try {
+        await getCurrentClient(clientID);
+      } catch (error) {
+        console.log("error in updateClientData ", error);
+      }
+    };
+
     if (token && userData) {
-      console.log("updating");
-      // setIsLoggedIn(true);
-      console.log(JSON.parse(userData));
-      console.log(JSON.parse(userData).client);
-      setCurrentUser(JSON.parse(userData));
-      setCurrentClient(JSON.parse(userData).client);
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      console.log("updating");
+      console.log("JSON.parse(userData):", JSON.parse(userData));
+      console.log(".client:", JSON.parse(userData).clientId);
+      setCurrentUser(JSON.parse(userData));
+      if (JSON.parse(userData).clientId) {
+        updateClientData(JSON.parse(userData).clientId);
+      }
       console.log("Setting isLoggedIn to true");
       setIsLoggedIn(true);
     } else {
@@ -69,7 +79,7 @@ function App() {
           height="200"
           style={{ marginBottom: "20px" }}
         />
-        <CircularProgress sx={{ color: '#EB5406' }} />
+        <CircularProgress sx={{ color: "#EB5406" }} />
       </Box>
     );
   }

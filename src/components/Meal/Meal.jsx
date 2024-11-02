@@ -43,7 +43,7 @@ function Meal({ mealOption, mealType, setMealsChanged, display, consumed }) {
       const clientRating = mealOption?.ratings?.[currentClient._id];
       setRating(clientRating ?? 0);
     }
-  }, [currentClient]);
+  }, []);
 
   const handelNewRating = async (newValue) => {
     setRating(newValue);

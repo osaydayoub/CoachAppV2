@@ -76,7 +76,7 @@ export function DataProvider({ children }) {
       const response = await axios.get(
         `${import.meta.env.VITE_API_LINK}/coach/clients/${id}?date=${currentDate.toISOString()}`
       );
-
+      console.log("response",response);
       setCurrentClient(response.data);
       console.log(response.data);
       return response.data;
@@ -255,7 +255,7 @@ export function DataProvider({ children }) {
         }
       );
       // console.log(response.data);
-      // await getCurrentClient(clientID);
+      await getCurrentClient(clientID);
     } catch (error) {
       console.log(error);
       console.log("error in addMealRating");
@@ -281,6 +281,7 @@ export function DataProvider({ children }) {
           date: currentDate,
         }
       );
+      await getCurrentClient(clientID);
     } catch (error) {
       console.log(error);
       console.log("error in addDailyMeal");

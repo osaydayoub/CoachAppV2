@@ -5,9 +5,11 @@ import { dateIsWithinSevenDays } from "../../utils/helpers.js";
 import WorkoutsCarousel from "../../components/WorkoutsCarousel/WorkoutsCarousel.jsx";
 import { Box, Tab, Tabs } from "@mui/material";
 import WorkoutsCalendar from "../../components/WorkoutsCalendar/WorkoutsCalendar.jsx";
+import { useData } from "../../context/DataContext.jsx";
 
 function TimetablePage() {
   const { currentUser } = useAuth();
+  const { currentClient } = useData();
   const [workoutsToDisply, setWorkoutsToDisply] = useState(null);
   const [activeTab, setActiveTab] = useState(0);
 
@@ -16,8 +18,8 @@ function TimetablePage() {
   };
 
   useEffect(() => {
-    if (!currentUser.isAdmin) {
-      const currentUserWorkouts = currentUser.client.workouts;
+    if (!currentUser.isAdmin&&currentClient) {
+      const currentUserWorkouts = currentClient.workouts;
       currentUserWorkouts.sort((a, b) => new Date(a.date) - new Date(b.date));
       const filterdWorkouts = currentUserWorkouts.filter((workout) => {
         return dateIsWithinSevenDays(workout.date);
@@ -25,7 +27,7 @@ function TimetablePage() {
 
       setWorkoutsToDisply(filterdWorkouts);
     }
-  }, []);
+  }, [currentClient]);
 
   return (
     <div className="TimetablePage page">

@@ -21,8 +21,19 @@ function Login({ handle }) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const { currentUser, setCurrentUser, isLoggedIn, setIsLoggedIn } = useAuth();
-  const { setCurrentClient } = useData();
+  const { getCurrentClient } = useData();
   const navigate = useNavigate();
+
+  
+  const updateClientData = async (clientID) => {
+    console.log("updateClientData:-=-=-");
+    try {
+      await getCurrentClient(clientID);
+    } catch (error) {
+      console.log("error in updateClientData ", error);
+    }
+  };
+
   async function handleSubmit(e) {
     e.preventDefault();
     try {
@@ -37,16 +48,25 @@ function Login({ handle }) {
       );
 
       localStorage.setItem("token", res.data.token);
-      localStorage.setItem("currentUser", JSON.stringify(res.data)); // Store the user data as a string
+      console.log(res.data);
+      const { client, ...rest } = res.data;
+      const userToStore={...rest ,clientId:(res.data.client)?res.data.client._id:null};
+      console.log("new:",userToStore);
+
+      localStorage.setItem("currentUser", JSON.stringify(userToStore)); // Store the user data as a string
       axios.defaults.headers.common[
         "Authorization"
       ] = `Bearer ${res.data.token}`;
-      setCurrentUser(res.data);
-      setCurrentClient(res.data.client);
+      setCurrentUser(userToStore);
+      
+      if (res.data.client) {
+        updateClientData(res.data.client._id);
+      }
       setIsLoggedIn(true);
       navigate("/");
     } catch (error) {
-      console.log("error.response:", error.response.status);
+      console.log("error.response:", error.response?.status);
+      console.log("error:", error);
       if (error.response.status === 403) {
         console.log("Forbidden");
         setError(inactiveAccountMessage1);

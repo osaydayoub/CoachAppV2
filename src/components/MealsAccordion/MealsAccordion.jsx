@@ -12,32 +12,10 @@ import { Link } from "react-router-dom";
 
 export default function MealsAccordion() {
   const [dailyMeals, setdailyMeals] = useState(null);
-  const [currentClientUpdated, setCurrentClientUpdated] = useState(false);
-  const { currentClient, getCurrentClient } = useData();
-  const updateCurrentClient = async () => {
-    try {
-      console.log(currentClient._id);
-      const resTrack = await getCurrentClient(currentClient._id);
-      console.log(resTrack);
-    } catch (error) {
-      console.error("Error fetching current client:", error);
-    }
-  };
+  const { currentClient} = useData();
+  
   useEffect(() => {
-    const update = async () => {
-      try {
-        await updateCurrentClient();
-        setCurrentClientUpdated(true);
-      } catch (error) {}
-    };
-    if (currentClient?._id) {
-      // Check if currentClient and _id exist
-      update();
-    }
-  }, []);
-
-  useEffect(() => {
-    if (currentClientUpdated) {
+    if (currentClient) {
       const dailyMeals = currentClient?.dailyMeals.find((daily) =>
         // isSameDay(new Date(daily.date), new Date())
       isToday(daily.date)
@@ -45,7 +23,7 @@ export default function MealsAccordion() {
       console.log(dailyMeals);
       setdailyMeals(dailyMeals);
     }
-  }, [currentClientUpdated, currentClient]);
+  }, [currentClient]);
   const mealTypes = [
     { title: "Breakfast", key: "breakfast", path: "breakfast" },
     { title: "First Snack", key: "snack-1", path: ["snacks", 0] },
