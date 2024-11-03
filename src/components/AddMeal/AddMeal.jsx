@@ -14,13 +14,20 @@ import {
   IconButton,
   CardContent,
   Card,
+  Dialog,
 } from "@mui/material";
 import { useData } from "../../context/DataContext.jsx";
 import CloseIcon from "@mui/icons-material/Close";
 import CircleIcon from "@mui/icons-material/Circle";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-function AddMeal({ handeleAddMealDisplay, type, handleMealsChanged }) {
+function AddMeal({
+  handeleAddMealDisplay,
+  type,
+  handleMealsChanged,
+  open,
+  isDialog,
+}) {
   const [ingredientsArray, setIngredientsArray] = useState([]);
   const [ingredientName, setIngredientName] = useState("");
   const [amount, setAmount] = useState(0);
@@ -78,14 +85,15 @@ function AddMeal({ handeleAddMealDisplay, type, handleMealsChanged }) {
     setIngredientsArray(updatedIngredients);
   };
 
-  return (
+  const dialogContent = (
     <Box
       sx={{
-        padding: 3,
+        padding: 2,
         border: "1px solid #ccc",
         borderRadius: 2,
         maxWidth: 350,
         margin: "auto",
+        // mt:2,
       }}
     >
       <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
@@ -178,7 +186,14 @@ function AddMeal({ handeleAddMealDisplay, type, handleMealsChanged }) {
           fullWidth
           variant="contained"
           type="submit"
-          sx={{ mt: 2 }}
+          // sx={{ mt: 2 }}
+          sx={{
+            mt: 2,
+            backgroundColor: "#EB5406",
+            "&:hover": { backgroundColor: "#d34905" },
+            padding: "8px 16px",
+            fontWeight: 600,
+          }}
           disabled={
             adding || totalCalories <= 0 || ingredientsArray.length === 0
           }
@@ -188,6 +203,18 @@ function AddMeal({ handeleAddMealDisplay, type, handleMealsChanged }) {
         </Button>
       </form>
     </Box>
+    //
+  );
+  return isDialog ? (
+    <Dialog
+      onClose={() => handeleAddMealDisplay(false)}
+      open={open}
+      scroll="body"
+    >
+      {dialogContent}
+    </Dialog>
+  ) : (
+     dialogContent 
   );
 }
 

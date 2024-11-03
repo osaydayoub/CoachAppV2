@@ -5,7 +5,17 @@ import { useData } from "../../context/DataContext.jsx";
 import Meal from "../../components/Meal/Meal.jsx";
 import AddMeal from "../../components/AddMeal/AddMeal.jsx";
 import { useAuth } from "../../context/AuthContext.jsx";
-
+import {
+  Box,
+  Button,
+  Typography,
+  Stack,
+  CardContent,
+  Card,
+} from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 function MealOptionsPage() {
   const { type } = useParams();
   const navigate = useNavigate();
@@ -32,38 +42,141 @@ function MealOptionsPage() {
   }
   return (
     <div className="page MealOptionsPage">
-      <button className="back-btn" onClick={handleBack}>
-        Back
-      </button>
-      <h1>{type}</h1>
-      <p>{`You can choose from a variety of options for your ${type}, ensuring your meal fits your preferences and nutritional needs.`}</p>
-      <div>
-      {currentUser.isAdmin && (<div>
-          <button
-            className="add-meal-btn"
-            onClick={() => {
-              setAddMealDisplay(true);
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          padding: 4,
+          gap: 3,
+          backgroundColor: "#f5f5f5",
+          borderRadius: 2,
+          boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+          maxWidth: 600,
+          margin: "0 auto",
+          mt: 1,
+        }}
+      >
+        <Typography variant="h5" gutterBottom>
+          {`${type.charAt(0).toUpperCase() + type.slice(1)} Meals`}
+        </Typography>
+
+        <Stack direction="row" spacing={2} justifyContent="center">
+          <Button
+            variant="contained"
+            // color="secondary"
+            endIcon={<ArrowBackIcon />}
+            onClick={handleBack}
+            sx={{
+              padding: "8px 16px",
+              fontWeight: 600,
             }}
           >
-            +
-          </button>
-          {addMealDisplay && (
-            <AddMeal
-              handeleAddMealDisplay={setAddMealDisplay}
-              type={type}
-              handleMealsChanged={setMealsChanged}
-            />
-          )}
-        </div>)
-        }
-        {mealOptions && (
+            Back
+          </Button>
+        </Stack>
+      </Box>
+
+      {!currentUser.isAdmin && (
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            padding: 2,
+            gap: 3,
+            backgroundColor: "#f5f5f5",
+            borderRadius: 2,
+            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+            // maxWidth: 600,
+            margin: "0 auto",
+            mt: 2,
+          }}
+        >
+          <Typography gutterBottom>
+            {`You can choose from a variety of options for your ${type}, ensuring your meal fits your preferences and nutritional needs.`}
+          </Typography>
+        </Box>
+      )}
+
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        {mealOptions ? (
           <div className="meals-container">
+            {currentUser.isAdmin && (
+              <Card
+                sx={{
+                  width: 230,
+                  height: 200,
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <CardContent>
+                  <Button
+                    variant="contained"
+                    endIcon={<AddCircleOutlineIcon />}
+                    onClick={() => setAddMealDisplay(true)}
+                    sx={{
+                      backgroundColor: "#EB5406",
+                      "&:hover": { backgroundColor: "#d34905" },
+                      padding: "8px 16px",
+                      fontWeight: 600,
+                    }}
+                    disabled={addMealDisplay}
+                  >
+                    Add new Meal
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
+            {addMealDisplay && currentUser.isAdmin && (
+              <Box>
+                <AddMeal
+                  handeleAddMealDisplay={setAddMealDisplay}
+                  type={type}
+                  handleMealsChanged={setMealsChanged}
+                  open={addMealDisplay}
+                  isDialog={false}
+                />
+              </Box>
+            )}
             {mealOptions.map((mealOption) => {
-              return <Meal mealOption={mealOption} setMealsChanged={setMealsChanged} key={mealOption._id} />;
+              return (
+                <Meal
+                  mealOption={mealOption}
+                  setMealsChanged={setMealsChanged}
+                  key={mealOption._id}
+                />
+              );
             })}
           </div>
+        ) : (
+          <Card
+            sx={{
+              width: 230,
+              minHeight: 200,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <CardContent>
+              <CircularProgress sx={{ color: "#EB5406" }} />
+            </CardContent>
+          </Card>
         )}
-      </div>
+      </Box>
     </div>
   );
 }
