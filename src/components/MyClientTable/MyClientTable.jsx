@@ -155,8 +155,10 @@ const MyClientTable = ({ data }) => {
       </MenuItem>,
     ],
     renderTopToolbar: ({ table }) => {
-
-
+      const selectedRowCount = table.getSelectedRowModel().flatRows.length;
+      // const isSomeRowsSelected = table.getIsSomeRowsSelected();
+      // console.log("Is some rows selected:", isSomeRowsSelected);
+      // console.log("Updating user status:", updatingUserStatus);
 
       const callUpdateUser = async (userId, status) => {
         try {
@@ -215,7 +217,8 @@ const MyClientTable = ({ data }) => {
             <Box sx={{ display: "flex", gap: "0.5rem" }}>
               <Button
                 color="error"
-                disabled={!table.getIsSomeRowsSelected()||updatingUserStatus}
+                // disabled={!table.getIsSomeRowsSelected() && selectedRowCount !== 1||updatingUserStatus}
+                disabled={selectedRowCount === 0 || updatingUserStatus}
                 onClick={handleDeactivate}
                 variant="contained"
               >
@@ -223,7 +226,8 @@ const MyClientTable = ({ data }) => {
               </Button>
               <Button
                 color="success"
-                disabled={!table.getIsSomeRowsSelected()||updatingUserStatus}
+                // disabled={!table.getIsSomeRowsSelected() && selectedRowCount !== 1||updatingUserStatus}
+                disabled={selectedRowCount === 0 || updatingUserStatus}
                 onClick={handleActivate}
                 variant="contained"
               >
