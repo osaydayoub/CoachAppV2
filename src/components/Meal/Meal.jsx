@@ -97,7 +97,7 @@ function Meal({ mealOption, mealType, setMealsChanged, display, consumed }) {
   };
 
   return (
-    <Card sx={{ width: 230}}>
+    <Card sx={{ width: 230,minHeight: 200}}>
       <CardContent>
         <List>
           {mealOption.ingredients.map((ingredient) => (
