@@ -1,7 +1,8 @@
 import React from "react";
 import { Box, Typography, CircularProgress, Paper } from "@mui/material";
 import LinearProgress from "@mui/material/LinearProgress";
-const circle=!true;
+import { getCurrentDateTime, getGreeting } from "../../utils/helpers";
+const circle = !true;
 function DailyTrackingSummary({ currentUser, dailyTracking, currentClient }) {
   const progressPercentage = dailyTracking
     ? Math.floor((dailyTracking.calories / currentClient.caloricIntake) * 100)
@@ -10,8 +11,13 @@ function DailyTrackingSummary({ currentUser, dailyTracking, currentClient }) {
   return (
     <Paper elevation={3} sx={{ padding: 1, borderRadius: 2 }}>
       <Box sx={{ marginBottom: 2 }}>
-        <Typography variant="h6" component="h2">
-          {`Hello ${currentUser.name} !`}
+        <Box sx={{ textAlign: "right",m:1 }}>
+          <Typography variant="body1" color="textSecondary">
+            {getCurrentDateTime()}
+          </Typography>
+        </Box>
+        <Typography variant="h6" component="h2"sx={{mb:1}}>
+          {`${getGreeting()}, ${currentUser.name}!`}
         </Typography>
 
         {dailyTracking && (
@@ -112,52 +118,54 @@ function DailyTrackingSummary({ currentUser, dailyTracking, currentClient }) {
                   </Box>
                 </Box>
               )}
-            { !circle&&  <Box sx={{ position: "relative", width: 220, height: 30 }}>
-                {/* Full Rectangle Background */}
-                <Box
-                  sx={{
-                    width: "100%",
-                    height: "100%",
-                    backgroundColor: "#939292", // Background color for the full rectangle
-                    borderRadius: 1, // Optional for rounded corners
-                  }}
-                />
-                {/* Actual Progress */}
-                <Box
-                  sx={{
-                    width: `${progressPercentage}%`, // Adjust width based on progress
-                    height: "100%",
-                    backgroundColor: "#fd8e06", // Progress color
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    borderRadius: 1, // Optional for rounded corners
-                    // maxWidth?
-                  }}
-                />
-                {/* Percentage Text in the Center */}
-                <Box
-                  sx={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <Typography
-                    variant="caption"
-                    component="div"
-                    color="textSecondary"
-                    fontWeight="bold"
+              {!circle && (
+                <Box sx={{ position: "relative", width: 220, height: 30 }}>
+                  {/* Full Rectangle Background */}
+                  <Box
+                    sx={{
+                      width: "100%",
+                      height: "100%",
+                      backgroundColor: "#939292", // Background color for the full rectangle
+                      borderRadius: 1, // Optional for rounded corners
+                    }}
+                  />
+                  {/* Actual Progress */}
+                  <Box
+                    sx={{
+                      width: `${progressPercentage}%`, // Adjust width based on progress
+                      height: "100%",
+                      backgroundColor: "#fd8e06", // Progress color
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      borderRadius: 1, // Optional for rounded corners
+                      // maxWidth?
+                    }}
+                  />
+                  {/* Percentage Text in the Center */}
+                  <Box
+                    sx={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
                   >
-                    {`${progressPercentage}%`}
-                  </Typography>
+                    <Typography
+                      variant="caption"
+                      component="div"
+                      color="textSecondary"
+                      fontWeight="bold"
+                    >
+                      {`${progressPercentage}%`}
+                    </Typography>
+                  </Box>
                 </Box>
-              </Box>}
+              )}
               {/* <Box sx={{ width: "100%" }}>
                 <LinearProgress value={progressPercentage} />
               </Box> */}
