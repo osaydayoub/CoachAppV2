@@ -1,13 +1,12 @@
 import React from "react";
 import "./MealCard.css";
 import { useNavigate } from "react-router-dom";
-import CheckIcon from '@mui/icons-material/Check';
 
 import img1 from "../../assets/images/1.jpg";
 import img2 from "../../assets/images/2.jpg";
 import img3 from "../../assets/images/3.jpg";
 import img4 from "../../assets/images/4.jpg";
-import { Button } from "@mui/material";
+import { Paper } from "@mui/material";
 function getTheImg(img) {
   switch (img) {
     case "1.jpg":
@@ -29,17 +28,15 @@ function MealCard({ meal }) {
     navigate(`/meals/${name.toLowerCase()}`);
   };
   return (
-    <div className="card-container">
+    <Paper
+      className="card-container"
+      sx={{ m: 2, p: 2, textAlign: "center", cursor: "pointer" }}
+      elevation={4}
+      onClick={() => handleSelect(meal.name)}
+    >
       <img className="card-img" src={getTheImg(meal.img)} alt="img" />
       <h2>{meal.name}</h2>
-
-      <div>
-        {/* <button className="meal-btn" onClick={() => handleSelect(meal.name)}>Select!</button> */}
-        <Button variant="contained" endIcon={<CheckIcon />} onClick={() => handleSelect(meal.name)}>
-  Select
-</Button>
-      </div>
-    </div>
+    </Paper>
   );
 }
 
