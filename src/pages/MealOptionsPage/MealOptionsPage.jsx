@@ -9,7 +9,6 @@ import {
   Box,
   Button,
   Typography,
-  Stack,
   CardContent,
   Card,
 } from "@mui/material";
@@ -61,43 +60,25 @@ function MealOptionsPage() {
           {`${type.charAt(0).toUpperCase() + type.slice(1)} Meals`}
         </Typography>
 
-        <Stack direction="row" spacing={2} justifyContent="center">
-          <Button
-            variant="contained"
-            // color="secondary"
-            endIcon={<ArrowBackIcon />}
-            onClick={handleBack}
-            sx={{
-              padding: "8px 16px",
-              fontWeight: 600,
-            }}
-          >
-            Back
-          </Button>
-        </Stack>
-      </Box>
-
-      {!currentUser.isAdmin && (
-        <Box
+        <Button
+          variant="contained"
+          // color="secondary"
+          endIcon={<ArrowBackIcon />}
+          onClick={handleBack}
           sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            padding: 2,
-            gap: 3,
-            backgroundColor: "#f5f5f5",
-            borderRadius: 2,
-            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-            // maxWidth: 600,
-            margin: "0 auto",
-            mt: 2,
+            padding: "8px 16px",
+            fontWeight: 600,
           }}
         >
+          Back
+        </Button>
+
+        {!currentUser.isAdmin && (
           <Typography gutterBottom>
             {`You can choose from a variety of options for your ${type}, ensuring your meal fits your preferences and nutritional needs.`}
           </Typography>
-        </Box>
-      )}
+        )}
+      </Box>
 
       <Box
         sx={{
@@ -106,6 +87,7 @@ function MealOptionsPage() {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
+          mt: 2,
         }}
       >
         {mealOptions ? (
@@ -146,7 +128,7 @@ function MealOptionsPage() {
                   type={type}
                   handleMealsChanged={setMealsChanged}
                   open={addMealDisplay}
-                  isDialog={false}
+                  isDialog={true}
                 />
               </Box>
             )}

@@ -64,3 +64,23 @@ export const isToday=(date)=>{
 }
 
 
+export const getGreeting = () => {
+  const currentHour = new Date().getHours();
+  if (currentHour < 12) {
+    return "Good morning";
+  } else if (currentHour < 18) {
+    return "Good afternoon";
+  } else if (currentHour < 22) {
+    return "Good evening";
+  } else {
+    return "Good night";
+  }
+};
+
+export const getCurrentDateTime = () => {
+  const now = new Date();
+  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  const date = now.toLocaleDateString(undefined, options); 
+  const time = now.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+  return `${date} | ${time}`;
+};

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext.jsx";
 import "./Homepage.css";
 import { useData } from "../../context/DataContext.jsx";
-import { isSameDay } from "../../utils/helpers.js";
+import { getGreeting, isSameDay } from "../../utils/helpers.js";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import { Box, Stack, Typography } from "@mui/material";
 import WorkoutsCarousel from "../../components/WorkoutsCarousel/WorkoutsCarousel.jsx";
@@ -56,7 +56,9 @@ function Homepage() {
 
   return currentUser.isAdmin ? (
     <div className="Homepage page">
-      <h2>{`Hello ${currentUser.name} !`}</h2>
+      <Typography variant="h6" component="h2" sx={{ mb: 1 }}>
+        {`${getGreeting()}, ${currentUser.name}!`}
+      </Typography>
       <div>
         <Box sx={{ mb: 2 }}>
           <Stack direction="row" alignItems="center" spacing={1}>
