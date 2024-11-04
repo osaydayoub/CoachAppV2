@@ -4,14 +4,16 @@ import { useData } from "../../context/DataContext";
 import WeightLogList from "../WeightLogList/WeightLogList";
 import WeightLogChart from "../WeightLogChart/WeightLogChart";
 import { useNotification } from "../../context/NotificationContext";
+import WeightLogListTable from "../WeightLogListTable/WeightLogListTable";
+import LogSwitch from "../LogSwitch/LogSwitch";
 
 function WeightTracking() {
   const [date, setDate] = useState("");
   const [newWeight, setNewWeight] = useState("");
   const [loggingWeight, setLoggingWeight] = useState(false);
-  const [showLogs, setShowLogs] = useState(false);
   const { currentClient, addWeightTracking } = useData();
   const showNotification = useNotification();
+  const [isTable, setIsTable] = useState(true);
 
   const sortedWeightTracking = currentClient.weightTracking
     ? [...currentClient.weightTracking].sort(
@@ -26,20 +28,19 @@ function WeightTracking() {
       await addWeightTracking(currentClient._id, newLog);
     } catch (error) {
       console.log("Error in handleLogWeight:", error);
-      if(error.response.status==409){
+      if (error.response.status == 409) {
         showNotification(
           "Weight data for this date already exists. Would you like to update the existing entry?",
           "error"
         );
-        console.log("Error in handleLogWeight: status=>", error.response.status);
+        console.log(
+          "Error in handleLogWeight: status=>",
+          error.response.status
+        );
       }
     }
     setLoggingWeight(false);
     setNewWeight("");
-  };
-
-  const toggleLogs = () => {
-    setShowLogs(!showLogs);
   };
 
   return (
@@ -86,22 +87,18 @@ function WeightTracking() {
         {loggingWeight ? "Logging..." : "Log Weight"}
       </Button>
 
-      <Button
-        variant="outlined"
-        color="secondary"
-        onClick={toggleLogs}
-        fullWidth
-        sx={{ mt: 2 }}
-      >
-        {showLogs ? "Hide Logs" : "Show Logs"}
-      </Button>
-
-      {showLogs && currentClient.weightTracking && (
-        <>
-      {false&&<WeightLogChart weightTracking={sortedWeightTracking} />}
-          <WeightLogList weightTracking={sortedWeightTracking} />
-        </>
-      )}
+      <Box sx={{mt:2}}>
+        {currentClient.weightTracking && (
+          <>
+            <LogSwitch handleSwitche={setIsTable} />
+            {isTable ? (
+              <WeightLogListTable weightTracking={sortedWeightTracking} />
+            ) : (
+              <WeightLogChart weightTracking={sortedWeightTracking} />
+            )}
+          </>
+        )}
+      </Box>
     </Box>
   );
 }

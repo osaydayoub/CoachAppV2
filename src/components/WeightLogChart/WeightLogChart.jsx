@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  Box,
-  Typography,
-  Paper,
-} from "@mui/material";
+import { Box, Typography, Paper } from "@mui/material";
 import {
   LineChart,
   Line,
@@ -23,23 +19,23 @@ function WeightLogChart({ weightTracking }) {
   }));
 
   return (
-    <Box sx={{ my: 4 }}>
+    <Paper elevation={3} sx={{ padding: 2 ,mt: 2}}>
       <Typography variant="h6" component="h2" gutterBottom>
         Weight Log Chart
       </Typography>
-      <Paper elevation={3} sx={{ padding: 2 }}>
-        <ResponsiveContainer width="100%" height={300}>
-          <LineChart data={data}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="date" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Line type="monotone" dataKey="weight" stroke="#8884d8" />
-          </LineChart>
-        </ResponsiveContainer>
-      </Paper>
-    </Box>
+      <ResponsiveContainer width="100%" height={300}>
+        <LineChart data={data}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="date" />
+          <YAxis
+            label={{ value: "Weight (kg)", angle: -90, position: "insideLeft" }}
+          />
+          <Tooltip />
+          <Legend />
+          <Line type="monotone" dataKey="weight" stroke="#8884d8" />
+        </LineChart>
+      </ResponsiveContainer>
+    </Paper>
   );
 }
 
