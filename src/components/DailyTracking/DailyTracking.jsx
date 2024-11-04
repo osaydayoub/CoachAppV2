@@ -14,20 +14,23 @@ function DailyTracking() {
   const { currentClient, addDailyTracking, getCurrentClient } = useData();
 
   useEffect(() => {
-    let track = currentClient.dailyTracking.find((track) => {
-      return isSameDay(new Date(track.date), new Date());
-    });
-    if (track === undefined) {
-      console.log("still no data");
-      const t = {
-        date: new Date(),
-        calories: 0,
-        waterAmount: 0,
-        sleepHours: 0,
-      };
-      track = t;
+    if(currentClient){
+      let track = currentClient.dailyTracking.find((track) => {
+        return isSameDay(new Date(track.date), new Date());
+      });
+      if (track === undefined) {
+        console.log("still no data");
+        const t = {
+          date: new Date(),
+          calories: 0,
+          waterAmount: 0,
+          sleepHours: 0,
+        };
+        track = t;
+      }
+      setDailyTracking(track);
     }
-    setDailyTracking(track);
+
   }, [currentClient]);
 
   const handleUpdateDailyTracking = async () => {

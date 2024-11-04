@@ -40,8 +40,8 @@ function WeightLogItem({ log, onUpdate }) {
   };
 
   return (
-    <ListItem>
-      <Box sx={{ flexGrow: 1 }}>
+    <ListItem sx={{height: isEditing ? 'auto' : '30px'}}>
+      <Box sx={{ flexGrow: 1}}>
         <Box
           sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}
         >
