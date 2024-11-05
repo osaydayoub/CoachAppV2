@@ -63,6 +63,10 @@
     color: rgb(17, 45, 78);
     font-weight: bolder;
 }
+/* .login-container button:disabled {
+    background-color: rgb(219, 226, 239);
+    color: rgb(17, 45, 78);
+} */
 .error-container{
     color: red;
 }

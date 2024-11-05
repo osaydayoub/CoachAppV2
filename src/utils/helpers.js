@@ -84,3 +84,8 @@ export const getCurrentDateTime = () => {
   const time = now.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
   return `${date} | ${time}`;
 };
+
+export const isRTL = (text) => {
+  const rtlChar = /[\u0590-\u05FF\u0600-\u06FF]/; // Hebrew and Arabic Unicode ranges
+  return rtlChar.test(text);
+};

@@ -1,8 +1,7 @@
 import React from "react";
 import { Box, Typography, CircularProgress, Paper } from "@mui/material";
-import LinearProgress from "@mui/material/LinearProgress";
 import { getCurrentDateTime, getGreeting } from "../../utils/helpers";
-const circle = !true;
+const circle = true;
 function DailyTrackingSummary({ currentUser, dailyTracking, currentClient }) {
   const progressPercentage = dailyTracking
     ? Math.floor((dailyTracking.calories / currentClient.caloricIntake) * 100)
@@ -76,7 +75,7 @@ function DailyTrackingSummary({ currentUser, dailyTracking, currentClient }) {
                     variant="determinate"
                     value={100}
                     size={120}
-                    thickness={4}
+                    thickness={6}
                     sx={{
                       color: "#939292", // Background color for the full circle
                     }}
@@ -86,7 +85,7 @@ function DailyTrackingSummary({ currentUser, dailyTracking, currentClient }) {
                     variant="determinate"
                     value={progressPercentage}
                     size={120}
-                    thickness={4}
+                    thickness={6}
                     sx={{
                       color: "#fd8e06", // Customize the color of the progress circle
                       position: "absolute", // Stack on top of the full circle
@@ -111,7 +110,7 @@ function DailyTrackingSummary({ currentUser, dailyTracking, currentClient }) {
                       component="div"
                       color="textSecondary"
                       fontWeight="bold"
-                      // fontSize={"big"}
+                      sx={{ fontSize: '1.2rem' }}
                     >
                       {`${progressPercentage}%`}
                     </Typography>
@@ -166,9 +165,6 @@ function DailyTrackingSummary({ currentUser, dailyTracking, currentClient }) {
                   </Box>
                 </Box>
               )}
-              {/* <Box sx={{ width: "100%" }}>
-                <LinearProgress value={progressPercentage} />
-              </Box> */}
             </Box>
           </Box>
         )}

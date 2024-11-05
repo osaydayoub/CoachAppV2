@@ -14,17 +14,18 @@ import {
   InputLabel,
   FormControl,
 } from "@mui/material";
-import CircleIcon from "@mui/icons-material/Circle"; 
+import CircleIcon from "@mui/icons-material/Circle";
 import { useData } from "../../context/DataContext";
 import { useAuth } from "../../context/AuthContext";
 import LocalDining from "@mui/icons-material/LocalDining";
 import AddIcon from "@mui/icons-material/Add";
 import DoneIcon from "@mui/icons-material/Done";
+import { isRTL } from "../../utils/helpers";
 
 function Meal({ mealOption, mealType, setMealsChanged, display, consumed }) {
   const [rating, setRating] = useState(null);
   const [selectedSnack, setSelectedSnack] = useState(""); // State to store selected snack
-  const [addingMeal,setAddingMeal]=useState(false);
+  const [addingMeal, setAddingMeal] = useState(false);
   // Handle snack selection
   const handleSnackChange = (event) => {
     setSelectedSnack(event.target.value);
@@ -44,6 +45,7 @@ function Meal({ mealOption, mealType, setMealsChanged, display, consumed }) {
       setRating(clientRating ?? 0);
     }
   }, []);
+
 
   const handelNewRating = async (newValue) => {
     setRating(newValue);
@@ -77,7 +79,7 @@ function Meal({ mealOption, mealType, setMealsChanged, display, consumed }) {
     } catch (error) {
       console.log(error);
       console.log("error in handelNewRating");
-    }finally{
+    } finally {
       setAddingMeal(false);
     }
   };
@@ -97,14 +99,21 @@ function Meal({ mealOption, mealType, setMealsChanged, display, consumed }) {
   };
 
   return (
-    <Card sx={{ width: 230,minHeight: 200}}>
+    <Card sx={{ width: 230, minHeight: 200 }}>
       <CardContent>
         <List>
           {mealOption.ingredients.map((ingredient) => (
             <ListItem key={ingredient.name} disablePadding>
               <Box display="flex" alignItems="center">
                 <CircleIcon sx={{ fontSize: 8, marginRight: 1 }} />
-                <Typography variant="body2" color="text.secondary">
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{
+                    textAlign: isRTL(ingredient.name) ? "right" : "left",
+                    direction: isRTL(ingredient.name) ? "rtl" : "ltr",
+                  }}
+                >
                   {`${ingredient.name} - ${ingredient.amount} ${ingredient.unit}`}
                 </Typography>
               </Box>
@@ -166,7 +175,8 @@ function Meal({ mealOption, mealType, setMealsChanged, display, consumed }) {
                       endIcon={<LocalDining />}
                       startIcon={<AddIcon />}
                       disabled={
-                        mealOption.type === "snack" && selectedSnack === ""||addingMeal
+                        (mealOption.type === "snack" && selectedSnack === "") ||
+                        addingMeal
                       }
                     />
                   </span>
