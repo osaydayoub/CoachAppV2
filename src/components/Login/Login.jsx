@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import "./Login.css";
 import { useAuth } from "../../context/AuthContext";
 import { Alert, Typography } from "@mui/material";
-
+import { Button, CircularProgress } from '@mui/material';
 import axios from "axios";
 // import loginImg from "../../assets/msaCoach.jpeg";
 import loginImg from "../../assets/images/logo2.png";
@@ -125,9 +125,20 @@ function Login({ handle }) {
         </div>
 
         <div>
-          <button disabled={loading} type="submit">
+          <Button
+            variant="contained"
+            type="submit"
+            disabled={loading}
+            sx={{
+              minWidth: 120,
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+            }}
+          >
             Login
-          </button>
+            {loading && <CircularProgress size={20} color="inherit" />}
+          </Button>
         </div>
       </form>
 
