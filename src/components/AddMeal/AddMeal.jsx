@@ -27,6 +27,7 @@ function AddMeal({
   handleMealsChanged,
   open,
   isDialog,
+  mealData,
 }) {
   const [ingredientsArray, setIngredientsArray] = useState([]);
   const [ingredientName, setIngredientName] = useState("");
@@ -42,7 +43,15 @@ function AddMeal({
   ];
   const [selectedUnit, setSelectedUnit] = useState(unitOptions[0].value);
   const [adding, setAdding] = useState(false);
-  const { addNewMeal } = useData();
+  const { addNewMeal,updateMeal } = useData();
+
+  useState(() => {
+    if (mealData) {
+      setIngredientsArray(mealData.ingredients);
+      setDisplayNewMeal(true);
+      setTotalCalories(mealData.totalCalories);
+    }
+  }, []);
 
   const handleAddMeal = async (e) => {
     e.preventDefault();
@@ -54,7 +63,28 @@ function AddMeal({
         totalCalories: totalCalories,
       };
       await addNewMeal(newMeal);
-      handleMealsChanged(true);
+      handleMealsChanged();
+    } catch (error) {
+      console.log("Error adding meal", error);
+    } finally {
+      setAdding(false);
+      setTotalCalories(0);
+      handeleAddMealDisplay(false);
+    }
+  };
+
+  const handleUpdateMeal = async (e) => {
+    e.preventDefault();
+    try {
+      setAdding(true);
+      const newMeal = {
+        mealId:mealData._id,
+        type:mealData.type,
+        ingredients: ingredientsArray,
+        totalCalories: totalCalories,
+      };
+      await updateMeal(newMeal);
+      handleMealsChanged();
     } catch (error) {
       console.log("Error adding meal", error);
     } finally {
@@ -102,7 +132,7 @@ function AddMeal({
         </IconButton>
       </Box>
       <Typography variant="h5" gutterBottom>
-        Add a Meal
+        {mealData ? `Update Meal` : `Add a Meal`}
       </Typography>
 
       {displayNewMeal && (
@@ -172,7 +202,7 @@ function AddMeal({
         </Button>
       </form>
 
-      <form onSubmit={handleAddMeal}>
+      <form onSubmit={mealData ? handleUpdateMeal : handleAddMeal}>
         <TextField
           fullWidth
           margin="normal"
@@ -199,7 +229,14 @@ function AddMeal({
           }
           startIcon={adding ? <CircularProgress size={20} /> : null}
         >
-          {adding ? "Adding Meal..." : "Add Meal"}
+          {/* {adding ? "Adding Meal..." : "Add Meal"} */}
+          {mealData
+            ? adding
+              ? "Update Meal..."
+              : "Update Meal"
+            : adding
+            ? "Adding Meal..."
+            : "Add Meal"}
         </Button>
       </form>
     </Box>
@@ -214,7 +251,7 @@ function AddMeal({
       {dialogContent}
     </Dialog>
   ) : (
-     dialogContent 
+    dialogContent
   );
 }
 

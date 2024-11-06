@@ -8,6 +8,7 @@ import {
 import React, { useEffect, useState } from "react";
 import SaveIcon from "@mui/icons-material/Save";
 import UpdateIcon from "@mui/icons-material/Update";
+import EditIcon from "@mui/icons-material/Edit";
 import { useNotification } from "../../context/NotificationContext";
 import { getFullDate } from "../../utils/helpers";
 
@@ -20,9 +21,7 @@ function WeightLogItem({ log, onUpdate }) {
   //   },[isEditing]);
 
   const handleUpdate = async () => {
-    console.log("onUpdate(log.date, newWeight)");
     if (newWeight !== log.weight) {
-      console.log("onUpdate(log.date, newWeight)");
       try {
         await onUpdate(log.date, newWeight);
         showNotification(
@@ -34,7 +33,6 @@ function WeightLogItem({ log, onUpdate }) {
       } catch (error) {
         console.log("error in handleUpdate", error);
       }
-      console.log("newWeight:", newWeight);
     }
     setIsEditing(false);
   };
@@ -69,7 +67,7 @@ function WeightLogItem({ log, onUpdate }) {
               },
             }}
           >
-            <UpdateIcon />
+              <EditIcon />
           </IconButton>
         </Box>
 
