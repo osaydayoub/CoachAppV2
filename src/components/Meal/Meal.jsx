@@ -252,6 +252,7 @@ function Meal({ mealOption, mealType, setMealChanged, display, consumed ,handleU
           horizontal: "right", // Adjust to 'left', 'center', etc.
         }}
       >
+        {/*TODO: Add a timestamp for the last update and display a note to users if the meal was updated after they selected it */}
         <MenuItem onClick={handleUpdate}>
           <Box
             display="flex"
@@ -263,7 +264,8 @@ function Meal({ mealOption, mealType, setMealChanged, display, consumed ,handleU
             <EditIcon />
           </Box>
         </MenuItem>
-        <MenuItem onClick={handleDelete}>
+         {/* TODO: Handle the case where a client has already selected this meal for their daily tracking */}
+        {/* <MenuItem onClick={handleDelete}>
           <Box
             display="flex"
             justifyContent="space-between"
@@ -273,7 +275,7 @@ function Meal({ mealOption, mealType, setMealChanged, display, consumed ,handleU
             <Typography>Delete</Typography>
             <DeleteIcon />
           </Box>
-        </MenuItem>
+        </MenuItem> */}
       </Menu>
     </Card>
   );
