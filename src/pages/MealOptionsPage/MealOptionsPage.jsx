@@ -5,13 +5,7 @@ import { useData } from "../../context/DataContext.jsx";
 import Meal from "../../components/Meal/Meal.jsx";
 import AddMeal from "../../components/AddMeal/AddMeal.jsx";
 import { useAuth } from "../../context/AuthContext.jsx";
-import {
-  Box,
-  Button,
-  Typography,
-  CardContent,
-  Card,
-} from "@mui/material";
+import { Box, Button, Typography, CardContent, Card } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
@@ -20,15 +14,15 @@ function MealOptionsPage() {
   const navigate = useNavigate();
   const [mealOptions, setMealOptions] = useState(null);
   const [addMealDisplay, setAddMealDisplay] = useState(false);
-  const [mealsChanged, setMealsChanged] = useState(false);
+  const [mealsChanged, setMealsChanged] = useState(0);
   const { getAllMealsByType } = useData();
   const { currentUser } = useAuth();
+  const [mealData, setMealData] = useState(null);
 
   useEffect(() => {
     const getMeals = async () => {
       try {
         const MealOptions = await getAllMealsByType(type);
-        console.log(MealOptions);
         setMealOptions(MealOptions);
       } catch (error) {
         console.log(error);
@@ -107,7 +101,10 @@ function MealOptionsPage() {
                   <Button
                     variant="contained"
                     endIcon={<AddCircleOutlineIcon />}
-                    onClick={() => setAddMealDisplay(true)}
+                    onClick={() => {
+                      setAddMealDisplay(true);
+                      setMealData(null);
+                    }}
                     sx={{
                       backgroundColor: "#EB5406",
                       "&:hover": { backgroundColor: "#d34905" },
@@ -126,9 +123,10 @@ function MealOptionsPage() {
                 <AddMeal
                   handeleAddMealDisplay={setAddMealDisplay}
                   type={type}
-                  handleMealsChanged={setMealsChanged}
+                  handleMealsChanged={()=>setMealsChanged((prev) => prev + 1)}
                   open={addMealDisplay}
                   isDialog={true}
+                  mealData={mealData}
                 />
               </Box>
             )}
@@ -136,8 +134,12 @@ function MealOptionsPage() {
               return (
                 <Meal
                   mealOption={mealOption}
-                  setMealsChanged={setMealsChanged}
+                  setMealChanged={()=>setMealsChanged((prev) => prev + 1)}
                   key={mealOption._id}
+                  handleUpdateMeal={() => {
+                    setMealData(mealOption);
+                    setAddMealDisplay(true);
+                  }}
                 />
               );
             })}

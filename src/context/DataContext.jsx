@@ -146,6 +146,7 @@ export function DataProvider({ children }) {
     } catch (error) {
       // throw new Error("error in getAllMealsByType");
       console.log("error in getAllMealsByType");
+      console.log(error);
     }
   };
 
@@ -157,9 +158,32 @@ export function DataProvider({ children }) {
         `${import.meta.env.VITE_API_LINK}/coach/meals`,
         meal
       );
-      await getAllMealsByType(meal.type);
     } catch (error) {
       console.log("error in addNewMeal");
+    }
+  };
+
+  const updateMeal = async (meal) => {
+    console.log("updateMeal");
+    try {
+      console.log(meal);
+      const response = await axios.put(
+        `${import.meta.env.VITE_API_LINK}/coach/meals/${meal.mealId}`,
+        { ingredients: meal.ingredients, totalCalories: meal.totalCalories }
+      );
+    } catch (error) {
+      console.log("error in updateMeal");
+    }
+  };
+
+  const deleteMeal = async (mealId) => {
+    console.log("deleteMeal");
+    try {
+      const response = await axios.delete(
+        `${import.meta.env.VITE_API_LINK}/coach/meals/${mealId}`
+      );
+    } catch (error) {
+      console.log("error in deleteMeal");
     }
   };
 
@@ -371,6 +395,8 @@ export function DataProvider({ children }) {
     addDailyTracking,
     getAllMealsByType,
     addNewMeal,
+    updateMeal,
+    deleteMeal,
     addProduct,
     getProductByBarcodeNumber,
     addWeightTracking,

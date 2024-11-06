@@ -13,6 +13,9 @@ import {
   Select,
   InputLabel,
   FormControl,
+  IconButton,
+  CardHeader,
+  Menu,
 } from "@mui/material";
 import CircleIcon from "@mui/icons-material/Circle";
 import { useData } from "../../context/DataContext";
@@ -21,8 +24,10 @@ import LocalDining from "@mui/icons-material/LocalDining";
 import AddIcon from "@mui/icons-material/Add";
 import DoneIcon from "@mui/icons-material/Done";
 import { isRTL } from "../../utils/helpers";
-
-function Meal({ mealOption, mealType, setMealsChanged, display, consumed }) {
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+function Meal({ mealOption, mealType, setMealChanged, display, consumed ,handleUpdateMeal}) {
   const [rating, setRating] = useState(null);
   const [selectedSnack, setSelectedSnack] = useState(""); // State to store selected snack
   const [addingMeal, setAddingMeal] = useState(false);
@@ -36,8 +41,33 @@ function Meal({ mealOption, mealType, setMealsChanged, display, consumed }) {
     addDailyMeal,
     AddCaloriesToDailyTracking,
     consumeDailyMeal,
+    deleteMeal
   } = useData();
   const { currentUser } = useAuth();
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleUpdate = () => {
+    handleUpdateMeal();
+    handleClose();
+  };
+
+  const handleDelete = async() => {
+   try {
+    await deleteMeal(mealOption._id);
+    setMealChanged();
+   } catch (error) {
+    console.log("error in handleDelete",error);
+   }
+    handleClose();
+  };
 
   useEffect(() => {
     if (currentClient) {
@@ -46,11 +76,8 @@ function Meal({ mealOption, mealType, setMealsChanged, display, consumed }) {
     }
   }, []);
 
-
   const handelNewRating = async (newValue) => {
     setRating(newValue);
-    console.log("handleAddMealRating");
-    console.log(newValue);
     try {
       // setLoggingWeight(true);
       const updatedClient = await addMealRating(
@@ -68,7 +95,6 @@ function Meal({ mealOption, mealType, setMealsChanged, display, consumed }) {
   };
 
   const handelAddDailyMeal = async () => {
-    console.log("handelAddDailyMeal");
     try {
       setAddingMeal(true);
       const dailyMeal = await addDailyMeal(
@@ -85,8 +111,6 @@ function Meal({ mealOption, mealType, setMealsChanged, display, consumed }) {
   };
 
   const handleConsumeMeal = async () => {
-    console.log("handleConsumeMeal");
-    //TODO change flage to consumed =true!
     try {
       await AddCaloriesToDailyTracking(mealOption.totalCalories);
       await consumeDailyMeal(
@@ -100,10 +124,28 @@ function Meal({ mealOption, mealType, setMealsChanged, display, consumed }) {
 
   return (
     <Card sx={{ width: 230, minHeight: 200 }}>
-      <CardContent>
+      {currentUser.isAdmin && (
+        <CardHeader
+          action={
+            <IconButton aria-label="settings" onClick={handleClick}>
+              <MoreVertIcon />
+            </IconButton>
+          }
+          sx={{
+            paddingBottom: 0, // Removes the padding below the header
+            marginBottom: -1, // Adjusts the margin to reduce the space below the header
+          }}
+        />
+      )}
+      <CardContent
+        sx={{
+          paddingTop: currentUser.isAdmin ? 0 : undefined, // Removes the padding at the top of CardContent if admin
+          marginTop: currentUser.isAdmin ? -1 : undefined, // Adjusts the margin to reduce the space at the top if admin
+        }}
+      >
         <List>
-          {mealOption.ingredients.map((ingredient) => (
-            <ListItem key={ingredient.name} disablePadding>
+          {mealOption.ingredients.map((ingredient,index) => (
+            <ListItem key={ingredient.name+index} disablePadding>
               <Box display="flex" alignItems="center">
                 <CircleIcon sx={{ fontSize: 8, marginRight: 1 }} />
                 <Typography
@@ -197,6 +239,42 @@ function Meal({ mealOption, mealType, setMealsChanged, display, consumed }) {
           </Box>
         )}
       </CardContent>
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: "bottom", // Adjust this to 'bottom', 'center', etc.
+          horizontal: "right", // Adjust this to 'left', 'center', etc.
+        }}
+        transformOrigin={{
+          vertical: "top", // Adjust to 'bottom', 'center', etc.
+          horizontal: "right", // Adjust to 'left', 'center', etc.
+        }}
+      >
+        <MenuItem onClick={handleUpdate}>
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            gap={1}
+            width="100%"
+          >
+            <Typography>Update</Typography>
+            <EditIcon />
+          </Box>
+        </MenuItem>
+        <MenuItem onClick={handleDelete}>
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            gap={1}
+            width="100%"
+          >
+            <Typography>Delete</Typography>
+            <DeleteIcon />
+          </Box>
+        </MenuItem>
+      </Menu>
     </Card>
   );
 }
