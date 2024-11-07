@@ -14,8 +14,6 @@ import WorkoutsCarousel from "../../components/WorkoutsCarousel/WorkoutsCarousel
 import MealsAccordion from "../../components/MealsAccordion/MealsAccordion.jsx";
 import DailyTrackingSummary from "../../components/DailyTrackingSummary/DailyTrackingSummary.jsx";
 function Homepage() {
-  let blank = true;
-  blank = false;
   const { currentUser, isLoggedIn } = useAuth();
   const { currentClient } = useData();
   const [dailyTracking, setDailyTracking] = useState(null);
@@ -112,7 +110,7 @@ function Homepage() {
         </Box>
         <Box sx={{ mt: 2 }}>
           <WorkoutsCarousel
-            workoutsToDisply={blank ? [] : workoutsToDisply}
+            workoutsToDisply={workoutsToDisply}
             isViewOnly={true}
             isAdmin={currentUser.isAdmin}
           />
