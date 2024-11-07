@@ -1,14 +1,12 @@
 import React, { useState } from "react";
 import "./TrackingPage.css";
 import { useAuth } from "../../context/AuthContext.jsx";
-import { useData } from "../../context/DataContext.jsx";
 import DailyTracking from "../../components/DailyTracking/DailyTracking";
 import WeightTracking from "../../components/WeightTracking/WeightTracking.jsx";
-import BarcodeScanner from "../../components/BarcodeScanner/BarcodeScanner.jsx";
-import { Box, Tab, Tabs, Typography } from "@mui/material";
+
+import { Box, Tab, Tabs } from "@mui/material";
 function TrackingPage() {
   const { currentUser } = useAuth();
-  const { currentClient } = useData();
   const [activeTab, setActiveTab] = useState(0);
 
   const handleTabChange = (event, newValue) => {
@@ -23,13 +21,12 @@ function TrackingPage() {
             <Tabs
               value={activeTab}
               onChange={handleTabChange}
-              // centered
-              variant="scrollable"
-              scrollButtons="auto"
+              centered
+              // variant="scrollable"
+              // scrollButtons="auto"
             >
               <Tab label="Daily Tracking" />
               <Tab label="Weight Tracking" />
-              <Tab label="Barcode Scanner" />
             </Tabs>
 
             <Box
@@ -45,7 +42,6 @@ function TrackingPage() {
             >
               {activeTab === 0 && <DailyTracking />}
               {activeTab === 1 && <WeightTracking />}
-              {activeTab === 2 && <BarcodeScanner />}
             </Box>
           </Box>
         </div>
@@ -53,7 +49,6 @@ function TrackingPage() {
       {currentUser.isAdmin && (
         <>
           <h2> Admin Daily Tracking</h2>
-          <BarcodeScanner />
         </>
       )}
     </div>
