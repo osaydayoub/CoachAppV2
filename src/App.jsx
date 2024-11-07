@@ -15,6 +15,7 @@ import { useData } from "./context/DataContext";
 import { useEffect, useState } from "react";
 import NotFound from "./pages/NotFound/NotFound";
 import LoadingScreen from "./components/LoadingScreen/LoadingScreen";
+import ProductScanPage from "./pages/ProductScanPage/ProductScanPage";
 
 function MealTypeCheck() {
   const { type } = useParams();
@@ -62,9 +63,7 @@ function App() {
     setLoading(false);
   }, []);
   if (loading) {
-    return (
-      <LoadingScreen/>
-    );
+    return <LoadingScreen />;
   }
   return (
     <>
@@ -103,20 +102,20 @@ function App() {
             isLoggedIn ? <MealsPage /> : <Navigate replace to={"/login"} />
           }
         />
-        {/* <Route
-          path="/meals/:type"
-          element={
-            isLoggedIn ? (
-              <MealOptionsPage />
-            ) : (
-              <Navigate replace to={"/login"} />
-            )
-          }
-        /> */}
         <Route
           path="/meals/:type"
           element={
             isLoggedIn ? <MealTypeCheck /> : <Navigate replace to="/login" />
+          }
+        />
+        <Route
+          path="/scanner"
+          element={
+            isLoggedIn ? (
+              <ProductScanPage />
+            ) : (
+              <Navigate replace to={"/login"} />
+            )
           }
         />
         <Route path="/404" element={<NotFound />} />

@@ -32,21 +32,23 @@ function ResponsiveAppBar() {
   React.useEffect(() => {
     if(isLoggedIn){
       if (currentUser.isAdmin) {
-        setPages(["Home", "Admin", "Training Timetable", "Tracking", "Meals"]);
+        setPages(["Home", "Admin", "Training Timetable", "Tracking", "Meals","Product Scanner"]);
         setHandleFunctions([
           handleHomeClick,
           handleAdminClick,
           handleTrainingClick,
           handleTrackingClick,
           handleMealsClick,
+          handleScannerClick,
         ]);
       } else {
-        setPages(["Home", "Training Timetable", "Tracking", "Meals"]);
+        setPages(["Home", "Training Timetable", "Tracking", "Meals","Product Scanner"]);
         setHandleFunctions([
           handleHomeClick,
           handleTrainingClick,
           handleTrackingClick,
           handleMealsClick,
+          handleScannerClick,
         ]);
       }
 
@@ -82,6 +84,11 @@ function ResponsiveAppBar() {
   const handleTrackingClick = () => {
     handleCloseNavMenu();
     navigate("/tracking");
+  };
+
+  const handleScannerClick = () => {
+    handleCloseNavMenu();
+    navigate("/scanner");
   };
 
   async function handleLogout() {
