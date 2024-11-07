@@ -14,7 +14,7 @@ function DailyTracking() {
   const { currentClient, addDailyTracking, getCurrentClient } = useData();
 
   useEffect(() => {
-    if(currentClient){
+    if (currentClient) {
       let track = currentClient.dailyTracking.find((track) => {
         return isSameDay(new Date(track.date), new Date());
       });
@@ -30,7 +30,6 @@ function DailyTracking() {
       }
       setDailyTracking(track);
     }
-
   }, [currentClient]);
 
   const handleUpdateDailyTracking = async () => {
@@ -61,13 +60,11 @@ function DailyTracking() {
   };
 
   return (
-    <Box
+    <Paper
+      elevation={4}
       sx={{
         p: 2,
         maxWidth: 400,
-        border: "2px solid #1976d2",
-        borderRadius: "8px",
-        boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.4)",
       }}
     >
       {/* Title */}
@@ -77,20 +74,13 @@ function DailyTracking() {
 
       {/* Description */}
       <Typography variant="body1" align="center" gutterBottom>
-        Please take a moment to add or update your Daily Tracking to keep a
-        record of your progress and maintain a comprehensive overview of your
-        daily activities and goals.
+        Please take a moment to add or update your Daily Tracking.
+        {/* to keep a record of your progress and maintain a comprehensive overview of your
+        daily activities and goals. */}
       </Typography>
 
       {/* Tracking Data Box */}
-      <Paper
-        elevation={4}
-        sx={{
-          p: 1,
-          borderRadius: "10px",
-          boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-        }}
-      >
+      <Box p={1}>
         {dailyTracking && (
           <Box sx={{ mt: 2 }}>
             {/* Calories Tracking */}
@@ -131,8 +121,8 @@ function DailyTracking() {
             </Button>
           </Box>
         )}
-      </Paper>
-    </Box>
+      </Box>
+    </Paper>
   );
 }
 

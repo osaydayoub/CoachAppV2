@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, TextField, Box } from "@mui/material";
+import { Button, TextField, Box, Paper, Typography } from "@mui/material";
 import { useData } from "../../context/DataContext";
 import WeightLogList from "../WeightLogList/WeightLogList";
 import WeightLogChart from "../WeightLogChart/WeightLogChart";
@@ -44,16 +44,16 @@ function WeightTracking() {
   };
 
   return (
-    <Box
+    <Paper
+      elevation={4}
       sx={{
         p: 2,
         maxWidth: 400,
-        border: "2px solid #1976d2",
-        borderRadius: "8px",
-        boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.4)",
       }}
     >
-      <h3>Weight Tracking</h3>
+      <Typography variant="h7" component="h3" gutterBottom >
+        Weight Tracking
+      </Typography>
 
       <TextField
         type="date"
@@ -87,7 +87,7 @@ function WeightTracking() {
         {loggingWeight ? "Logging..." : "Log Weight"}
       </Button>
 
-      <Box sx={{mt:2}}>
+      <Box sx={{ mt: 2 }}>
         {currentClient.weightTracking && (
           <>
             <LogSwitch handleSwitche={setIsTable} />
@@ -99,7 +99,7 @@ function WeightTracking() {
           </>
         )}
       </Box>
-    </Box>
+    </Paper>
   );
 }
 

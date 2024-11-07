@@ -6,10 +6,10 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Paper,
   TablePagination,
   TextField,
   Typography,
+  Box
 } from "@mui/material";
 import WeightLogItem from "../WeightLogItem/WeightLogItem";
 import { useData } from "../../context/DataContext";
@@ -46,8 +46,8 @@ function WeightLogListTable({ weightTracking }) {
   };
 
   return (
-    <Paper sx={{ mt: 2, p:2 }} elevation={3}>
-      <Typography variant="h6" component="h2" gutterBottom>
+    <Box sx={{ mt: 2, p:2 }} >
+      <Typography variant="h7" component="h4" gutterBottom>
         Weight Log Table
       </Typography>
       <TextField
@@ -58,7 +58,7 @@ function WeightLogListTable({ weightTracking }) {
         }}
         value={filterDate}
         onChange={(e) => setFilterDate(e.target.value)}
-        style={{ margin: 15 }}
+        style={{ margin: 10 }}
       />
       {filterDate && (
         <Typography variant="subtitle1" align="center">
@@ -124,7 +124,7 @@ function WeightLogListTable({ weightTracking }) {
           },
         }}
       />
-    </Paper>
+    </Box>
   );
 }
 
