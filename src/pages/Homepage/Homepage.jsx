@@ -61,6 +61,7 @@ function Homepage() {
   }, [currentClient]);
 
   return currentUser.isAdmin ? (
+    // TODO check if workoutsData is null Add  <LoadingScreen />
     <div className="Homepage page">
       <Paper
         elevation={3}
