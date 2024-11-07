@@ -7,6 +7,7 @@ import { FaSearch } from "react-icons/fa";
 
 import MyClientTableWithLocalizationProvider from "../../components/MyClientTable/MyClientTable.jsx";
 import { useNavigate } from "react-router-dom";
+import LoadingScreen from "../../components/LoadingScreen/LoadingScreen.jsx";
 // import { useNavigate } from "react-router-dom";
 
 function AdminPage() {
@@ -33,9 +34,10 @@ function AdminPage() {
 
   return (
     <div className="AdminPage page">
-      {clientsToDisply && (
+      
+      {clientsToDisply? (
         <MyClientTableWithLocalizationProvider data={clientsToDisply} />
-      )}
+      ):<LoadingScreen/>}
     </div>
   );
 }

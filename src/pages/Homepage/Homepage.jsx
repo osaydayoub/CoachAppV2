@@ -13,6 +13,7 @@ import { Paper, Box, Stack, Typography, Button } from "@mui/material";
 import WorkoutsCarousel from "../../components/WorkoutsCarousel/WorkoutsCarousel.jsx";
 import MealsAccordion from "../../components/MealsAccordion/MealsAccordion.jsx";
 import DailyTrackingSummary from "../../components/DailyTrackingSummary/DailyTrackingSummary.jsx";
+import LoadingScreen from "../../components/LoadingScreen/LoadingScreen.jsx";
 function Homepage() {
   const { currentUser, isLoggedIn } = useAuth();
   const { currentClient } = useData();
@@ -118,14 +119,22 @@ function Homepage() {
       </Paper>
     </div>
   ) : (
-    <div className="client-homepage Homepage page">
-      <DailyTrackingSummary
-        currentUser={currentUser}
-        dailyTracking={dailyTracking}
-        currentClient={currentClient}
-      />
-      {currentClient && <MealsAccordion />}
-    </div>
+    <>
+      {!currentUser || !dailyTracking || !currentClient ? (
+        <div className="page">
+          <LoadingScreen />
+        </div>
+      ) : (
+        <div className="client-homepage Homepage page">
+          <DailyTrackingSummary
+            currentUser={currentUser}
+            dailyTracking={dailyTracking}
+            currentClient={currentClient}
+          />
+          <MealsAccordion />
+        </div>
+      )}
+    </>
   );
 }
 
