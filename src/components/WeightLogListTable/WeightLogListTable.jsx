@@ -53,12 +53,13 @@ function WeightLogListTable({ weightTracking }) {
       <TextField
         type="date"
         label="Filter by Date"
+        fullWidth
         InputLabelProps={{
           shrink: true, // Keep the label always condensed
         }}
         value={filterDate}
         onChange={(e) => setFilterDate(e.target.value)}
-        style={{ margin: 10 }}
+        sx={{m:1, mt:2}}
       />
       {filterDate && (
         <Typography variant="subtitle1" align="center">
