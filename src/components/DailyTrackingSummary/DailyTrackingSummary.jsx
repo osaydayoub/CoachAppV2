@@ -1,8 +1,10 @@
 import React from "react";
 import { Box, Typography, CircularProgress, Paper } from "@mui/material";
 import { getCurrentDateTime, getGreeting } from "../../utils/helpers";
+import { useAuth } from "../../context/AuthContext";
 const circle = true;
 function DailyTrackingSummary({ currentUser, dailyTracking, currentClient }) {
+  const { t } = useAuth();
   const progressPercentage = dailyTracking
     ? Math.floor((dailyTracking.calories / currentClient.caloricIntake) * 100)
     : 0;
@@ -16,7 +18,7 @@ function DailyTrackingSummary({ currentUser, dailyTracking, currentClient }) {
           </Typography>
         </Box>
         <Typography variant="h6" component="h2"sx={{mb:1}}>
-          {`${getGreeting()}, ${currentUser.name}!`}
+          {`${t(getGreeting())}, ${currentUser.name}!`}
         </Typography>
 
         {dailyTracking && (
