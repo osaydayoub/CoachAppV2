@@ -4,7 +4,8 @@ import { Link } from "react-router-dom";
 import "./Login.css";
 import { useAuth } from "../../context/AuthContext";
 import { Alert, Typography } from "@mui/material";
-import { Button, CircularProgress } from '@mui/material';
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { Box, Button, TextField, CircularProgress } from "@mui/material";
 import axios from "axios";
 // import loginImg from "../../assets/msaCoach.jpeg";
 import loginImg from "../../assets/images/logo2.png";
@@ -24,7 +25,6 @@ function Login({ handle }) {
   const { getCurrentClient } = useData();
   const navigate = useNavigate();
 
-  
   const updateClientData = async (clientID) => {
     console.log("updateClientData:-=-=-");
     try {
@@ -50,15 +50,17 @@ function Login({ handle }) {
       localStorage.setItem("token", res.data.token);
       console.log(res.data);
       const { client, ...rest } = res.data;
-      const userToStore={...rest ,clientId:(res.data.client)?res.data.client._id:null};
-      console.log("new:",userToStore);
+      const userToStore = {
+        ...rest,
+        clientId: res.data.client ? res.data.client._id : null,
+      };
+      console.log("new:", userToStore);
 
       localStorage.setItem("currentUser", JSON.stringify(userToStore)); // Store the user data as a string
-      axios.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${res.data.token}`;
+      axios.defaults.headers.common["Authorization"] =
+        `Bearer ${res.data.token}`;
       setCurrentUser(userToStore);
-      
+
       if (res.data.client) {
         updateClientData(res.data.client._id);
       }
@@ -78,21 +80,17 @@ function Login({ handle }) {
     setLoading(false);
   }
 
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: "rgb(17, 45, 78)", // Set the primary color
+      },
+    },
+  });
+
   return (
     <div className="login-container">
-      {/* <img className="img-login" src={loginImg} alt="logo-img" /> */}
       <h2>Welcome</h2>
-      {/* <h3>M.S.A</h3> */}
-      {error && false && <div className="error-container">{error}</div>}
-      {/* {error && (
-        <Alert
-          severity="error"
-          variant="filled"
-          style={{ marginBottom: "1rem" }}
-        >
-          {error}
-        </Alert>
-      )} */}
       {error && (
         <Alert
           severity="error"
@@ -105,41 +103,53 @@ function Login({ handle }) {
         </Alert>
       )}
       <form onSubmit={(e) => handleSubmit(e)}>
-        <div>
-          <label htmlFor="email">Email</label>
-          <br />
-          <input
-            type="email"
-            id="email"
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-        <div>
-          <label htmlFor="password">Password</label>
-          <br />
-          <input
-            type="password"
-            id="password"
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-
-        <div>
-          <Button
-            variant="contained"
-            type="submit"
-            disabled={loading}
+        <ThemeProvider theme={theme}>
+          <Box
             sx={{
-              minWidth: 120,
+              mt: 2,
+              height: 300,
               display: "flex",
+              flexDirection: "column",
               alignItems: "center",
-              gap: 1,
+              gap: 4,
             }}
           >
-            Login
-            {loading && <CircularProgress size={20} color="inherit" />}
-          </Button>
-        </div>
+            <TextField
+              label="Email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              fullWidth
+              variant="outlined"
+            />
+
+            <TextField
+              label="Password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              fullWidth
+              variant="outlined"
+            />
+            <Button
+              className="login-btn"
+              variant="contained"
+              type="submit"
+              disabled={loading}
+              sx={{
+                minWidth: 120,
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+              }}
+            >
+              Login
+              {loading && <CircularProgress size={20} color="inherit" />}
+            </Button>
+          </Box>
+        </ThemeProvider>
       </form>
 
       <div>
