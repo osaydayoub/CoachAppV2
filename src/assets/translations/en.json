@@ -1,7 +1,24 @@
 {
+  "navigation": {
     "Home": "Home",
-    "Training Timetable":"Training Timetable",
-    "Good morning":"Good morning"
+    "Admin": "Admin",
+    "Training Timetable": "Training Timetable",
+    "Tracking": "Tracking",
+    "Meals": "Meals",
+    "Product Scanner": "Product Scanner"
+  },
+    "Good morning":"Good morning",
+    "Meal Not Chosen message":" Meal for Today Not Chosen!",
+    "first client daily message":"Your caloric intake goal",
+    "second client daily message":"Calories consumed today",
+    "third client daily message":"Remaining for today",
+    "forth client message":"Don't forget to log your calorie intake in your Daily Tracking. Whether you're maintaining, gaining, or losing, keeping an eye on your calories helps you stay on track with your health and fitness goals.",
+    "Workouts in 7 days":"Workouts in the upcoming 7 days",
+    "no workouts":"No Workouts To Display Available!",
+    "calender message":"Days with the icon have workouts",
+    "no workout on date":"No workout on this date",
+    "meals page title":"Meals for Today",
+    "meals page message":"Feel free to choose any meal from the four options - Breakfast, Lunch,Snack, or Dinner. Customize your Daily Tracking with the meals that best suit your preferences and nutritional goals"
   }
 
   

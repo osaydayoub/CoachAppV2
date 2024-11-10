@@ -20,7 +20,15 @@ import ScrollToTop from "../ScrollToTop/ScrollToTop.jsx";
 import LanguageIcon from "@mui/icons-material/Language";
 
 function ResponsiveAppBar() {
-  const { currentUser, setCurrentUser, isLoggedIn, setIsLoggedIn, t, language, changeLanguage  } = useAuth();
+  const {
+    currentUser,
+    setCurrentUser,
+    isLoggedIn,
+    setIsLoggedIn,
+    t,
+    language,
+    changeLanguage,
+  } = useAuth();
 
   const { setClientsData, setWorkoutsData, setCurrentClient } = useData();
   const topScroller = React.useRef();
@@ -32,12 +40,12 @@ function ResponsiveAppBar() {
     if (isLoggedIn) {
       if (currentUser.isAdmin) {
         setPages([
-          `${t("Home")}`,
-          "Admin",
-          "Training Timetable",
-          "Tracking",
-          "Meals",
-          "Product Scanner",
+          `${t("navigation.Home")}`,
+          `${t("navigation.Admin")}`,
+          `${t("navigation.navigation.Training Timetable")}`,
+          `${t("navigation.Tracking")}`,
+          `${t("navigation.Meals")}`,
+          `${t("navigation.Product Scanner")}`,
         ]);
         setHandleFunctions([
           handleHomeClick,
@@ -49,11 +57,11 @@ function ResponsiveAppBar() {
         ]);
       } else {
         setPages([
-         `${t("Home")}`,
-         `${t("Training Timetable")}`,
-          "Tracking",
-          "Meals",
-          "Product Scanner",
+          `${t("navigation.Home")}`,
+          `${t("navigation.Training Timetable")}`,
+          `${t("navigation.Tracking")}`,
+          `${t("navigation.Meals")}`,
+          `${t("navigation.Product Scanner")}`,
         ]);
         setHandleFunctions([
           handleHomeClick,
@@ -64,7 +72,7 @@ function ResponsiveAppBar() {
         ]);
       }
     }
-  }, [isLoggedIn,t]);
+  }, [isLoggedIn, t]);
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const navigate = useNavigate();
@@ -237,11 +245,11 @@ function ResponsiveAppBar() {
 
           {isLoggedIn && (
             <Box sx={{ flexGrow: 0 }}>
-              <IconButton size="large" onClick={handleLogout} color="inherit">
-                <LogoutIcon />
-              </IconButton>
               <IconButton size="large" onClick={handleLanguage} color="inherit">
                 <LanguageIcon />
+              </IconButton>
+              <IconButton size="large" onClick={handleLogout} color="inherit">
+                <LogoutIcon />
               </IconButton>
             </Box>
           )}

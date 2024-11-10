@@ -51,7 +51,7 @@ function ServerDay(props) {
 function WorkoutsCalendar() {
   const [value, setValue] = useState(initialValue);
   const [month, setMonth] = useState(initialValue);
-  const { currentUser } = useAuth();
+  const { currentUser,t } = useAuth();
   const { workoutsData, getWorkouts,currentClient } = useData();
   //maybe no need for that
   const [workouts, setWorkouts] = useState(null);
@@ -198,7 +198,7 @@ function WorkoutsCalendar() {
           >
             <FitnessCenterIcon sx={{ mr: 1 }} />
             <Typography fontSize="small" sx={{ color: "#9d9d9d" }}>
-              Days with the icon have workouts.
+             {`- ${t("calender message")}`}
             </Typography>
           </Box>
 
@@ -211,7 +211,7 @@ function WorkoutsCalendar() {
             }}
           >
             <Button variant="contained" onClick={handleTodayClick}>
-              Today
+              {t("Today")}
             </Button>
           </Box>
         </LocalizationProvider>
@@ -245,7 +245,7 @@ function WorkoutsCalendar() {
                   width: "100%",
                 }}
               >
-                <Typography>No workout on this date!</Typography>
+                <Typography>{t("no workout on date")}</Typography>
               </Box>
             )}
           </Box>

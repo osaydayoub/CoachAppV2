@@ -4,21 +4,26 @@ import { getCurrentDateTime, getGreeting } from "../../utils/helpers";
 import { useAuth } from "../../context/AuthContext";
 const circle = true;
 function DailyTrackingSummary({ currentUser, dailyTracking, currentClient }) {
-  const { t } = useAuth();
+  const { t, language } = useAuth();
   const progressPercentage = dailyTracking
     ? Math.floor((dailyTracking.calories / currentClient.caloricIntake) * 100)
     : 0;
 
+  const isArabic = language === "ar";
+  const textAlign = isArabic ? "right" : "left";
+
   return (
     <Paper elevation={3} sx={{ padding: 1, borderRadius: 2 }}>
-      <Box sx={{ marginBottom: 2 }}>
-        <Box sx={{ textAlign: "right",m:1 }}>
+      <Box sx={{ marginBottom: 2, textAlign }}>
+        <Box sx={{ textAlign: textAlign == "left" ? "right" : "left", m: 1 }}>
           <Typography variant="body1" color="textSecondary">
             {getCurrentDateTime()}
           </Typography>
         </Box>
-        <Typography variant="h6" component="h2"sx={{mb:1}}>
-          {`${t(getGreeting())}, ${currentUser.name}!`}
+        <Typography variant="h6" component="h2" sx={{ mb: 1 }}>
+          {language == "en"
+            ? `${t(getGreeting())}, ${currentUser.name}!`
+            : `!${currentUser.name},${t(getGreeting())}`}
         </Typography>
 
         {dailyTracking && (
@@ -32,7 +37,9 @@ function DailyTrackingSummary({ currentUser, dailyTracking, currentClient }) {
               }}
             >
               <Typography variant="body1">
-                {`Your caloric intake goal: ${currentClient.caloricIntake} calories`}
+                {`${t("first client daily message")}: ${
+                  currentClient.caloricIntake
+                } ${t("calories")}`}
               </Typography>
             </Box>
             <Box
@@ -44,7 +51,9 @@ function DailyTrackingSummary({ currentUser, dailyTracking, currentClient }) {
               }}
             >
               <Typography variant="body1">
-                {`Calories consumed today: ${dailyTracking.calories} calories`}
+                {`${t("second client daily message")}: ${
+                  dailyTracking.calories
+                } ${t("calories")}`}
               </Typography>
             </Box>
             <Box
@@ -56,9 +65,9 @@ function DailyTrackingSummary({ currentUser, dailyTracking, currentClient }) {
               }}
             >
               <Typography variant="body1" fontWeight="bold">
-                {`Remaining for today: ${
+                {`${t("third client daily message")}: ${
                   currentClient.caloricIntake - dailyTracking.calories
-                } calories`}
+                } ${t("calories")}`}
               </Typography>
             </Box>
 
@@ -112,7 +121,7 @@ function DailyTrackingSummary({ currentUser, dailyTracking, currentClient }) {
                       component="div"
                       color="textSecondary"
                       fontWeight="bold"
-                      sx={{ fontSize: '1.2rem' }}
+                      sx={{ fontSize: "1.2rem" }}
                     >
                       {`${progressPercentage}%`}
                     </Typography>
@@ -171,13 +180,8 @@ function DailyTrackingSummary({ currentUser, dailyTracking, currentClient }) {
           </Box>
         )}
 
-        <Box sx={{ marginTop: 3 }}>
-          <Typography variant="body1">
-            Don't forget to log your calorie intake in your Daily Tracking.
-            Whether you're maintaining, gaining, or losing, keeping an eye on
-            your calories helps you stay on track with your health and fitness
-            goals.
-          </Typography>
+        <Box sx={{ marginTop: 3, textAlign }}>
+          <Typography variant="body1">{t("forth client message")}</Typography>
         </Box>
       </Box>
     </Paper>

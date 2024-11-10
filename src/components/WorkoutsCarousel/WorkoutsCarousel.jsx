@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import Carousel from "react-material-ui-carousel";
 import Workout from "../Workout/Workout";
 import { Box, Typography } from "@mui/material";
+import { useAuth } from "../../context/AuthContext";
 
 function WorkoutsCarousel({ autoPlay, workoutsToDisply, isViewOnly, isAdmin }) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const {t}=useAuth();
 
   useEffect(() => {
     if (workoutsToDisply && workoutsToDisply.length > 0) {
@@ -49,7 +51,7 @@ function WorkoutsCarousel({ autoPlay, workoutsToDisply, isViewOnly, isAdmin }) {
           }}
         >
           <Typography variant="body1" color="textPrimary">
-            No Workouts To Display Available!
+            {t("no workouts")}
           </Typography>
         </Box>
       )}
