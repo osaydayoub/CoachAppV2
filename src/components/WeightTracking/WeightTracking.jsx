@@ -6,6 +6,7 @@ import WeightLogChart from "../WeightLogChart/WeightLogChart";
 import { useNotification } from "../../context/NotificationContext";
 import WeightLogListTable from "../WeightLogListTable/WeightLogListTable";
 import LogSwitch from "../LogSwitch/LogSwitch";
+import { useAuth } from "../../context/AuthContext";
 
 function WeightTracking() {
   const [date, setDate] = useState("");
@@ -14,6 +15,7 @@ function WeightTracking() {
   const { currentClient, addWeightTracking } = useData();
   const showNotification = useNotification();
   const [isTable, setIsTable] = useState(true);
+  const {t}=useAuth();
 
   const sortedWeightTracking = currentClient.weightTracking
     ? [...currentClient.weightTracking].sort(
@@ -52,12 +54,12 @@ function WeightTracking() {
       }}
     >
       <Typography variant="h7" component="h3" gutterBottom >
-        Weight Tracking
+        {t("TrackingPage.Weight Tracking")}
       </Typography>
 
       <TextField
         type="date"
-        label="Date"
+        label={t("TrackingPage.Date")}
         value={date}
         onChange={(e) => setDate(e.target.value)}
         fullWidth
@@ -67,7 +69,7 @@ function WeightTracking() {
       />
 
       <TextField
-        label="Weight in kg"
+        label={t("TrackingPage.Weight in kg")}
         variant="outlined"
         value={newWeight}
         type="number"
@@ -84,7 +86,7 @@ function WeightTracking() {
         sx={{ mt: 2 }}
         disabled={!date || newWeight === "" || loggingWeight}
       >
-        {loggingWeight ? "Logging..." : "Log Weight"}
+        {loggingWeight ? t("TrackingPage.Logging...") : t("TrackingPage.Log Weight")}
       </Button>
 
       <Box sx={{ mt: 2 }}>
