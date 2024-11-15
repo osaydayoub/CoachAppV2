@@ -95,12 +95,17 @@ export function DataProvider({ children }) {
         {
           exercise: workout.exercise,
           date: workout.date,
+          duration:workout.duration,
           clientID: workout.clientID,
         }
       );
       // console.log(response.data);
       await getWorkouts();
     } catch (error) {
+      if(error.response.status==409){
+        throw(error);
+      }
+      console.log(error);
       console.log("error in createWorkout");
     }
   };

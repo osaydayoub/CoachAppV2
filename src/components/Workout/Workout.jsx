@@ -21,6 +21,10 @@ function Workout({ workout, isAdmin, index, id, isViewOnly }) {
       console.log("error in deleteWorkout");
     }
   };
+  const workoutStartTime = new Date(workout.date);
+  const workoutEndTime = new Date(
+    workoutStartTime.getTime() + workout.duration * 60000
+  );
 
   return (
     <div
@@ -35,7 +39,11 @@ function Workout({ workout, isAdmin, index, id, isViewOnly }) {
       {(!isAdmin || isViewOnly) && (
         <div>{`Date: ${getFullDate(new Date(workout.date))}`}</div>
       )}
-      <div>{`Time: ${getTime(new Date(workout.date))}`}</div>
+      <div>{`Time: ${getTime(workoutStartTime)}`}</div>
+      {workout.duration && <div>{`Duration: ${workout.duration} minutes`}</div>}
+      {/* <div>{`Time: ${getTime(workoutStartTime)} - ${getTime(
+        workoutEndTime
+      )}`}</div> */}
       {isAdmin && !isViewOnly && (
         <div>
           <Button
