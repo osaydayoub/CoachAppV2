@@ -59,25 +59,25 @@ const BarcodeScanner = () => {
   const startScanning = () => {
     if (isScanning) return; // Prevent starting multiple scanning processes
 
-    console.log("Starting scan");
+    // console.log("Starting scan");
     setIsScanning(true);
 
     captureIntervalRef.current = setInterval(() => {
       if (webcamRef.current) {
         const imageSrc = webcamRef.current.getScreenshot();
         if (imageSrc) {
-          console.log("Captured image for scanning");
+          // console.log("Captured image for scanning");
           scanBarcode(imageSrc);
         } else {
-          console.log("No image captured");
+          // console.log("No image captured");
         }
         setCounter((prevCounter) => {
           const newCounter = prevCounter + 1;
-          console.log(`counter=${newCounter}`);
+          // console.log(`counter=${newCounter}`);
 
           if (newCounter >= MAX_SCAN_ATTEMPTS) {
             // Check if the counter reaches 30
-            console.log("Reached maximum scanning attempts");
+            // console.log("Reached maximum scanning attempts");
             setTryScanAgain(true);
             stopScanning(); // Stop scanning when counter hits 30
           }
@@ -88,7 +88,7 @@ const BarcodeScanner = () => {
   };
 
   const stopScanning = () => {
-    console.log("Stopping scan");
+    // console.log("Stopping scan");
     setIsScanning(false);
     // setCounter(0);
     if (captureIntervalRef.current) {
@@ -106,7 +106,7 @@ const BarcodeScanner = () => {
         .decodeFromImageElement(image)
         .then((result) => {
           if (result) {
-            console.log("Barcode detected:", result.text);
+            // console.log("Barcode detected:", result.text);
             setData(result.text); // Set the barcode text
             fetchNutritionData(result.text); // Fetch nutrition data
             stopScanning(); // Stop scanning once a barcode is detected
@@ -134,9 +134,12 @@ const BarcodeScanner = () => {
         `https://world.openfoodfacts.org/api/v0/product/${barcode}.json`
       );
       if (response.data.status === 1) {
-        const newNutritionData =
-          response.data.product.nutriments["energy-kcal_100g"];
-        console.log(newNutritionData);
+        const newNutritionData = {
+          caloriesIn100g: response.data.product.nutriments["energy-kcal_100g"],
+          imageUrl:response.data.product.image_front_small_url,
+        };
+        // response.data.product.nutriments["energy-kcal_100g"];
+        // console.log("response:",response.data.product);
         setNutritionData(newNutritionData);
         setNutritionDataFetchStatus("success");
       } else {
@@ -149,7 +152,8 @@ const BarcodeScanner = () => {
               setNutritionData(null);
               return;
             }
-            setNutritionData(productData.caloriesIn100g);
+            // console.log("my productData :",productData);
+            setNutritionData(productData);
             setNutritionDataFetchStatus("success");
           } catch (error) {
             //console.log(error);
