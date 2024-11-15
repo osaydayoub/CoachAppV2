@@ -42,7 +42,7 @@ function ResponsiveAppBar() {
         setPages([
           `${t("navigation.Home")}`,
           `${t("navigation.Admin")}`,
-          `${t("navigation.navigation.Training Timetable")}`,
+          `${t("navigation.Training Timetable")}`,
           `${t("navigation.Tracking")}`,
           `${t("navigation.Meals")}`,
           `${t("navigation.Product Scanner")}`,
