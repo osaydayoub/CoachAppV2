@@ -24,14 +24,20 @@ function NutritionCard({
   const [inputValue, setInputValue] = useState(""); // To store the user's input (either calories or weight)
   const [result, setResult] = useState(null); // To store the result of the calculation
   const [addingCalories, setAdding] = useState(false);
-  const [addingProduct,setAddingProduct]=useState(false);
+  const [addingProduct, setAddingProduct] = useState(false);
   const [calories, setCalories] = useState(0);
   // const [dailyTracking, setDailyTracking] = useState(null);
 
   const { currentUser } = useAuth();
-  const { currentClient, addDailyTracking, getCurrentClient,addProduct ,AddCaloriesToDailyTracking} = useData();
+  const {
+    currentClient,
+    addDailyTracking,
+    getCurrentClient,
+    addProduct,
+    AddCaloriesToDailyTracking,
+  } = useData();
   const handleSubmit = () => {
-    console.log("handleSubmit")
+    console.log("handleSubmit");
     if (manualBarcode.trim() !== "") {
       handleManualInput(manualBarcode);
     }
@@ -42,10 +48,8 @@ function NutritionCard({
     try {
       setAddingProduct(true);
       const newProduct = {
-        
-          barcodeNumber: scannedBarcode,
-          caloriesIn100g: manualNutritionData,
-        
+        barcodeNumber: scannedBarcode,
+        caloriesIn100g: manualNutritionData,
       };
       await addProduct(newProduct);
     } catch (error) {
@@ -55,7 +59,7 @@ function NutritionCard({
 
     setAddingProduct(false);
   };
-  
+
   const handleAddCalories = async () => {
     console.log("handleAddCalories");
     console.log(currentClient);
@@ -70,46 +74,6 @@ function NutritionCard({
     setResult(null);
     setInputValue("");
   };
-  // const handleAddCalories = async () => {
-  //   console.log("handleAddCalories");
-  //   console.log(currentClient);
-  //   let track = currentClient.dailyTracking.find((track) => {
-  //     return isSameDay(new Date(track.date), new Date());
-  //   });
-  //   if (track === undefined) {
-  //     console.log("stil no data");
-  //     const t = {
-  //       date: new Date(),
-  //       calories: 0,
-  //       waterAmount: 0,
-  //       sleepHours: 0,
-  //     };
-  //     track = t;
-  //   }
-
-  //   try {
-  //     setAdding(true);
-  //     console.log(track);
-  //     const updatednewTrack = {
-  //       date: track.date,
-  //       calories: Number(track.calories) + Number(calories),
-  //       waterAmount: Number(track.waterAmount),
-  //       sleepHours: Number(track.sleepHours),
-  //     };
-  //     await addDailyTracking(currentClient._id, updatednewTrack);
-  //     const resTrack = await getCurrentClient(currentClient._id);
-  //     const uptrack = resTrack.dailyTracking.find((track) => {
-  //       return isSameDay(new Date(track.date), new Date());
-  //     });
-  //   } catch (error) {
-  //     console.log(error);
-  //     console.log("error in handleDailyTracking");
-  //   }
-  //   setAdding(false);
-  //   setSelectedOption(null);
-  //   setResult(null);
-  //   setInputValue("");
-  // };
 
   const handleInputChange = (event) => {
     setInputValue(event.target.value);
@@ -117,17 +81,19 @@ function NutritionCard({
 
   const handleCalculateWeight = () => {
     // Logic to calculate weight from calories
-    const weight = (inputValue / nutritionData) * 100;
+    const weight = (inputValue / nutritionData.caloriesIn100g) * 100;
     setResult(weight.toFixed(2) + " gr");
     setCalories(inputValue);
   };
 
   const handleCalculateCalories = () => {
     // Logic to calculate calories from weight
-    const calculatedCalories = (inputValue * nutritionData) / 100;
+    const calculatedCalories =
+      (inputValue * nutritionData.caloriesIn100g) / 100;
     setCalories(calculatedCalories);
     setResult(calculatedCalories.toFixed(2) + " cal");
   };
+  console.log("nutritionData:", nutritionData);
   return (
     <Card
       sx={{ minWidth: 275, maxWidth: 450, mt: 2, backgroundColor: "#f5f5f5" }}
@@ -178,7 +144,6 @@ function NutritionCard({
               )}
             </>
           ) : (
-            //TODO if currentUser.isAdmin so add option to add new data!
             <>
               <Typography
                 gutterBottom
@@ -212,11 +177,31 @@ function NutritionCard({
             >
               {`Nutrition Information for scanned Barcode ${scannedBarcode} `}
             </Typography>
+            {nutritionData?.imageUrl && (
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  mb: 2,
+                }}
+              >
+                <img
+                  src={nutritionData.imageUrl}
+                  alt="Product Image"
+                  style={{
+                    width: "100%",
+                    maxWidth: "100px",
+                    height: "auto",
+                    borderRadius: "8px",
+                  }}
+                />
+              </Box>
+            )}
             <Typography variant="h5" component="div">
               Calories in 100 gr
             </Typography>
             <Typography sx={{ color: "text.secondary", mb: 1.5 }}>
-              {nutritionData}
+              {nutritionData.caloriesIn100g}
             </Typography>
           </>
         )}
@@ -284,7 +269,11 @@ function NutritionCard({
               : `Calories: ${result}`}
           </Typography>
 
-          <Button variant="contained" onClick={handleAddCalories} disabled={addingCalories}>
+          <Button
+            variant="contained"
+            onClick={handleAddCalories}
+            disabled={addingCalories}
+          >
             Add Calories to your daily tracking
             {/* Calories to your daily tracking */}
           </Button>
