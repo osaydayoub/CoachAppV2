@@ -8,7 +8,7 @@ import WorkoutsCalendar from "../../components/WorkoutsCalendar/WorkoutsCalendar
 import { useData } from "../../context/DataContext.jsx";
 
 function TimetablePage() {
-  const { currentUser } = useAuth();
+  const { currentUser,t } = useAuth();
   const { currentClient } = useData();
   const [workoutsToDisply, setWorkoutsToDisply] = useState(null);
   const [activeTab, setActiveTab] = useState(0);
@@ -39,12 +39,12 @@ function TimetablePage() {
             <Tabs
               value={activeTab}
               onChange={handleTabChange}
-              // centered
-              variant="scrollable"
-              scrollButtons="auto"
+              centered
+              // variant="scrollable"
+              // scrollButtons="auto"
             >
-              <Tab label="Workouts Calendar" />
-              <Tab label="7-day Workouts" />
+              <Tab label={t("Workouts Calendar")} />
+              <Tab label={t("7-day Workouts")} />
             </Tabs>
 
             <Box
@@ -78,7 +78,7 @@ function TimetablePage() {
                       boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.4)",
                     }}
                   >
-                    <h3>Workouts in the upcoming 7 days</h3>
+                    <h3>{t("7-day Workouts")}</h3>
                     <WorkoutsCarousel
                       autoPlay={false}
                       workoutsToDisply={workoutsToDisply}

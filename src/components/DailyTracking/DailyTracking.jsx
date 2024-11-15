@@ -4,6 +4,7 @@ import { useData } from "../../context/DataContext.jsx";
 import SingleTracking from "../SingleTracking/SingleTracking.jsx";
 import { Box, Button, Typography, Paper } from "@mui/material";
 import UpdateIcon from "@mui/icons-material/Update";
+import { useAuth } from "../../context/AuthContext.jsx";
 
 function DailyTracking() {
   const [adding, setAdding] = useState(false);
@@ -12,6 +13,7 @@ function DailyTracking() {
   const [sleepHours, setSleepHours] = useState(0);
   const [dailyTracking, setDailyTracking] = useState(null);
   const { currentClient, addDailyTracking, getCurrentClient } = useData();
+  const {t}=useAuth();
 
   useEffect(() => {
     if (currentClient) {
@@ -20,13 +22,13 @@ function DailyTracking() {
       });
       if (track === undefined) {
         console.log("still no data");
-        const t = {
+        const newTrack = {
           date: new Date(),
           calories: 0,
           waterAmount: 0,
           sleepHours: 0,
         };
-        track = t;
+        track = newTrack;
       }
       setDailyTracking(track);
     }
@@ -69,12 +71,12 @@ function DailyTracking() {
     >
       {/* Title */}
       <Typography variant="h5" component="h1" align="center" gutterBottom>
-        Daily Tracking
+        {t("TrackingPage.Daily Tracking")}
       </Typography>
 
       {/* Description */}
       <Typography variant="body1" align="center" gutterBottom>
-        Please take a moment to add or update your Daily Tracking.
+        {t("TrackingPage.Daily Tracking message")}
         {/* to keep a record of your progress and maintain a comprehensive overview of your
         daily activities and goals. */}
       </Typography>
@@ -117,7 +119,7 @@ function DailyTracking() {
               fullWidth
               sx={{ mt: 3 }}
             >
-              {adding ? "Updating..." : "Update"}
+              {adding ? t("TrackingPage.Updating...") : t("TrackingPage.Update")}
             </Button>
           </Box>
         )}

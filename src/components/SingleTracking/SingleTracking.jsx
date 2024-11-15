@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Box, Typography, Button, TextField } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import { useAuth } from "../../context/AuthContext";
 
 function SingleTracking({
   trackingType,
@@ -10,6 +11,7 @@ function SingleTracking({
 }) {
   const [adding, setAdding] = useState(false);
   const inputRef = useRef(null);
+  const {t,language}=useAuth();
 
   useEffect(() => {
     if (adding) {
@@ -17,6 +19,9 @@ function SingleTracking({
     }
   }, [adding]);
 
+  const isArabic = language === "ar";
+  const textAlign = isArabic ? "right" : "left";
+  const flexDirection = isArabic ? "row-reverse" : "row";
   return (
     <Box 
       sx={{
@@ -26,10 +31,12 @@ function SingleTracking({
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        mb: 2
+        flexDirection,
+        mb: 2,
+        textAlign
       }}
     >
-      <Typography variant="body1">{`${trackingType}: ${dailyTracking}`}</Typography>
+      <Typography variant="body1">{`${t(`TrackingPage.${trackingType}`)}: ${dailyTracking}`}</Typography>
 
       <Button
         variant="contained"

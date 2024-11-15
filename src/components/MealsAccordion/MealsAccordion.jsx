@@ -6,19 +6,21 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useData } from "../../context/DataContext";
 import Meal from "../Meal/Meal";
-import { isSameDay ,isToday } from "../../utils/helpers";
-import { Box  ,Button} from "@mui/material";
+import { isSameDay, isToday } from "../../utils/helpers";
+import { Box, Button, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 export default function MealsAccordion() {
   const [dailyMeals, setdailyMeals] = useState(null);
-  const { currentClient} = useData();
-  
+  const { currentClient } = useData();
+  const { t, language } = useAuth();
+
   useEffect(() => {
     if (currentClient) {
       const dailyMeals = currentClient?.dailyMeals.find((daily) =>
         // isSameDay(new Date(daily.date), new Date())
-      isToday(daily.date)
+        isToday(daily.date)
       );
       console.log(dailyMeals);
       setdailyMeals(dailyMeals);
@@ -33,6 +35,19 @@ export default function MealsAccordion() {
   ];
   return (
     <Box sx={{ width: 300 }}>
+      <Box
+        sx={{
+          backgroundColor: "#f0f0f0",
+          padding: 1,
+          borderRadius: 1,
+          marginBottom: 2,
+          textAlign: "center",
+        }}
+      >
+        <Typography variant="h6" component="div">
+          {t("Your Daily Meals")}
+        </Typography>
+      </Box>
       {mealTypes.map((meal) => {
         const mealData = Array.isArray(meal.path)
           ? dailyMeals?.[meal.path[0]]?.[meal.path[1]]
@@ -45,7 +60,7 @@ export default function MealsAccordion() {
               aria-controls={`${meal.key}-content`}
               id={`${meal.key}-header`}
             >
-              {meal.title}
+              {t(meal.title)}
             </AccordionSummary>
             <AccordionDetails
               sx={{
@@ -61,19 +76,23 @@ export default function MealsAccordion() {
                   consumed={mealData.consumed}
                   display={true}
                 />
+              ) : language == "en" ? (
+                `${t(meal.title)}${t("Meal Not Chosen message")}`
               ) : (
-                `${meal.title} Meal for Today Not Chosen!`
+                `${t("Meal Not Chosen message")} ${t(meal.title)}`
               )}
             </AccordionDetails>
-          {(!mealData||!mealData?.consumed) && <AccordionActions>
-              <Button
-                component={Link}
-                to={`/meals/${meal.title.split(' ').pop().toLowerCase()}`}  
-                size="small"
-              >
-                Add/Choose
-              </Button>
-            </AccordionActions>}
+            {(!mealData || !mealData?.consumed) && (
+              <AccordionActions>
+                <Button
+                  component={Link}
+                  to={`/meals/${meal.title.split(" ").pop().toLowerCase()}`}
+                  size="small"
+                >
+                  {t("Add/Choose")}
+                </Button>
+              </AccordionActions>
+            )}
           </Accordion>
         );
       })}
