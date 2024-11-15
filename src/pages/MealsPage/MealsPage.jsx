@@ -1,10 +1,8 @@
 import React from "react";
 import "./MealsPage.css";
 import MealCard from "../../components/MealCard/MealCard";
-import {
-  Box,
-  Typography,
-} from "@mui/material";
+import { Box, Typography } from "@mui/material";
+import { useAuth } from "../../context/AuthContext";
 function MealsPage() {
   const mealsData = [
     { name: "Breakfast", img: "1.jpg" },
@@ -12,6 +10,9 @@ function MealsPage() {
     { name: "Snack", img: "3.jpg" },
     { name: "Dinner", img: "4.jpg" },
   ];
+  const { t, language } = useAuth();
+  const isArabic = language === "ar";
+  const textAlign = isArabic ? "right" : "left";
   return (
     <div className="MealsPage page">
       <Box
@@ -27,16 +28,13 @@ function MealsPage() {
           maxWidth: 600,
           margin: "0 auto",
           mt: 1,
+          textAlign,
         }}
       >
         <Typography variant="h4" gutterBottom>
-          {`Meals for Today`}
+          {t("meals page title")}
         </Typography>
-        <Typography gutterBottom>
-          Feel free to choose any meal from the four options - Breakfast, Lunch,
-          Snack, or Dinner. Customize your Daily Tracking with the meals that
-          best suit your preferences and nutritional goals
-        </Typography>
+        <Typography gutterBottom>{t("meals page message")}</Typography>
       </Box>
 
       <div className="cards-container" id="cards-id">

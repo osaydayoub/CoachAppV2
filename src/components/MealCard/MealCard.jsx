@@ -7,6 +7,7 @@ import img2 from "../../assets/images/2.jpg";
 import img3 from "../../assets/images/3.jpg";
 import img4 from "../../assets/images/4.jpg";
 import { Paper } from "@mui/material";
+import { useAuth } from "../../context/AuthContext";
 function getTheImg(img) {
   switch (img) {
     case "1.jpg":
@@ -24,6 +25,7 @@ function getTheImg(img) {
 
 function MealCard({ meal }) {
   const navigate = useNavigate();
+  const {t}=useAuth();
   const handleSelect = (name) => {
     navigate(`/meals/${name.toLowerCase()}`);
   };
@@ -35,7 +37,7 @@ function MealCard({ meal }) {
       onClick={() => handleSelect(meal.name)}
     >
       <img className="card-img" src={getTheImg(meal.img)} alt="img" />
-      <h2>{meal.name}</h2>
+      <h2>{t(meal.name)}</h2>
     </Paper>
   );
 }

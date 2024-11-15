@@ -6,7 +6,7 @@ import WeightTracking from "../../components/WeightTracking/WeightTracking.jsx";
 
 import { Box, Tab, Tabs } from "@mui/material";
 function TrackingPage() {
-  const { currentUser } = useAuth();
+  const { currentUser,t } = useAuth();
   const [activeTab, setActiveTab] = useState(0);
 
   const handleTabChange = (event, newValue) => {
@@ -25,8 +25,8 @@ function TrackingPage() {
               // variant="scrollable"
               // scrollButtons="auto"
             >
-              <Tab label="Daily Tracking" />
-              <Tab label="Weight Tracking" />
+              <Tab label={t("TrackingPage.Daily Tracking")} />
+              <Tab label={t("TrackingPage.Weight Tracking")} />
             </Tabs>
 
             <Box

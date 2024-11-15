@@ -6,17 +6,21 @@ import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import { DataProvider } from "./context/DataContext.jsx";
 import { NotificationProvider } from "./context/NotificationContext.jsx";
+import { I18nextProvider } from "react-i18next";
+import i18n from "./i18n";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   // <React.StrictMode>
-    <BrowserRouter>
-      <AuthProvider>
-        <DataProvider>
-          <NotificationProvider>
+  <BrowserRouter>
+  <I18nextProvider i18n={i18n}>
+    <AuthProvider>
+      <DataProvider>
+        <NotificationProvider>
             <App />
-          </NotificationProvider>
-        </DataProvider>
-      </AuthProvider>
-    </BrowserRouter>
+        </NotificationProvider>
+      </DataProvider>
+    </AuthProvider>
+    </I18nextProvider>
+  </BrowserRouter>
   // </React.StrictMode>
 );
