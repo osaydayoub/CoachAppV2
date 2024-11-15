@@ -28,7 +28,8 @@ function AddWorkout({ client, workoutDisplay }) {
   );
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
-  //duration in minuts
+
+  //duration in minutes
   const [workoutDuration, setWorkoutDuration] = useState(60);
   const [adding, setAdding] = useState(false);
   const durationChoices = [
@@ -66,15 +67,43 @@ function AddWorkout({ client, workoutDisplay }) {
     }
   };
 
+  console.log(client);
+
   return (
     <Box sx={{ padding: 2, width: 300 }}>
-      <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+      {/* <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
         <IconButton onClick={workoutDisplay}>
           <CloseIcon />
         </IconButton>
       </Box>
-      <Typography variant="h6" sx={{ marginBottom: 2 }}>
+      <Typography variant="h6" sx={{ marginBottom: 1, fontWeight: "bold" }}>
         Add a Workout
+      </Typography> */}
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: 1,
+        }}
+      >
+        <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+          Add a Workout
+        </Typography>
+        <IconButton onClick={workoutDisplay}>
+          <CloseIcon />
+        </IconButton>
+      </Box>
+      
+      <Typography
+        variant="body1"
+        sx={{
+          marginBottom: 2,
+          fontSize: "0.875rem", 
+          color: "gray", 
+        }}
+      >
+        For {client.name}
       </Typography>
       <form onSubmit={handleCreateWorkout}>
         <FormControl fullWidth variant="outlined" sx={{ marginBottom: 2 }}>
@@ -141,6 +170,7 @@ function AddWorkout({ client, workoutDisplay }) {
           color="primary"
           disabled={adding}
           sx={{ marginTop: 2 }}
+          fullWidth
         >
           {adding ? "Adding..." : "Add"}
         </Button>
