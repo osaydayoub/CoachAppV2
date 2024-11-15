@@ -106,7 +106,7 @@ function NutritionCard({
                 gutterBottom
                 sx={{ color: "text.secondary", fontSize: 14 }}
               >
-                {`Nutrition Information for scanned Barcode ${scannedBarcode} `}
+                {`Nutrition Information for scanned Barcode ${scannedBarcode}`}
               </Typography>
 
               <Typography
@@ -198,15 +198,15 @@ function NutritionCard({
               </Box>
             )}
             <Typography variant="h5" component="div">
-              Calories in 100 gr
+              Calories in 100 gr:
             </Typography>
             <Typography sx={{ color: "text.secondary", mb: 1.5 }}>
-              {nutritionData.caloriesIn100g}
+            {nutritionData?.caloriesIn100g ? nutritionData.caloriesIn100g : "Not available"}
             </Typography>
           </>
         )}
       </CardContent>
-      {status === "success" && !currentUser.isAdmin && (
+      {status === "success"&&nutritionData.caloriesIn100g && !currentUser.isAdmin && (
         <CardActions>
           <Button onClick={() => setSelectedOption("calories-to-weight")}>
             Input Calories to Continue Calculation for Weight

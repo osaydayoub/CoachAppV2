@@ -10,6 +10,7 @@ import { isSameDay, isToday } from "../../utils/helpers";
 import { Box, Button, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import LocalDiningIcon from '@mui/icons-material/LocalDining';
 
 export default function MealsAccordion() {
   const [dailyMeals, setdailyMeals] = useState(null);
@@ -42,11 +43,17 @@ export default function MealsAccordion() {
           borderRadius: 1,
           marginBottom: 2,
           textAlign: "center",
+          display:"flex",
+          flexDirection:"row",
+          alignContent:"center",
+          justifyContent:"center",
+          gap:1
         }}
       >
         <Typography variant="h6" component="div">
           {t("Your Daily Meals")}
         </Typography>
+        <LocalDiningIcon sx={{mt:0.3}}/>
       </Box>
       {mealTypes.map((meal) => {
         const mealData = Array.isArray(meal.path)
