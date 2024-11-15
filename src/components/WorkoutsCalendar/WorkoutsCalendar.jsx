@@ -52,7 +52,7 @@ function WorkoutsCalendar() {
   const [value, setValue] = useState(initialValue);
   const [month, setMonth] = useState(initialValue);
   const { currentUser } = useAuth();
-  const { workoutsData, getWorkouts,currentClient } = useData();
+  const { workoutsData, getWorkouts, currentClient } = useData();
   //maybe no need for that
   const [workouts, setWorkouts] = useState(null);
   const [allHighlightedDates, setAllHighlightedDates] = useState(null);
@@ -62,7 +62,7 @@ function WorkoutsCalendar() {
   // const [isLoading,setIsLoading]=useState(false);
 
   useEffect(() => {
-    if (!currentUser.isAdmin&& currentClient?.workouts) {
+    if (!currentUser.isAdmin && currentClient?.workouts) {
       const currentUserWorkouts = currentClient.workouts;
       currentUserWorkouts.sort((a, b) => new Date(a.date) - new Date(b.date));
       const highlightArray = [];
@@ -218,24 +218,31 @@ function WorkoutsCalendar() {
       </Box>
       {!currentUser.isAdmin && workouts && (
         // <div className="message-container">
-          <Box
-            sx={{
-              width: 225,
-              height: 150,
-              border: "1px solid",
-              borderColor: "primary.main",
-              borderRadius: "8px",
-              boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.4)",
-            }}
-          >
-            {workoutForDate ? (
+        <>
+          {workoutForDate ? (
+            <Box
+              sx={{
+                width: 225,
+              }}
+            >
               <Workout
                 workout={workoutForDate}
                 isAdmin={currentUser.isAdmin}
                 index={1}
                 isViewOnly={true}
               />
-            ) : (
+            </Box>
+          ) : (
+            <Box
+              sx={{
+                width: 225,
+                height: 150,
+                border: "1px solid",
+                borderColor: "primary.main",
+                borderRadius: "8px",
+                boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.4)",
+              }}
+            >
               <Box
                 sx={{
                   display: "flex",
@@ -247,15 +254,17 @@ function WorkoutsCalendar() {
               >
                 <Typography>No workout on this date!</Typography>
               </Box>
-            )}
-          </Box>
+            </Box>
+          )}
+        </>
+
         // </div>
       )}
       {currentUser.isAdmin && (
         <Box
           sx={{
             display: "flex",
-            flexDirection:"column",
+            flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
             height: "100%",
