@@ -4,7 +4,7 @@ import "./BarcodeScanner.css";
 import Webcam from "react-webcam";
 import axios from "axios";
 import NutritionCard from "../NutritionCard/NutritionCard";
-import { Button, Box, Paper } from "@mui/material";
+import { Button, Box, Paper, CircularProgress } from "@mui/material";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import StopIcon from "@mui/icons-material/Stop";
 import { useData } from "../../context/DataContext.jsx";
@@ -129,6 +129,7 @@ const BarcodeScanner = () => {
 
   const fetchNutritionData = async (barcode) => {
     try {
+      setNutritionDataFetchStatus("loading");
       const response = await axios.get(
         `https://world.openfoodfacts.org/api/v0/product/${barcode}.json`
       );
@@ -168,6 +169,7 @@ const BarcodeScanner = () => {
       elevation={4}
       sx={{
         p: 2,
+        m: 2,
         maxWidth: 400,
         display: "flex",
         flexDirection: "column",
@@ -192,10 +194,23 @@ const BarcodeScanner = () => {
       <Button
         sx={{ mt: 2 }}
         variant="contained"
-        endIcon={isScanning ? <StopIcon /> : <PlayArrowIcon />}
+        endIcon={
+          nutritionDataFetchStatus === "loading" ? (
+            <CircularProgress size={20} color="inherit" />
+          ) : isScanning ? (
+            <StopIcon />
+          ) : (
+            <PlayArrowIcon />
+          )
+        }
         onClick={handleScanning}
+        disabled={nutritionDataFetchStatus === "loading"}
       >
-        {isScanning ? "Stop Scanning" : "Start Scanning"}
+        {nutritionDataFetchStatus === "loading"
+          ? "Looking up information for you..."
+          : isScanning
+          ? "Stop Scanning"
+          : "Start Scanning"}
       </Button>
       {(nutritionData ||
         tryScanAgain ||
