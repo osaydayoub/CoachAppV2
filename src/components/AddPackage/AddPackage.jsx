@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useData } from "../../context/DataContext.jsx";
 import { TextField, Button, Typography, IconButton, Box } from "@mui/material";
-import CloseIcon from '@mui/icons-material/Close'; 
+import CloseIcon from "@mui/icons-material/Close";
 
 function AddPackage({ client, packageDisplay }) {
   const [workoutsNumber, setWorkoutsNumber] = useState(0);
@@ -28,15 +28,33 @@ function AddPackage({ client, packageDisplay }) {
   };
 
   return (
-    <Box  sx={{ padding: 2,  maxWidth:300}}>
-      <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+    <Box sx={{ padding: 2, maxWidth: 300 }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: 1,
+        }}
+      >
+        <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+          Add a Package
+        </Typography>
         <IconButton onClick={packageDisplay}>
           <CloseIcon />
         </IconButton>
       </Box>
-      <Typography sx={{paddingBottom:2}} variant="h6" gutterBottom>
-        Add a Package
+      <Typography
+        variant="body1"
+        sx={{
+          marginBottom: 2,
+          fontSize: "0.875rem", 
+          color: "gray", 
+        }}
+      >
+        For {client.name}
       </Typography>
+
       <form onSubmit={handleAddPackage}>
         <TextField
           label="Workouts Number"
@@ -89,4 +107,3 @@ function AddPackage({ client, packageDisplay }) {
 }
 
 export default AddPackage;
-
