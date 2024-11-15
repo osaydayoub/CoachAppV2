@@ -12,6 +12,8 @@ import {
   IconButton,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { useNotification } from "../../context/NotificationContext.jsx";
+
 function AddWorkout({ client, workoutDisplay }) {
   const exerciseOptions = [
     { value: "Push", label: "Push" },
@@ -26,9 +28,17 @@ function AddWorkout({ client, workoutDisplay }) {
   );
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
+  //duration in minuts
+  const [workoutDuration, setWorkoutDuration] = useState(60);
   const [adding, setAdding] = useState(false);
+  const durationChoices = [
+    { value: 30, label: "30 min" },
+    { value: 60, label: "60 min" },
+    { value: 90, label: "90 min" },
+  ];
 
   const { createWorkout } = useData();
+  const showNotification = useNotification();
 
   const handleCreateWorkout = async (e) => {
     e.preventDefault();
@@ -37,9 +47,19 @@ function AddWorkout({ client, workoutDisplay }) {
       await createWorkout({
         exercise: selectedExercise,
         date: new Date(`${date}T${time}`),
+        duration: workoutDuration,
         clientID: client._id,
       });
+      showNotification("Workout added successfully!", "success");
     } catch (error) {
+      console.log("Error in handleLogWeight:", error);
+      if (error.response.status == 409) {
+        showNotification("A workout already exists at this time.", "error");
+        console.log(
+          "Error in handleLogWeight: status=>",
+          error.response.status
+        );
+      }
       console.error("Error creating workout:", error);
     } finally {
       setAdding(false);
@@ -86,20 +106,34 @@ function AddWorkout({ client, workoutDisplay }) {
           }}
         />
 
-        {date && (
-          <TextField
-            type="time"
-            label="Time"
-            value={time}
-            onChange={(e) => setTime(e.target.value)}
-            required
-            fullWidth
-            sx={{ marginBottom: 2 }}
-            InputLabelProps={{
-              shrink: true, // Keep the label always condensed
-            }}
-          />
-        )}
+        <TextField
+          type="time"
+          label="Time"
+          value={time}
+          onChange={(e) => setTime(e.target.value)}
+          required
+          fullWidth
+          sx={{ marginBottom: 2 }}
+          InputLabelProps={{
+            shrink: true, // Keep the label always condensed
+          }}
+        />
+
+        <FormControl fullWidth variant="outlined" sx={{ marginBottom: 2 }}>
+          <InputLabel id="duration-label">Choose a Duration</InputLabel>
+          <Select
+            labelId="duration-label"
+            value={workoutDuration}
+            onChange={(e) => setWorkoutDuration(e.target.value)}
+            label="Choose a Duration"
+          >
+            {durationChoices.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
 
         <Button
           type="submit"
