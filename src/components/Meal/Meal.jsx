@@ -27,7 +27,14 @@ import { isRTL } from "../../utils/helpers";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-function Meal({ mealOption, mealType, setMealChanged, display, consumed ,handleUpdateMeal}) {
+function Meal({
+  mealOption,
+  mealType,
+  setMealChanged,
+  display,
+  consumed,
+  handleUpdateMeal,
+}) {
   const [rating, setRating] = useState(null);
   const [selectedSnack, setSelectedSnack] = useState(""); // State to store selected snack
   const [addingMeal, setAddingMeal] = useState(false);
@@ -41,7 +48,7 @@ function Meal({ mealOption, mealType, setMealChanged, display, consumed ,handleU
     addDailyMeal,
     AddCaloriesToDailyTracking,
     consumeDailyMeal,
-    deleteMeal
+    deleteMeal,
   } = useData();
   const { currentUser } = useAuth();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -59,13 +66,13 @@ function Meal({ mealOption, mealType, setMealChanged, display, consumed ,handleU
     handleClose();
   };
 
-  const handleDelete = async() => {
-   try {
-    await deleteMeal(mealOption._id);
-    setMealChanged();
-   } catch (error) {
-    console.log("error in handleDelete",error);
-   }
+  const handleDelete = async () => {
+    try {
+      await deleteMeal(mealOption._id);
+      setMealChanged();
+    } catch (error) {
+      console.log("error in handleDelete", error);
+    }
     handleClose();
   };
 
@@ -85,7 +92,7 @@ function Meal({ mealOption, mealType, setMealChanged, display, consumed ,handleU
         currentClient._id,
         newValue
       );
-      // setMealsChanged(true);
+      setMealChanged();
     } catch (error) {
       console.log(error);
       console.log("error in handelNewRating");
@@ -144,8 +151,8 @@ function Meal({ mealOption, mealType, setMealChanged, display, consumed ,handleU
         }}
       >
         <List>
-          {mealOption.ingredients.map((ingredient,index) => (
-            <ListItem key={ingredient.name+index} disablePadding>
+          {mealOption.ingredients.map((ingredient, index) => (
+            <ListItem key={ingredient.name + index} disablePadding>
               <Box display="flex" alignItems="center">
                 <CircleIcon sx={{ fontSize: 8, marginRight: 1 }} />
                 <Typography
@@ -167,77 +174,93 @@ function Meal({ mealOption, mealType, setMealChanged, display, consumed ,handleU
         </Typography>
         {/* //TODO admin cant rate  */}
         {/* TODO Add rating average if  isAdmin */}
-        {!currentUser.isAdmin && (
-          <Box
-            sx={{
-              marginTop: 2,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center", // Optional: To center the contents horizontally
-              gap: 2,
-            }}
-          >
-            <Rating
-              name="half-rating"
-              value={rating} // Bind value to the rating state
-              precision={0.5}
-              onChange={(event, newValue) => handelNewRating(newValue)} // Update state on change
-            />
 
-            {!display && (
-              <>
-                {mealOption.type === "snack" && (
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: 2,
-                      marginTop: 2,
-                    }}
-                  >
-                    <FormControl sx={{ minWidth: 110 }}>
-                      <InputLabel id="snack-select-label">Select as</InputLabel>
-                      <Select
-                        labelId="snack-select-label"
-                        value={selectedSnack}
-                        label="Select Snack"
-                        onChange={handleSnackChange}
-                      >
-                        <MenuItem value="snack-1">Snack 1</MenuItem>
-                        <MenuItem value="snack-2">Snack 2</MenuItem>
-                      </Select>
-                    </FormControl>
-                  </Box>
-                )}
-                <Tooltip title="Add to Today's Meals">
-                  <span>
-                    <Button
-                      variant="contained"
-                      onClick={() => handelAddDailyMeal()}
-                      endIcon={<LocalDining />}
-                      startIcon={<AddIcon />}
-                      disabled={
-                        (mealOption.type === "snack" && selectedSnack === "") ||
-                        addingMeal
-                      }
-                    />
-                  </span>
-                </Tooltip>
-              </>
-            )}
-            {/*TODO "You’ve already consumed a meal for this time. You can't select another." */}
-            {display && (
-              <Button
-                variant="contained"
-                onClick={() => handleConsumeMeal()}
-                endIcon={<DoneIcon />}
-                disabled={consumed}
-              >
-                I Ate This
-              </Button>
-            )}
-          </Box>
-        )}
+        <Box
+          sx={{
+            marginTop: 2,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center", // Optional: To center the contents horizontally
+            gap: 2,
+          }}
+        >
+          {currentUser.isAdmin ? (
+            <Tooltip title="Average Rating">
+              <span>
+                <Rating
+                  name="average-rating"
+                  value={mealOption.averageRating || 0}
+                  precision={0.5}
+                  readOnly
+                />
+              </span>
+            </Tooltip>
+          ) : (
+            <>
+              <Rating
+                name="half-rating"
+                value={rating} // Bind value to the rating state
+                precision={0.5}
+                onChange={(event, newValue) => handelNewRating(newValue)} // Update state on change
+              />
+              {!display && (
+                <>
+                  {mealOption.type === "snack" && (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 2,
+                        marginTop: 2,
+                      }}
+                    >
+                      <FormControl sx={{ minWidth: 110 }}>
+                        <InputLabel id="snack-select-label">
+                          Select as
+                        </InputLabel>
+                        <Select
+                          labelId="snack-select-label"
+                          value={selectedSnack}
+                          label="Select Snack"
+                          onChange={handleSnackChange}
+                        >
+                          <MenuItem value="snack-1">Snack 1</MenuItem>
+                          <MenuItem value="snack-2">Snack 2</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Box>
+                  )}
+                  <Tooltip title="Add to Today's Meals">
+                    <span>
+                      <Button
+                        variant="contained"
+                        onClick={() => handelAddDailyMeal()}
+                        endIcon={<LocalDining />}
+                        startIcon={<AddIcon />}
+                        disabled={
+                          (mealOption.type === "snack" &&
+                            selectedSnack === "") ||
+                          addingMeal
+                        }
+                      />
+                    </span>
+                  </Tooltip>
+                </>
+              )}
+              {/*TODO "You’ve already consumed a meal for this time. You can't select another." */}
+              {display && (
+                <Button
+                  variant="contained"
+                  onClick={() => handleConsumeMeal()}
+                  endIcon={<DoneIcon />}
+                  disabled={consumed}
+                >
+                  I Ate This
+                </Button>
+              )}
+            </>
+          )}
+        </Box>
       </CardContent>
       <Menu
         anchorEl={anchorEl}
@@ -264,7 +287,7 @@ function Meal({ mealOption, mealType, setMealChanged, display, consumed ,handleU
             <EditIcon />
           </Box>
         </MenuItem>
-         {/* TODO: Handle the case where a client has already selected this meal for their daily tracking */}
+        {/* TODO: Handle the case where a client has already selected this meal for their daily tracking */}
         {/* <MenuItem onClick={handleDelete}>
           <Box
             display="flex"
