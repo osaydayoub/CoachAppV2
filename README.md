@@ -21,7 +21,7 @@ CoachApp is a powerful tool designed to assist both coaches and trainers in orga
 - **Workout Tracking**: Keep track of workout times and sessions to ensure consistency and improvement.  
 
 ## What's Next?  
-We’re working on adding more exciting features to CoachApp! Here’s what’s coming soon:  
+I’m working on adding more exciting features to CoachApp! Here’s what’s coming soon:  
 1. **WhatsApp Notifications**: Automatically send WhatsApp messages to clients whenever a workout is picked or canceled, ensuring clear and instant communication.  
 2. **Advanced Records Logging for Trainers**: Enable trainers to log additional records such as body measurements and photos, including:  
    - Abdomen size  
@@ -30,10 +30,10 @@ We’re working on adding more exciting features to CoachApp! Here’s what’s 
    - Chest measurements  
    - Other body metrics  
 
-Stay tuned for these updates and more as we continue enhancing your experience!  
+Stay tuned for these updates and more as I continue enhancing the experience!  
 
 ## Website  
-Access the app here: [CoachApp](https://msa-68-coachapp.netlify.app/) 
+Access the app here: [CoachApp](https://msa-68-coachapp.netlify.app/)  
 
 ## Guest Login  
 For users who want to explore the app without signing up, you can use the following guest credentials:  
@@ -42,4 +42,3 @@ For users who want to explore the app without signing up, you can use the follow
 - **Password**: 123456  
 
 > Note: Guest accounts have full access to all features and can save their data, but any data saved under the guest account may be overwritten by other guest users.  
-
