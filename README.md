@@ -35,10 +35,10 @@ Stay tuned for these updates and more as I continue enhancing the experience!
 ## Website  
 Access the app here: [CoachApp](https://msa-68-coachapp.netlify.app/)  
 
-## Guest Login  
-For users who want to explore the app without signing up, you can use the following guest credentials:  
+## Try the App  
+For users who want to explore the app without signing up, simply log in using the **regular client user** account. This account provides full access to explore the app's features.
 
-- **Email**: guest@coachapp.com  
+- **Email**: client@coachapp.com  
 - **Password**: 123456  
 
-> Note: Guest accounts have full access to all features and can save their data, but any data saved under the guest account may be overwritten by other guest users.  
+> Note: This client account allows you to explore all features of the app, but any data saved will be temporary and may be overwritten when another user accesses the app.
