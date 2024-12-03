@@ -36,6 +36,14 @@ function ResponsiveAppBar() {
   const [pages, setPages] = React.useState([]);
   const [handleFunctions, setHandleFunctions] = React.useState([]);
 
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   React.useEffect(() => {
     if (isLoggedIn) {
       if (currentUser.isAdmin) {
@@ -245,9 +253,70 @@ function ResponsiveAppBar() {
 
           {isLoggedIn && (
             <Box sx={{ flexGrow: 0 }}>
-              <IconButton size="large" onClick={handleLanguage} color="inherit">
+              <IconButton size="large" onClick={handleClick} color="inherit">
                 <LanguageIcon />
               </IconButton>
+              <Menu
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+                anchorOrigin={{
+                  vertical: "bottom", // Adjust this to 'bottom', 'center', etc.
+                  horizontal: "center", // Adjust this to 'left', 'center', etc.
+                }}
+                transformOrigin={{
+                  vertical: "top", // Adjust to 'bottom', 'center', etc.
+                  horizontal: "right", // Adjust to 'left', 'center', etc.
+                }}
+              >
+                <MenuItem
+                  onClick={handleLanguage}
+                  selected={language === "en"}
+                  sx={{
+                    "&.Mui-selected": {
+                      bgcolor: "primary.main", 
+                      color: "primary.contrastText",
+                    },
+                    "&.Mui-selected:hover": {
+                      bgcolor: "primary.light", 
+                      color: "primary.contrastText", 
+                    },
+                  }}
+                >
+                  <Box
+                    display="flex"
+                    justifyContent="space-between"
+                    gap={1}
+                    width="100%"
+                  >
+                    <Typography>English</Typography>
+                  </Box>
+                </MenuItem>
+
+                <MenuItem
+                  onClick={handleLanguage}
+                  selected={language === "ar"}
+                  sx={{
+                    "&.Mui-selected": {
+                      bgcolor: "primary.main", 
+                      color: "primary.contrastText",
+                    },
+                    "&.Mui-selected:hover": {
+                      bgcolor: "primary.light", 
+                      color: "primary.contrastText", 
+                    },
+                  }}
+                >
+                  <Box
+                    display="flex"
+                    justifyContent="space-between"
+                    gap={1}
+                    width="100%"
+                  >
+                    <Typography>Arabic</Typography>
+                  </Box>
+                </MenuItem>
+              </Menu>
               <IconButton size="large" onClick={handleLogout} color="inherit">
                 <LogoutIcon />
               </IconButton>
