@@ -20,20 +20,24 @@ import { useData } from "../../context/DataContext.jsx";
 import CloseIcon from "@mui/icons-material/Close";
 import CircleIcon from "@mui/icons-material/Circle";
 import DeleteIcon from "@mui/icons-material/Delete";
+import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 
 function AddMeal({
   handeleAddMealDisplay,
   type,
   handleMealsChanged,
   open,
-  isDialog,
   mealData,
+  //mealAction can be "update"  "create" "generate"
+  mealAction,
 }) {
   const [ingredientsArray, setIngredientsArray] = useState([]);
   const [ingredientName, setIngredientName] = useState("");
   const [amount, setAmount] = useState(0);
   const [totalCalories, setTotalCalories] = useState(0);
   const [displayNewMeal, setDisplayNewMeal] = useState(false);
+  const [caloriesLimit, setCaloriesLimit] = useState("");
+  // const [showCreateMealOption, setShowCreateMealOption] = useState(false);
 
   const unitOptions = [
     { value: "kg", label: "kg" },
@@ -43,7 +47,9 @@ function AddMeal({
   ];
   const [selectedUnit, setSelectedUnit] = useState(unitOptions[0].value);
   const [adding, setAdding] = useState(false);
-  const { addNewMeal,updateMeal } = useData();
+  const [generating, setGenerating] = useState(false);
+
+  const { addNewMeal, updateMeal, generateMeal } = useData();
 
   useState(() => {
     if (mealData) {
@@ -78,8 +84,8 @@ function AddMeal({
     try {
       setAdding(true);
       const newMeal = {
-        mealId:mealData._id,
-        type:mealData.type,
+        mealId: mealData._id,
+        type: mealData.type,
         ingredients: ingredientsArray,
         totalCalories: totalCalories,
       };
@@ -93,6 +99,31 @@ function AddMeal({
       handeleAddMealDisplay(false);
     }
   };
+  const handleGenerateMeal = async () => {
+    try {
+      setGenerating(true);
+      const newMeal = await generateMeal(type, caloriesLimit);
+      const newMealObj = newMeal;
+      // console.log(newMeal);
+      // const newMealObj = {
+      //   ingredients: [
+      //     { name: "eff", amount: "1", unit: "kg" },
+      //     { name: "qqq", amount: "2", unit: "ml" },
+      //   ],
+      //   type: "breakfast",
+      //   totalCalories: 20,
+      // };
+      setIngredientsArray(newMealObj.ingredients);
+      setTotalCalories(newMealObj.totalCalories);
+      setDisplayNewMeal(true);
+    } catch (error) {
+      console.log("handleGenerateMeal", error);
+    } finally {
+      setGenerating(false);
+      // setTotalCalories(0);
+      // handeleAddMealDisplay(false);
+    }
+  };
 
   const handleAddIngredient = (e) => {
     e.preventDefault();
@@ -101,6 +132,7 @@ function AddMeal({
       amount: amount,
       unit: selectedUnit,
     };
+    console.log("new ingredient:", ingredient);
     setIngredientsArray([...ingredientsArray, ingredient]);
     setDisplayNewMeal(true);
     setIngredientName("");
@@ -126,17 +158,55 @@ function AddMeal({
         // mt:2,
       }}
     >
-      <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: 1,
+        }}
+      >
+        <Typography variant="h5" sx={{ fontWeight: "bold" }}>
+          {mealData ? `Update Meal` : `Add a Meal`}
+        </Typography>
         <IconButton onClick={() => handeleAddMealDisplay(false)}>
           <CloseIcon />
         </IconButton>
       </Box>
-      <Typography variant="h5" gutterBottom>
-        {mealData ? `Update Meal` : `Add a Meal`}
-      </Typography>
+      {mealAction == "generate" && (
+        <Box>
+          <Typography
+            variant="body1"
+            sx={{
+              marginBottom: 2,
+              fontSize: "0.875rem",
+              color: "gray",
+            }}
+          >
+            You can either generate a meal with or without a calorie limit!
+          </Typography>
+          <TextField
+            fullWidth
+            margin="normal"
+            type="number"
+            label="Set Calorie Limit"
+            value={caloriesLimit}
+            onChange={(e) => setCaloriesLimit(e.target.value)}
+          />
+          <Button
+            fullWidth
+            variant="outlined"
+            color="secondary"
+            startIcon={<AutoAwesomeIcon />}
+            onClick={handleGenerateMeal}
+          >
+            {generating ? "Generating..." : "Generate Meal"}
+          </Button>
+        </Box>
+      )}
 
       {displayNewMeal && (
-        <Card sx={{ mb: 2 }}>
+        <Card sx={{ mt: 1, mb: 2 }}>
           <CardContent>
             <Typography variant="h6" component="div" gutterBottom>
               Ingredients
@@ -146,13 +216,15 @@ function AddMeal({
                 <ListItem
                   key={index}
                   secondaryAction={
-                    <IconButton
-                      edge="end"
-                      aria-label="delete"
-                      onClick={() => handleRemoveIngredient(index)}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
+                    mealAction !== "generate" ? (
+                      <IconButton
+                        edge="end"
+                        aria-label="delete"
+                        onClick={() => handleRemoveIngredient(index)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    ) : null
                   }
                 >
                   <CircleIcon sx={{ fontSize: 10, mr: 1 }} />
@@ -160,58 +232,67 @@ function AddMeal({
                 </ListItem>
               ))}
             </List>
+            {mealAction == "generate" && (
+              <Typography variant="h6" component="div" gutterBottom>
+                {`Total Calories: ${totalCalories}`}
+              </Typography>
+            )}
           </CardContent>
         </Card>
       )}
 
-      <form onSubmit={handleAddIngredient}>
-        <TextField
-          fullWidth
-          margin="normal"
-          label="Ingredient Name"
-          value={ingredientName}
-          onChange={(e) => setIngredientName(e.target.value)}
-          required
-        />
-        <TextField
-          fullWidth
-          margin="normal"
-          type="number"
-          label="Amount"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-          required
-        />
-        <FormControl fullWidth margin="normal">
-          <InputLabel id="unit-label">Choose a Unit</InputLabel>
-          <Select
-            labelId="unit-label"
-            value={selectedUnit}
-            onChange={(e) => setSelectedUnit(e.target.value)}
-            label="Choose a Unit"
-          >
-            {unitOptions.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <Button fullWidth variant="outlined" type="submit" sx={{ mt: 2 }}>
-          Add Ingredient
-        </Button>
-      </form>
+      {(mealAction == "update" || mealAction == "create") && (
+        <>
+          <form onSubmit={handleAddIngredient}>
+            <TextField
+              fullWidth
+              margin="normal"
+              label="Ingredient Name"
+              value={ingredientName}
+              onChange={(e) => setIngredientName(e.target.value)}
+              required
+            />
+            <TextField
+              fullWidth
+              margin="normal"
+              type="number"
+              label="Amount"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              required
+            />
+            <FormControl fullWidth margin="normal">
+              <InputLabel id="unit-label">Choose a Unit</InputLabel>
+              <Select
+                labelId="unit-label"
+                value={selectedUnit}
+                onChange={(e) => setSelectedUnit(e.target.value)}
+                label="Choose a Unit"
+              >
+                {unitOptions.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <Button fullWidth variant="outlined" type="submit" sx={{ mt: 2 }}>
+              Add Ingredient
+            </Button>
+          </form>
+          <TextField
+            fullWidth
+            margin="normal"
+            type="number"
+            label="Total Calories"
+            value={totalCalories}
+            onChange={(e) => setTotalCalories(e.target.value)}
+            required
+          />
+        </>
+      )}
 
       <form onSubmit={mealData ? handleUpdateMeal : handleAddMeal}>
-        <TextField
-          fullWidth
-          margin="normal"
-          type="number"
-          label="Total Calories"
-          value={totalCalories}
-          onChange={(e) => setTotalCalories(e.target.value)}
-          required
-        />
         <Button
           fullWidth
           variant="contained"
@@ -229,7 +310,6 @@ function AddMeal({
           }
           startIcon={adding ? <CircularProgress size={20} /> : null}
         >
-          {/* {adding ? "Adding Meal..." : "Add Meal"} */}
           {mealData
             ? adding
               ? "Update Meal..."
@@ -242,7 +322,7 @@ function AddMeal({
     </Box>
     //
   );
-  return isDialog ? (
+  return (
     <Dialog
       onClose={() => handeleAddMealDisplay(false)}
       open={open}
@@ -250,8 +330,6 @@ function AddMeal({
     >
       {dialogContent}
     </Dialog>
-  ) : (
-    dialogContent
   );
 }
 
