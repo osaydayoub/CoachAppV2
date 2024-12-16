@@ -60,7 +60,6 @@ export function DataProvider({ children }) {
           caloricIntake: packageObj.caloricIntake,
         }
       );
-      //console.log(response.data);
       await getClients();
     } catch (error) {
       console.log("error in addPackage");
@@ -70,8 +69,6 @@ export function DataProvider({ children }) {
   const getCurrentClient = async (id) => {
     const currentDate = new Date();
     currentDate.setHours(0, 0, 0, 0);
-    // console.log("getCurrentClient-currentDate:",currentDate);
-    // console.log("currentDate.toISOString():",currentDate.toISOString());
     try {
       const response = await axios.get(
         `${
