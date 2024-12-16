@@ -74,9 +74,11 @@ export function DataProvider({ children }) {
     // console.log("currentDate.toISOString():",currentDate.toISOString());
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_API_LINK}/coach/clients/${id}?date=${currentDate.toISOString()}`
+        `${
+          import.meta.env.VITE_API_LINK
+        }/coach/clients/${id}?date=${currentDate.toISOString()}`
       );
-      console.log("response",response);
+      console.log("response", response);
       setCurrentClient(response.data);
       console.log(response.data);
       return response.data;
@@ -95,15 +97,15 @@ export function DataProvider({ children }) {
         {
           exercise: workout.exercise,
           date: workout.date,
-          duration:workout.duration,
+          duration: workout.duration,
           clientID: workout.clientID,
         }
       );
       // console.log(response.data);
       await getWorkouts();
     } catch (error) {
-      if(error.response.status==409){
-        throw(error);
+      if (error.response.status == 409) {
+        throw error;
       }
       console.log(error);
       console.log("error in createWorkout");
@@ -158,13 +160,12 @@ export function DataProvider({ children }) {
   const addNewMeal = async (meal) => {
     console.log("addNewMeal");
     try {
-      console.log(meal);
       const response = await axios.post(
         `${import.meta.env.VITE_API_LINK}/coach/meals`,
         meal
       );
     } catch (error) {
-      console.log("error in addNewMeal");
+      console.log("error in addNewMeal",error);
     }
   };
 
@@ -177,7 +178,7 @@ export function DataProvider({ children }) {
         { ingredients: meal.ingredients, totalCalories: meal.totalCalories }
       );
     } catch (error) {
-      console.log("error in updateMeal");
+      console.log("error in updateMeal",error);
     }
   };
 
@@ -189,6 +190,20 @@ export function DataProvider({ children }) {
       );
     } catch (error) {
       console.log("error in deleteMeal");
+    }
+  };
+
+  const generateMeal = async (type, calorieLimit) => {
+    console.log("generateMeal");
+    try {
+      const response = await axios.get(
+        `${
+          import.meta.env.VITE_API_LINK
+        }/coach/meals/generateMeal/${type}?calorieLimit=${calorieLimit}`
+      );
+      return response.data;
+    } catch (error) {
+      console.log("error in generateMeal",error);
     }
   };
 
@@ -238,14 +253,13 @@ export function DataProvider({ children }) {
       await getCurrentClient(clientID);
     } catch (error) {
       console.log(error);
-      console.log("ststus:",error.response.status);
-      if(error.response.status==409){
-        throw(error);
+      console.log("ststus:", error.response.status);
+      if (error.response.status == 409) {
+        throw error;
       }
       console.log("error in addWeightTracking");
     }
   };
- 
 
   const updateWeightTracking = async (clientID, weightLog) => {
     console.log("updateWeightTracking");
@@ -264,9 +278,9 @@ export function DataProvider({ children }) {
       await getCurrentClient(clientID);
     } catch (error) {
       console.log(error);
-      console.log("ststus:",error.response.status);
-      if(error.response.status==409){
-        throw(error);
+      console.log("ststus:", error.response.status);
+      if (error.response.status == 409) {
+        throw error;
       }
       console.log("error in updateWeightTracking");
     }
@@ -358,7 +372,7 @@ export function DataProvider({ children }) {
         }/coach/clients/consumeDailyMeals/${clientID}`,
         {
           mealType: type,
-          date:currentDate,
+          date: currentDate,
         }
       );
       await getCurrentClient(currentClient._id);
@@ -402,6 +416,7 @@ export function DataProvider({ children }) {
     addNewMeal,
     updateMeal,
     deleteMeal,
+    generateMeal,
     addProduct,
     getProductByBarcodeNumber,
     addWeightTracking,

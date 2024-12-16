@@ -15,10 +15,15 @@ import {
   MenuItem,
   Menu,
   Tooltip,
+  Stack,
 } from "@mui/material";
+
+import CreateIcon from "@mui/icons-material/Create";
+import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import CircularProgress from "@mui/material/CircularProgress";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+// import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import AddIcon from "@mui/icons-material/Add";
 import SortIcon from "@mui/icons-material/Sort";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
@@ -31,17 +36,27 @@ function MealOptionsPage() {
   const [mealsChanged, setMealsChanged] = useState(0);
   const { currentClient, getAllMealsByType } = useData();
   const { currentUser } = useAuth();
+  //mealAction can be "update"  "create" "generate"
+  const [mealAction, setMealAction] = useState("");
 
   const [mealData, setMealData] = useState(null);
   const [sortOrder, setSortOrder] = useState("asc");
 
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorEl1, setAnchorEl1] = useState(null);
+
   const handleSortClick = (event) => {
-    setAnchorEl(event.currentTarget);
+    setAnchorEl1(event.currentTarget);
   };
 
   const handleClose = () => {
-    setAnchorEl(null);
+    setAnchorEl1(null);
+  };
+  const [anchorEl2, setAnchorEl2] = useState(null);
+  const handleClose2 = () => {
+    setAnchorEl2(null);
+  };
+  const handleAddMealClick = (event) => {
+    setAnchorEl2(event.currentTarget);
   };
 
   useEffect(() => {
@@ -198,8 +213,8 @@ function MealOptionsPage() {
           </Tooltip>
 
           <Menu
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
+            anchorEl={anchorEl1}
+            open={Boolean(anchorEl1)}
             onClose={handleClose}
             anchorOrigin={{
               vertical: "top",
@@ -259,23 +274,66 @@ function MealOptionsPage() {
                 }}
               >
                 <CardContent>
-                  <Button
-                    variant="contained"
-                    endIcon={<AddCircleOutlineIcon />}
-                    onClick={() => {
-                      setAddMealDisplay(true);
-                      setMealData(null);
+                  <Tooltip title="Add New Meal">
+                    <IconButton
+                      onClick={handleAddMealClick}
+                      variant="contained"
+                      sx={{
+                        fontSize: "3rem",
+                      }}
+                      disabled={addMealDisplay}
+                    >
+                      <AddIcon sx={{ fontSize: "inherit" }} />
+                    </IconButton>
+                  </Tooltip>
+
+                  <Menu
+                    anchorEl={anchorEl2}
+                    open={Boolean(anchorEl2)}
+                    onClose={handleClose2}
+                    anchorOrigin={{
+                      vertical: "top",
+                      horizontal: "center",
                     }}
-                    sx={{
-                      backgroundColor: "#EB5406",
-                      "&:hover": { backgroundColor: "#d34905" },
-                      padding: "8px 16px",
-                      fontWeight: 600,
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "center",
                     }}
-                    disabled={addMealDisplay}
                   >
-                    Add new Meal
-                  </Button>
+                    <MenuItem>
+                      <Stack
+                        direction="column"
+                        spacing={2}
+                        justifyContent="center"
+                      >
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          endIcon={<CreateIcon />}
+                          onClick={() => {
+                            setAddMealDisplay(true);
+                            setMealData(null);
+                            setMealAction("create");
+                          }}
+                        >
+                          Create Meal
+                        </Button>
+
+                        <Button
+                          variant="outlined"
+                          color="secondary"
+                          endIcon={<AutoAwesomeIcon />}
+                          onClick={() => {
+                            setAddMealDisplay(true);
+                            setMealData(null);
+                            setMealAction("generate");
+                          }}
+                        >
+                          Generate Meal
+                        </Button>
+                      </Stack>
+                    </MenuItem>
+                  </Menu>
                 </CardContent>
               </Card>
             )}
@@ -286,8 +344,8 @@ function MealOptionsPage() {
                   type={type}
                   handleMealsChanged={() => setMealsChanged((prev) => prev + 1)}
                   open={addMealDisplay}
-                  isDialog={true}
                   mealData={mealData}
+                  mealAction={mealAction}
                 />
               </Box>
             )}
@@ -300,6 +358,7 @@ function MealOptionsPage() {
                   handleUpdateMeal={() => {
                     setMealData(mealOption);
                     setAddMealDisplay(true);
+                    setMealAction("update");
                   }}
                 />
               );
