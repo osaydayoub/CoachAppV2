@@ -279,11 +279,11 @@ function MealOptionsPage() {
                       onClick={handleAddMealClick}
                       variant="contained"
                       sx={{
-                        fontSize: "3rem",
+                        fontSize: "4rem",
                       }}
                       disabled={addMealDisplay}
                     >
-                      <AddIcon sx={{ fontSize: "inherit" }} />
+                      <AddIcon sx={{ fontSize: "inherit",  color:"#EB5406"}} />
                     </IconButton>
                   </Tooltip>
 
