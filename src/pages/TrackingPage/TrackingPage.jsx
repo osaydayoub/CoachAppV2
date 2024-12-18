@@ -5,6 +5,7 @@ import DailyTracking from "../../components/DailyTracking/DailyTracking";
 import WeightTracking from "../../components/WeightTracking/WeightTracking.jsx";
 
 import { Box, Tab, Tabs } from "@mui/material";
+import CaloricIntakeCalculator from "../../components/CaloricIntakeCalculator/CaloricIntakeCalculator.jsx";
 function TrackingPage() {
   const { currentUser,t } = useAuth();
   const [activeTab, setActiveTab] = useState(0);
@@ -48,7 +49,8 @@ function TrackingPage() {
       )}
       {currentUser.isAdmin && (
         <>
-          <h2> Admin Daily Tracking</h2>
+          {/* <h2> Admin Daily Tracking</h2> */}
+          <CaloricIntakeCalculator/>
         </>
       )}
     </div>
