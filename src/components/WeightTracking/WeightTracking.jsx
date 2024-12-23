@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Button, TextField, Box, Paper, Typography } from "@mui/material";
 import { useData } from "../../context/DataContext";
-import WeightLogList from "../WeightLogList/WeightLogList";
 import WeightLogChart from "../WeightLogChart/WeightLogChart";
 import { useNotification } from "../../context/NotificationContext";
 import WeightLogListTable from "../WeightLogListTable/WeightLogListTable";

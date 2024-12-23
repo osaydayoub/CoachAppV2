@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import "./AdminPage.css";
 import { useAuth } from "../../context/AuthContext";
 import { useData } from "../../context/DataContext.jsx";
-import Client from "../../components/Client/Client";
-import { FaSearch } from "react-icons/fa";
 
 import MyClientTableWithLocalizationProvider from "../../components/MyClientTable/MyClientTable.jsx";
 import { useNavigate } from "react-router-dom";

@@ -251,7 +251,7 @@ const MyClientTable = ({ data }) => {
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import AddWorkoutDialog from "../AddWorkoutDialog/AddWorkoutDialog.jsx";
-import AddPackageDialog from "../PackageDialog/PackageDialog.jsx";
+import AddPackageDialog from "../AddPackageDialog/AddPackageDialog.jsx";
 
 const MyClientTableWithLocalizationProvider = ({ data }) => (
   //App.tsx or AppProviders file
