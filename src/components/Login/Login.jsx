@@ -86,7 +86,7 @@ function Login({ handle }) {
 
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", gap: 2.5, p: 4 ,minHeight:600}}>
+    <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", gap: 2.5, p: 4, minHeight: 600 }}>
       <Typography variant="h4" fontWeight={700}>Welcome</Typography>
       {error && (
         <Alert
@@ -171,7 +171,11 @@ function Login({ handle }) {
                 borderRadius: 1,
                 background: (theme) =>
                   `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
-                boxShadow: (theme) => `0 8px 24px ${alpha(theme.palette.grey[900], 0.35)}`
+                boxShadow: (theme) => `0 8px 24px ${alpha(theme.palette.grey[900], 0.35)}`,
+                "&:hover": {
+                  background: (theme) =>
+                    `linear-gradient(135deg,${theme.palette.secondary.main}  0%, ${theme.palette.primary.main} 100%)`,
+                }
               }}
             >
               Login
