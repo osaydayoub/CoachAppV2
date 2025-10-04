@@ -33,7 +33,7 @@ function LoginPage() {
     <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
       <Paper sx={{ display: "flex", margin: 4, width: "70%", overflow: "hidden" }} elevation={3} >
         <Box sx={{
-          width: "50%",
+          width: { xs: "100%", md: "50%" },
           py: 1,
           display: "flex",
           justifyContent: "center",
