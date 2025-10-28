@@ -13,7 +13,6 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { useAuth } from "../../context/AuthContext.jsx";
 import { useData } from "../../context/DataContext.jsx";
 import logo from "../../assets/images/logo.png";
-import "./AppBar.css";
 import { useNavigate } from "react-router-dom";
 import ScrollToTop from "../ScrollToTop/ScrollToTop.jsx";
 
@@ -143,17 +142,17 @@ function ResponsiveAppBar() {
     console.log("Current language:", languageCode);
   };
 
-  //To change the primary color of your Material-UI components,
-  // such as the AppBar, you can customize the Material-UI theme.
+
   return (
     <AppBar
       position="static"
-      sx={{ height: "90px", backgroundColor: "#21201c" }}
+      color="secondary"
+      sx={{ height: 90 }}
       ref={topScroller}
     >
       <ScrollToTop refToScroller={topScroller} />
-      <Container maxWidth="xl">
-        <Toolbar disableGutters sx={{ height: "90px" }}>
+      <Container maxWidth={false} disableGutters>
+        <Toolbar disableGutters sx={{ height: 90, pr: 1 }}>
           <Typography
             variant="h6"
             noWrap
@@ -168,11 +167,13 @@ function ResponsiveAppBar() {
               textDecoration: "none",
             }}
           >
-            <img
-              className="logo-img"
+            <Box
+              component="img"
               src={logo}
               alt="img"
               onClick={handleLogoClick}
+              sx={{ height: 55, width: "auto", cursor: "pointer" }}
+
             />
           </Typography>
 
@@ -185,6 +186,7 @@ function ResponsiveAppBar() {
                 aria-haspopup="true"
                 onClick={handleOpenNavMenu}
                 color="inherit"
+                sx={{ ml: 1, "&:hover": { bgcolor: "brand.navHover" } }}
               >
                 <MenuIcon />
               </IconButton>
@@ -207,7 +209,7 @@ function ResponsiveAppBar() {
                 }}
               >
                 {pages.map((page, index) => (
-                  <MenuItem key={page} onClick={handleFunctions[index]}>
+                  <MenuItem key={page} onClick={handleFunctions[index]} sx={{ "&:hover": { bgcolor: "primary.main", color: "primary.contrastText" } }}>
                     <Typography textAlign="center">{page}</Typography>
                   </MenuItem>
                 ))}
@@ -230,11 +232,13 @@ function ResponsiveAppBar() {
               textDecoration: "none",
             }}
           >
-            <img
-              className="logo-img"
+            <Box
+              component="img"
               src={logo}
               alt="img"
               onClick={handleLogoClick}
+              sx={{ height: 55, width: "auto", cursor: "pointer" }}
+
             />
           </Typography>
           {isLoggedIn && (
@@ -243,7 +247,31 @@ function ResponsiveAppBar() {
                 <Button
                   key={page}
                   onClick={handleFunctions[index]}
-                  sx={{ my: 2, color: "white", display: "block" }}
+                  color="inherit"
+                  sx={{
+                    my: 1,
+                    px: 1.5,
+                    fontWeight: 600,
+                    textTransform: "none",
+                    borderRadius: 2,
+                    position: "relative",
+                    "&:hover": {
+                      backgroundColor: "brand.navHover",
+                    },
+                    "&:after": {
+                      content: '""',
+                      position: "absolute",
+                      left: 10,
+                      right: 10,
+                      bottom: 6,
+                      height: 2,
+                      transform: "scaleX(0)",
+                      transformOrigin: "left",
+                      transition: "transform .2s ease",
+                      bgcolor: "primary.main"
+                    },
+                    "&:hover:after": { transform: "scaleX(1)" },
+                  }}
                 >
                   {page}
                 </Button>
@@ -253,7 +281,11 @@ function ResponsiveAppBar() {
 
           {isLoggedIn && (
             <Box sx={{ flexGrow: 0 }}>
-              <IconButton size="large" onClick={handleClick} color="inherit">
+              <IconButton
+                size="large"
+                onClick={handleClick}
+                color="inherit"
+                sx={{ "&:hover": { bgcolor: "brand.navHover" } }}>
                 <LanguageIcon />
               </IconButton>
               <Menu
@@ -274,12 +306,12 @@ function ResponsiveAppBar() {
                   selected={language === "en"}
                   sx={{
                     "&.Mui-selected": {
-                      bgcolor: "primary.main", 
+                      bgcolor: "primary.main",
                       color: "primary.contrastText",
                     },
                     "&.Mui-selected:hover": {
-                      bgcolor: "primary.light", 
-                      color: "primary.contrastText", 
+                      bgcolor: "primary.light",
+                      color: "primary.contrastText",
                     },
                   }}
                 >
@@ -298,12 +330,12 @@ function ResponsiveAppBar() {
                   selected={language === "ar"}
                   sx={{
                     "&.Mui-selected": {
-                      bgcolor: "primary.main", 
+                      bgcolor: "primary.main",
                       color: "primary.contrastText",
                     },
                     "&.Mui-selected:hover": {
-                      bgcolor: "primary.light", 
-                      color: "primary.contrastText", 
+                      bgcolor: "primary.light",
+                      color: "primary.contrastText",
                     },
                   }}
                 >
@@ -317,7 +349,12 @@ function ResponsiveAppBar() {
                   </Box>
                 </MenuItem>
               </Menu>
-              <IconButton size="large" onClick={handleLogout} color="inherit">
+              <IconButton
+                size="large"
+                onClick={handleLogout}
+                color="inherit"
+                sx={{ "&:hover": { bgcolor: "brand.navHover" } }}
+              >
                 <LogoutIcon />
               </IconButton>
             </Box>

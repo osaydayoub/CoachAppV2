@@ -8,19 +8,24 @@ import { DataProvider } from "./context/DataContext.jsx";
 import { NotificationProvider } from "./context/NotificationContext.jsx";
 import { I18nextProvider } from "react-i18next";
 import i18n from "./i18n";
+import { ThemeProvider, CssBaseline } from "@mui/material";
+import theme from "./theme.js";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   // <React.StrictMode>
   <BrowserRouter>
-  <I18nextProvider i18n={i18n}>
-    <AuthProvider>
-      <DataProvider>
-        <NotificationProvider>
-            <App />
-        </NotificationProvider>
-      </DataProvider>
-    </AuthProvider>
-    </I18nextProvider>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <I18nextProvider i18n={i18n}>
+        <AuthProvider>
+          <DataProvider>
+            <NotificationProvider>
+              <App />
+            </NotificationProvider>
+          </DataProvider>
+        </AuthProvider>
+      </I18nextProvider>
+    </ThemeProvider>
   </BrowserRouter>
   // </React.StrictMode>
 );

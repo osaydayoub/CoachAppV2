@@ -11,14 +11,17 @@ import {
   Button,
   Alert,
   Typography,
+  Stack,
+  CircularProgress,
 } from "@mui/material";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { alpha } from "@mui/material/styles";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import "../Login/Login.css";
+// import "../Login/Login.css";
 import axios from "axios";
+import { CalendarMonth, FitnessCenter, MailOutline, PersonOutline, PhoneIphone } from "@mui/icons-material";
 
 function SignUp({ handle }) {
   const [userName, setUserName] = useState("");
@@ -112,40 +115,31 @@ function SignUp({ handle }) {
     setPageNumber(2);
     setError("");
   };
-  const theme = createTheme({
-    palette: {
-      primary: {
-        main: "rgb(17, 45, 78)", // Set the primary color
-      },
-    },
-  });
+
   return (
-    <div className="login-container">
-      <h2>Sign Up</h2>
+    <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", gap: 2.5, p: 4, minHeight: 600 }}>
+      <Typography variant="h4" fontWeight={700}>Sign Up</Typography>
       {error && (
         <Alert
           severity="error"
           variant="filled"
-          // style={{ marginBottom: "1rem" }}
+          sx={{ mb: 1 }}
         >
           <Typography variant="body2" style={{ whiteSpace: "pre-line" }}>
             {error}
           </Typography>
         </Alert>
       )}
-      <ThemeProvider theme={theme}>
-        <form onSubmit={(e) => handleSubmit(e)}>
-          {pageNumber === 1 && (
-            <Box
-              sx={{
-                mt: 2,
-                height: 300,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: 2,
-              }}
-            >
+
+
+      <form onSubmit={(e) => handleSubmit(e)}>
+        {pageNumber === 1 && (
+          <Box
+            sx={{
+              mt: 2,
+            }}
+          >
+            <Stack spacing={3}>
               <TextField
                 label="Name"
                 type="text"
@@ -155,6 +149,13 @@ function SignUp({ handle }) {
                 fullWidth
                 variant="outlined"
                 inputRef={userNameRef}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <PersonOutline />
+                    </InputAdornment>
+                  ),
+                }}
               />
 
               <TextField
@@ -166,6 +167,13 @@ function SignUp({ handle }) {
                 fullWidth
                 variant="outlined"
                 inputRef={ageRef}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <CalendarMonth />
+                    </InputAdornment>
+                  ),
+                }}
               />
               <TextField
                 label="Weight"
@@ -176,6 +184,13 @@ function SignUp({ handle }) {
                 fullWidth
                 variant="outlined"
                 inputRef={weightRef}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <FitnessCenter />
+                    </InputAdornment>
+                  ),
+                }}
               />
               <TextField
                 label="Phone Number"
@@ -186,20 +201,26 @@ function SignUp({ handle }) {
                 fullWidth
                 variant="outlined"
                 inputRef={phoneNumberRef}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <PhoneIphone />
+                    </InputAdornment>
+                  ),
+                }}
               />
-            </Box>
-          )}
-          {pageNumber === 2 && (
-            <Box
-              sx={{
-                mt: 2,
-                height: 300,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: 4,
-              }}
-            >
+
+            </Stack>
+
+          </Box>
+        )}
+        {pageNumber === 2 && (
+          <Box
+            sx={{
+              mt: 2,
+            }}
+          >
+            <Stack spacing={3}>
               <TextField
                 label="Email"
                 type="email"
@@ -209,6 +230,13 @@ function SignUp({ handle }) {
                 fullWidth
                 variant="outlined"
                 inputRef={emailRef}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <MailOutline />
+                    </InputAdornment>
+                  ),
+                }}
               />
 
               <FormControl variant="outlined" fullWidth inputRef={passwordRef}>
@@ -271,13 +299,42 @@ function SignUp({ handle }) {
                 />
               </FormControl>
 
-              <Button className="login-btn" disabled={loading} type="submit">
+
+
+              <Button
+                variant="contained"
+                type="submit"
+                disabled={loading}
+                sx={{
+                  width: "100%",
+                  minWidth: 140,
+                  alignSelf: "flex-start",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 1,
+                  py: 1.25,
+                  fontWeight: 700,
+                  borderRadius: 1,
+                  background: (theme) =>
+                    `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
+                  boxShadow: (theme) => `0 8px 24px ${alpha(theme.palette.grey[900], 0.35)}`,
+                  "&:hover": {
+                    background: (theme) =>
+                      `linear-gradient(135deg,${theme.palette.secondary.main}  0%, ${theme.palette.primary.main} 100%)`,
+                  }
+                }}
+              >
                 Sign Up
+                {loading && <CircularProgress size={20} color="inherit" />}
               </Button>
-            </Box>
-          )}
-        </form>
-      </ThemeProvider>
+            </Stack>
+
+          </Box>
+        )}
+
+      </form>
+
       <Box
         sx={{
           width: "100%",
@@ -305,10 +362,22 @@ function SignUp({ handle }) {
           <ArrowForwardIosIcon />
         </IconButton>
       </Box>
-      <div>
-        Already have an account?<Link onClick={handle}>Log In</Link>{" "}
-      </div>
-    </div>
+
+
+
+      <Stack direction="row" spacing={1} sx={{ mt: 1, alignItems: "center" }}>
+        <Typography variant="body2" color="text.secondary">
+          Already have an account?
+        </Typography>
+        <Button
+          variant="text"
+          onClick={handle}
+          sx={{ p: 0, minWidth: 0, fontWeight: 700 }}
+        >
+          Log In
+        </Button>
+      </Stack>
+    </Box>
   );
 }
 

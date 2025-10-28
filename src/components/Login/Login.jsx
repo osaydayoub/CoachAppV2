@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import "./Login.css";
 import { useAuth } from "../../context/AuthContext";
-import { Alert, Typography } from "@mui/material";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { Alert, alpha, IconButton, InputAdornment, Stack, Typography } from "@mui/material";
+import { LockOpenOutlined, LockOutlined, MailOutline, Visibility, VisibilityOff } from "@mui/icons-material";
 import { Box, Button, TextField, CircularProgress } from "@mui/material";
 import axios from "axios";
 // import loginImg from "../../assets/msaCoach.jpeg";
@@ -21,6 +20,7 @@ function Login({ handle }) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const { currentUser, setCurrentUser, isLoggedIn, setIsLoggedIn } = useAuth();
   const { getCurrentClient } = useData();
   const navigate = useNavigate();
@@ -80,22 +80,19 @@ function Login({ handle }) {
     setLoading(false);
   }
 
-  const theme = createTheme({
-    palette: {
-      primary: {
-        main: "rgb(17, 45, 78)", // Set the primary color
-      },
-    },
-  });
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
 
   return (
-    <div className="login-container">
-      <h2>Welcome</h2>
+    <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", gap: 2.5, p: 4, minHeight: 600 }}>
+      <Typography variant="h4" fontWeight={700}>Welcome</Typography>
       {error && (
         <Alert
           severity="error"
           variant="filled"
-          // style={{ marginBottom: "1rem" }}
+          sx={{ mb: 1 }}
         >
           <Typography variant="body2" style={{ whiteSpace: "pre-line" }}>
             {error}
@@ -103,17 +100,13 @@ function Login({ handle }) {
         </Alert>
       )}
       <form onSubmit={(e) => handleSubmit(e)}>
-        <ThemeProvider theme={theme}>
-          <Box
-            sx={{
-              mt: 2,
-              height: 300,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: 4,
-            }}
-          >
+
+        <Box
+          sx={{
+            mt: 2,
+          }}
+        >
+          <Stack spacing={3}>
             <TextField
               label="Email"
               type="email"
@@ -122,40 +115,93 @@ function Login({ handle }) {
               required
               fullWidth
               variant="outlined"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <MailOutline />
+                  </InputAdornment>
+                ),
+              }}
             />
 
             <TextField
               label="Password"
-              type="password"
+              type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
               fullWidth
               variant="outlined"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <LockOpenOutlined />
+                  </InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment
+                    sx={{ display: "flex", justifyContent: "flex-end" }}
+                  >
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                )
+              }}
+
             />
             <Button
-              className="login-btn"
               variant="contained"
               type="submit"
               disabled={loading}
               sx={{
-                minWidth: 120,
-                display: "flex",
+                width: "100%",
+                minWidth: 140,
+                alignSelf: "flex-start",
+                display: "inline-flex",
                 alignItems: "center",
+                justifyContent: "center",
                 gap: 1,
+                py: 1.25,
+                fontWeight: 700,
+                borderRadius: 1,
+                background: (theme) =>
+                  `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
+                boxShadow: (theme) => `0 8px 24px ${alpha(theme.palette.grey[900], 0.35)}`,
+                "&:hover": {
+                  background: (theme) =>
+                    `linear-gradient(135deg,${theme.palette.secondary.main}  0%, ${theme.palette.primary.main} 100%)`,
+                }
               }}
             >
               Login
               {loading && <CircularProgress size={20} color="inherit" />}
             </Button>
-          </Box>
-        </ThemeProvider>
+          </Stack>
+
+        </Box>
+
       </form>
 
-      <div>
-        Need an account?<Link onClick={handle}>Sign Up</Link>
-      </div>
-    </div>
+      <Stack direction="row" spacing={1} sx={{ mt: 1, alignItems: "center" }}>
+        <Typography variant="body2" color="text.secondary">
+          Need an account?
+        </Typography>
+        <Button
+          variant="text"
+          onClick={handle}
+          sx={{ p: 0, minWidth: 0, fontWeight: 700 }}
+        >
+          Sign Up
+        </Button>
+      </Stack>
+
+
+    </Box>
   );
 }
 
