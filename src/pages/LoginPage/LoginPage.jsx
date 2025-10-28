@@ -31,7 +31,7 @@ function LoginPage() {
   }
   return (
     <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-      <Paper sx={{ display: "flex", margin: 4, width: "70%", overflow: "hidden" }} elevation={3} >
+      <Paper sx={{ display: "flex", margin: { xs: 2, md: 4 }, width: { xs: "90%", md: "70%" }, overflow: "hidden" }} elevation={3} >
         <Box sx={{
           width: { xs: "100%", md: "50%" },
           py: 1,
